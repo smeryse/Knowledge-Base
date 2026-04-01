@@ -1,0 +1,208 @@
+{
+  "main": {
+    "id": "0e95195de20b9236",
+    "type": "split",
+    "children": [
+      {
+        "id": "80b2560242e22426",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "b6ab5925512e3296",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "00-Inbox/Obsidian Tranparent Theme.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Obsidian Tranparent Theme"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "8f4fa5fbfebe8088",
+    "type": "split",
+    "children": [
+      {
+        "id": "4932e2bafa5044a7",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "8b4275cd50fab818",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Файловый менеджер"
+            }
+          },
+          {
+            "id": "d9ffd4199ccc7440",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Поиск"
+            }
+          },
+          {
+            "id": "5939ca771af053da",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Закладки"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "207b51655b0582b3",
+    "type": "split",
+    "children": [
+      {
+        "id": "1dae360e4e6488ce",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "52ffd970e5742d84",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Обратные ссылки"
+            }
+          },
+          {
+            "id": "c5432cb793878aba",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Исходящие ссылки"
+            }
+          },
+          {
+            "id": "07ae99678e82cb7a",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Теги"
+            }
+          },
+          {
+            "id": "3623762b7965a7cd",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "Все свойства"
+            }
+          },
+          {
+            "id": "fc826ad400024905",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Структура"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Меню быстрого перехода": false,
+      "graph:Граф": false,
+      "canvas:Создать новый холст": false,
+      "daily-notes:Сегодняшняя заметка": false,
+      "templates:Вставить шаблон": false,
+      "command-palette:Открыть палитру команд": false,
+      "bases:Создать новую базу": false
+    }
+  },
+  "active": "b6ab5925512e3296",
+  "lastOpenFiles": [
+    "00-Inbox/Obsidian-Setup.md",
+    "00-Inbox/Osint против.md",
+    "00-Inbox/Pasted image 20260118212933.png",
+    "00-Inbox/Pasted image 20260315212414.png",
+    "00-Inbox/Pasted image 20260315213828.png",
+    "00-Inbox/Firefox theme launcher.md",
+    "00-Inbox/Evil Twin + PEAP Downgrade Attack.md",
+    "00-Inbox/Fonts.md",
+    "00-Inbox/Финансы.md",
+    "00-Inbox/плагины обсидиан.md",
+    "00-Inbox/Дни рождения.md",
+    "00-Inbox/И так, с чего начнем.md",
+    "00-Inbox/Измени все вокруг.md",
+    "00-Inbox/Где хранить информацию. Книги и прочее.md",
+    "00-Inbox/Вычмат курс.md",
+    "00-Inbox/Stepik Курс по алгоритмам и структурам данных.md",
+    "00-Inbox/Выстроить свою систему ведения этих заметок.md",
+    "00-Inbox/checked/Вентиляция. Как получать новый свежий воздух, когда на улице ядерная зима.md",
+    "00-Inbox/Глубина бункера, защищающая от двух АН-602.md",
+    "Instructions/Git.md",
+    "Без названия.md",
+    "Instructions"
+  ]
+}
