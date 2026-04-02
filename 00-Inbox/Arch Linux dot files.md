@@ -1,0 +1,6 @@
+---
+tags:
+  - linux
+  - arch
+  - config
+---

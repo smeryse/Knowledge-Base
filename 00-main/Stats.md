@@ -1,4 +1,4 @@
-## Задачи и монетки
+## Задачи и монетки 
 
 ```dataviewjs
 // Ищем файлы в Completed (отдельные задачи-файлы с frontmatter points)
@@ -13,14 +13,14 @@ const spentFromFiles = shopPages.spent.sum() ?? 0;
 let earnedFromInline = 0;
 let spentFromInline = 0;
 
-for (let page of dv.pages().where(p => p.file.path.startsWith("Tasks/00-Daily/"))) {
+for (let page of dv.pages().where(p => p.file.path.startsWith("Tasks/Daily/"))) {
   try {
     const content = await dv.io.load(page.file.path);
     if (content && typeof content === "string") {
       // Заработано: (+100) — только выполненные [x]
       const earnedMatches = [...content.matchAll(/- \[x\].*?\(\+(\d+)\)/g)];
       earnedMatches.forEach(m => earnedFromInline += parseInt(m[1]));
-      
+
       // Потрачено: (-80) — только выполненные [x]
       const spentMatches = [...content.matchAll(/- \[x\].*?\(-(\d+)\)/g)];
       spentMatches.forEach(m => spentFromInline += parseInt(m[1]));
@@ -45,13 +45,12 @@ dv.table(
 ```
 
 ```dataviewjs
-// Собираем данные по дням
+// 📊 Гистограмма: Заработано vs Потрачено (по дням недели)
 const daysOfWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
 const earnedData = [0, 0, 0, 0, 0, 0, 0];
 const spentData = [0, 0, 0, 0, 0, 0, 0];
 
-// Обработка Daily Note
-for (let page of dv.pages().where(p => p.file.path.startsWith("Tasks/00-Daily/"))) {
+for (let page of dv.pages().where(p => p.file.path.startsWith("Tasks/Daily/"))) {
   try {
     const content = await dv.io.load(page.file.path);
     if (content && typeof content === "string") {
@@ -59,11 +58,8 @@ for (let page of dv.pages().where(p => p.file.path.startsWith("Tasks/00-Daily/")
       if (dateMatch) {
         const date = new Date(dateMatch[1]);
         const dayIndex = (date.getDay() + 6) % 7;
-        
-        // Только выполненные [x]
         const earnedMatches = [...content.matchAll(/- \[x\].*?\(\+(\d+)\)/g)];
         earnedMatches.forEach(m => earnedData[dayIndex] += parseInt(m[1]));
-        
         const spentMatches = [...content.matchAll(/- \[x\].*?\(-(\d+)\)/g)];
         spentMatches.forEach(m => spentData[dayIndex] += parseInt(m[1]));
       }
@@ -71,27 +67,26 @@ for (let page of dv.pages().where(p => p.file.path.startsWith("Tasks/00-Daily/")
   } catch (e) {}
 }
 
-// Выводим график
-const chartConfig = `type: line
+dv.span(`\`\`\`chart
+type: bar
 labels:
   - ${daysOfWeek.join('\n  - ')}
 series:
   - label: Заработано
     data: [${earnedData.join(', ')}]
-    fill: false
+    color: "#275EE91"
   - label: Потрачено
     data: [${spentData.join(', ')}]
-    fill: false
+    color: "#275EE919"
 xOptions:
   display: true
   title: День недели
 yOptions:
   display: true
-  title: Баллы`;
-
-dv.span('```chart\n' + chartConfig + '\n```');
+  title: Баллы
+  beginAtZero: true
+\`\`\``);
 ```
-
 
 ---
 
@@ -150,17 +145,17 @@ const days = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
 function getColor(count) {
     if (count === 0) return '#242424';
     const ratio = count / maxCount;
-    if (ratio > 0.8) return '#C084FC';
-    if (ratio > 0.6) return '#9333EA';
-    if (ratio > 0.4) return '#6B21A8';
-    if (ratio > 0.2) return '#2E1065';
-    return '#2E1065';
+    if (ratio > 0.8) return '#8AB3F2';
+    if (ratio > 0.6) return '#6A9EF1';
+    if (ratio > 0.4) return '#4A8AF0';
+    if (ratio > 0.2) return '#2A76EF';
+    return '#0A62EE';
 }
 
-let html = '<div style="overflow-x: auto; font-family: -apple-system, BlinkMacSystemFont, sans-serif; text-align: center;">';
+let html = '<div style="width: 100%; overflow-x: auto; font-family: -apple-system, BlinkMacSystemFont, sans-serif; text-align: center;">';
 html += '<div style="display: flex; justify-content: center; margin-bottom: 8px;">';
 html += '<div style="width: 50px;"></div>';
-html += '<div style="display: flex; gap: 3px;">';
+html += '<div style="display: flex; gap: 3px; flex-wrap: nowrap;">';
 
 let currentMonth = -1;
 for (let i = daysToShow - 1; i >= 0; i--) {
@@ -174,14 +169,14 @@ for (let i = daysToShow - 1; i >= 0; i--) {
 }
 html += '</div></div>';
 
-html += '<div style="display: flex; justify-content: center; align-items: flex-start;">';
-html += '<div style="display: flex; flex-direction: column; gap: 3px; margin-right: 8px;">';
+html += '<div style="display: flex; justify-content: flex-start; align-items: flex-start; overflow-x: auto;">';
+html += '<div style="display: flex; flex-direction: column; gap: 3px; margin-right: 8px; flex-shrink: 0;">';
 days.forEach(day => {
     html += `<div style="height: 10px; font-size: 9px; color: #8b949e; line-height: 10px;">${day}</div>`;
 });
 html += '</div>';
 
-html += '<div style="display: grid; grid-template-rows: repeat(7, 1fr); gap: 3px;">';
+html += '<div style="display: grid; grid-template-rows: repeat(7, 1fr); gap: 3px; flex-shrink: 0;">';
 const weeks = {};
 for (let i = daysToShow - 1; i >= 0; i--) {
     const date = new Date(today);
@@ -208,13 +203,13 @@ for (let day = 1; day <= 7; day++) {
 
 html += '</div></div></div>';
 
-html += '<div style="display: flex; justify-content: center; align-items: center; gap: 4px; margin-top: 8px; font-size: 11px; color: #8b949e;">';
+html += '<div style="display: flex; justify-content: flex-start; align-items: center; gap: 4px; margin-top: 8px; font-size: 11px; color: #8b949e; flex-wrap: wrap;">';
 html += '<span>Меньше</span>';
-html += '<div style="width: 10px; height: 10px; background: #161220; border-radius: 2px;"></div>';
-html += '<div style="width: 10px; height: 10px; background: #2E1065; border-radius: 2px;"></div>';
-html += '<div style="width: 10px; height: 10px; background: #6B21A8; border-radius: 2px;"></div>';
-html += '<div style="width: 10px; height: 10px; background: #9333EA; border-radius: 2px;"></div>';
-html += '<div style="width: 10px; height: 10px; background: #C084FC; border-radius: 2px;"></div>';
+html += '<div style="width: 10px; height: 10px; background: #0A62EE; border-radius: 2px;"></div>';
+html += '<div style="width: 10px; height: 10px; background: #2A76EF; border-radius: 2px;"></div>';
+html += '<div style="width: 10px; height: 10px; background: #4A8AF0; border-radius: 2px;"></div>';
+html += '<div style="width: 10px; height: 10px; background: #6A9EF1; border-radius: 2px;"></div>';
+html += '<div style="width: 10px; height: 10px; background: #8AB3F2; border-radius: 2px;"></div>';
 html += '<span>Больше</span>';
 html += '</div>';
 
@@ -233,7 +228,7 @@ const data = [
     { label: "Прочее", value: 10 }
 ];
 
-const colors = ["#161220", "#2E1065", "#6B21A8", "#9333EA", "#C084FC", "#A855F7", "#7C3AED", "#5B21B6"];
+const colors = ["#0A62EE", "#2A76EF", "#4A8AF0", "#6A9EF1", "#8AB3F2", "#A9C8F3", "#C9DDF4", "#E8F2F6"];
 const total = data.reduce((sum, d) => sum + d.value, 0);
 
 const width = 300;
@@ -267,7 +262,7 @@ function createArc(cx, cy, outerR, innerR, startAngle, endAngle, color) {
         'Z'
     ].join(' ');
 
-    return `<path d="${d}" fill="${color}" stroke="#1F2223" stroke-width="2"/>`;
+    return `<path d="${d}" fill="${color}"/>`;
 }
 
 let currentAngle = -Math.PI / 2;

@@ -1,3 +1,12 @@
 {
-  "promptDelete": false
+  "promptDelete": false,
+  "newFileLocation": "folder",
+  "attachmentFolderPath": "assets",
+  "newFileFolderPath": "00-Inbox",
+  "alwaysUpdateLinks": true,
+  "showUnsupportedFiles": true,
+  "readableLineLength": false,
+  "ctrlClick": true,
+  "spellcheck": false,
+  "vimMode": false
 }

@@ -1,0 +1,9 @@
+{
+  "command_timeout": 5,
+  "enable_folder_watcher": false,
+  "enabled_templates": [],
+  "folder": "Templates",
+  "skip_folder": "",
+  "template_file": "Templates/Daily-Note.md",
+  "trigger_on_file_creation": true
+}

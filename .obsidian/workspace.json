@@ -4,21 +4,67 @@
     "type": "split",
     "children": [
       {
-        "id": "80b2560242e22426",
+        "id": "8161e9a7ab051d2b",
         "type": "tabs",
+        "dimension": 42.57228315054836,
         "children": [
           {
-            "id": "b6ab5925512e3296",
+            "id": "f1de9cc944c20be9",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "00-Inbox/Obsidian Tranparent Theme.md",
+                "file": "00-main/Stats.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Obsidian Tranparent Theme"
+              "title": "Stats"
+            }
+          },
+          {
+            "id": "0a474fabb0165e1b",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Tasks/Daily/2026-04-01.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "2026-04-01"
+            }
+          }
+        ]
+      },
+      {
+        "id": "7638c4d33d28c5f0",
+        "type": "tabs",
+        "dimension": 57.42771684945165,
+        "children": [
+          {
+            "id": "bb92d25b40abe7d4",
+            "type": "leaf",
+            "state": {
+              "type": "graph",
+              "state": {},
+              "icon": "lucide-git-fork",
+              "title": "Граф"
+            }
+          },
+          {
+            "id": "f6953f14e0d558cd",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Tasks/Daily/2026-04-02.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "2026-04-02"
             }
           }
         ]
@@ -33,6 +79,24 @@
       {
         "id": "4932e2bafa5044a7",
         "type": "tabs",
+        "dimension": 27.27272727272727,
+        "children": [
+          {
+            "id": "9fd5203dd511e0a5",
+            "type": "leaf",
+            "state": {
+              "type": "calendar",
+              "state": {},
+              "icon": "calendar-with-checkmark",
+              "title": "Calendar"
+            }
+          }
+        ]
+      },
+      {
+        "id": "48fc4626d1732e65",
+        "type": "tabs",
+        "dimension": 72.72727272727273,
         "children": [
           {
             "id": "8b4275cd50fab818",
@@ -45,6 +109,26 @@
               },
               "icon": "lucide-folder-closed",
               "title": "Файловый менеджер"
+            }
+          },
+          {
+            "id": "e2c3420595699a42",
+            "type": "leaf",
+            "state": {
+              "type": "timer-view",
+              "state": {},
+              "icon": "timer",
+              "title": "Timer"
+            }
+          },
+          {
+            "id": "5939ca771af053da",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Закладки"
             }
           },
           {
@@ -63,18 +147,9 @@
               "icon": "lucide-search",
               "title": "Поиск"
             }
-          },
-          {
-            "id": "5939ca771af053da",
-            "type": "leaf",
-            "state": {
-              "type": "bookmarks",
-              "state": {},
-              "icon": "lucide-bookmark",
-              "title": "Закладки"
-            }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -87,36 +162,44 @@
       {
         "id": "1dae360e4e6488ce",
         "type": "tabs",
+        "dimension": 72.90462427745665,
         "children": [
           {
-            "id": "52ffd970e5742d84",
+            "id": "6edb58a071962548",
             "type": "leaf",
             "state": {
-              "type": "backlink",
+              "type": "terminal:terminal",
               "state": {
-                "collapseAll": false,
-                "extraContext": false,
-                "sortOrder": "alphabetical",
-                "showSearch": false,
-                "searchQuery": "",
-                "backlinkCollapsed": false,
-                "unlinkedCollapsed": true
+                "terminal:terminal": {
+                  "cwd": "/data/05-Knowledge",
+                  "focus": false,
+                  "profile": {
+                    "args": [],
+                    "executable": "/bin/sh",
+                    "followTheme": true,
+                    "name": "",
+                    "platforms": {
+                      "linux": true
+                    },
+                    "pythonExecutable": "python3",
+                    "restoreHistory": false,
+                    "rightClickAction": "copyPaste",
+                    "successExitCodes": [
+                      "0",
+                      "SIGINT",
+                      "SIGTERM"
+                    ],
+                    "terminalOptions": {
+                      "documentOverride": null
+                    },
+                    "type": "integrated",
+                    "useWin32Conhost": true
+                  },
+                  "serial": null
+                }
               },
-              "icon": "links-coming-in",
-              "title": "Обратные ссылки"
-            }
-          },
-          {
-            "id": "c5432cb793878aba",
-            "type": "leaf",
-            "state": {
-              "type": "outgoing-link",
-              "state": {
-                "linksCollapsed": false,
-                "unlinkedCollapsed": true
-              },
-              "icon": "links-going-out",
-              "title": "Исходящие ссылки"
+              "icon": "terminal",
+              "title": "Terminal: Qwen - 05-Knowledge"
             }
           },
           {
@@ -154,20 +237,78 @@
             "state": {
               "type": "outline",
               "state": {
+                "file": "00-main/Stats.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Структура"
+              "title": "Структура Stats"
+            }
+          },
+          {
+            "id": "ea7bbb95ddfba7c6",
+            "type": "leaf",
+            "state": {
+              "type": "git-view",
+              "state": {},
+              "icon": "git-pull-request",
+              "title": "Source Control"
+            }
+          }
+        ],
+        "currentTab": 4
+      },
+      {
+        "id": "8e1f6f99373cf6f8",
+        "type": "tabs",
+        "dimension": 27.095375722543352,
+        "children": [
+          {
+            "id": "b95ace9d0ff46785",
+            "type": "leaf",
+            "pinned": true,
+            "state": {
+              "type": "terminal:terminal",
+              "state": {
+                "terminal:terminal": {
+                  "cwd": null,
+                  "focus": false,
+                  "profile": {
+                    "args": [],
+                    "executable": "/bin/sh",
+                    "followTheme": true,
+                    "name": "",
+                    "platforms": {
+                      "linux": true
+                    },
+                    "pythonExecutable": "python3",
+                    "restoreHistory": false,
+                    "rightClickAction": "copyPaste",
+                    "successExitCodes": [
+                      "0",
+                      "SIGINT",
+                      "SIGTERM"
+                    ],
+                    "terminalOptions": {
+                      "documentOverride": null
+                    },
+                    "type": "integrated",
+                    "useWin32Conhost": true
+                  },
+                  "serial": null
+                }
+              },
+              "pinned": true,
+              "icon": "terminal",
+              "title": "Terminal: cava"
             }
           }
         ]
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 553.5
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -177,32 +318,60 @@
       "daily-notes:Сегодняшняя заметка": false,
       "templates:Вставить шаблон": false,
       "command-palette:Открыть палитру команд": false,
-      "bases:Создать новую базу": false
+      "bases:Создать новую базу": false,
+      "terminal:Open terminal": false,
+      "obsidian-git:Open Git source control": false,
+      "pomodoro-timer:Toggle timer panel": false,
+      "templater-obsidian:Templater": false
     }
   },
-  "active": "b6ab5925512e3296",
+  "active": "ea7bbb95ddfba7c6",
   "lastOpenFiles": [
-    "00-Inbox/Obsidian-Setup.md",
-    "00-Inbox/Osint против.md",
-    "00-Inbox/Pasted image 20260118212933.png",
-    "00-Inbox/Pasted image 20260315212414.png",
-    "00-Inbox/Pasted image 20260315213828.png",
-    "00-Inbox/Firefox theme launcher.md",
-    "00-Inbox/Evil Twin + PEAP Downgrade Attack.md",
-    "00-Inbox/Fonts.md",
-    "00-Inbox/Финансы.md",
-    "00-Inbox/плагины обсидиан.md",
-    "00-Inbox/Дни рождения.md",
-    "00-Inbox/И так, с чего начнем.md",
-    "00-Inbox/Измени все вокруг.md",
-    "00-Inbox/Где хранить информацию. Книги и прочее.md",
-    "00-Inbox/Вычмат курс.md",
-    "00-Inbox/Stepik Курс по алгоритмам и структурам данных.md",
-    "00-Inbox/Выстроить свою систему ведения этих заметок.md",
-    "00-Inbox/checked/Вентиляция. Как получать новый свежий воздух, когда на улице ядерная зима.md",
-    "00-Inbox/Глубина бункера, защищающая от двух АН-602.md",
-    "Instructions/Git.md",
-    "Без названия.md",
-    "Instructions"
+    "00-main/Stats.md",
+    "Tasks/Daily/2026-04-01.md",
+    "00-Inbox/14.md",
+    "00-main/Balance-Lever.md",
+    "Tasks/Daily/2026-04-02.md",
+    "00-Inbox/Arch Linux dot files.md",
+    "00-main/Shop.md",
+    "Tasks/Waiting/TODO.md",
+    "00-main/Tag Base.md",
+    "00-main/Index.md",
+    "00-Inbox/Без названия 8.md",
+    "00-Inbox/Custom android os.md",
+    "00-main/Рабочий Pipeline.md",
+    "Tasks/Daily/2026-04-05.md",
+    "Tasks/Daily/2026-04-04.md",
+    "Tasks/Daily/2026-04-03.md",
+    "Tasks/Daily/2026-04-11.md",
+    "Templates/Daily-Note.md",
+    "Prompts/AI-Tasks-Evaluation-Prompt.md",
+    "Projects/Библиотека личной музыки.md",
+    "Prompts",
+    "Study/Расписание.md",
+    "schedule.png",
+    "Templates/daily-progress.js",
+    "00-Inbox/Double Ubuntu Boot.md",
+    "Projects/Интеграция расписания.md",
+    "Tasks/update_progress.py",
+    "Templates/Daily-Note-Dataview.md",
+    "Templates/Note.md",
+    "Templates/scripts/schedule.js",
+    "Templates/scripts",
+    "Study/schedule.json",
+    "00-main/Rewards.md",
+    "assets/Pasted image 20260401215233.png",
+    "Tasks/Daily",
+    "Tasks/Без названия 1",
+    "Tasks/Без названия",
+    "Tasks/Waiting",
+    "assets/banner.jpg",
+    "assets/Pasted image 20260401031020.png",
+    "assets/mermaid-1773276434370.png",
+    "assets/Pasted image 20260331102723.png",
+    "assets/Pasted image 20260118212933.png",
+    "assets/Pasted image 20260118212925.png",
+    "assets/Pasted image 20260315212414.png",
+    "assets/Pasted image 20260315213828.png"
   ]
 }

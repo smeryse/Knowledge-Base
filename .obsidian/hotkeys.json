@@ -1,0 +1,19 @@
+{
+  "obsidian-tasks-plugin:edit-task": [
+    {
+      "modifiers": [
+        "Meta"
+      ],
+      "key": "T"
+    }
+  ],
+  "templater-obsidian:create-new-note-from-template": [],
+  "templater-obsidian:create-Templates/Note.md": [
+    {
+      "modifiers": [
+        "Alt"
+      ],
+      "key": "N"
+    }
+  ]
+}
