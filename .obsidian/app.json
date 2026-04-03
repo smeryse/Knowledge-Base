@@ -8,5 +8,13 @@
   "readableLineLength": false,
   "ctrlClick": true,
   "spellcheck": false,
-  "vimMode": false
+  "vimMode": false,
+  "userIgnoreFilters": [
+    "Study/ВЕБ/",
+    "Study/КАСД/",
+    "Study/ОС/",
+    "Study/ТА/",
+    "Study/ТВ/"
+  ],
+  "defaultViewMode": "source"
 }

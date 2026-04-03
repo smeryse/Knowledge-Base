@@ -1,5 +1,6 @@
 {
   "folder": "Tasks/Daily",
   "format": "YYYY-MM-DD",
-  "template": "Templates/Daily-Note"
+  "template": "Templates/Daily-Note",
+  "autorun": true
 }

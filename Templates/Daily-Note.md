@@ -54,9 +54,17 @@
         }
     }
 %>
-
 ## Задачи
-- [ ] 
+
+
+## 🔥 Активные проекты
+
+```dataview
+TABLE status, priority, points, due
+FROM "Projects"
+WHERE contains(status, "active") OR status = "active"
+SORT priority ASC
+```
 
 ```dataviewjs
 const file = dv.current().file.path;

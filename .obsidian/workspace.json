@@ -4,21 +4,55 @@
     "type": "split",
     "children": [
       {
-        "id": "927049ba763e63bc",
+        "id": "61cc7d762d54e2df",
         "type": "tabs",
         "children": [
           {
-            "id": "447b8cf5d746cc06",
+            "id": "c7d642e742f54834",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Tasks/Daily/2026-04-03.md",
-                "mode": "preview",
+                "file": "Projects/Одежда/Одежда база данных.md",
+                "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "2026-04-03"
+              "title": "Одежда база данных"
+            }
+          },
+          {
+            "id": "17606fc3deedc523",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Projects/Одежда/Подбор одежды.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Подбор одежды"
+            }
+          }
+        ]
+      },
+      {
+        "id": "b7bb42c60ab1c867",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "5e4cd652795c4024",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Projects/Одежда/Образы.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Образы"
             }
           }
         ]
@@ -189,13 +223,12 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "00-main/Stats.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Структура Stats"
+              "title": "Структура"
             }
           },
           {
@@ -213,7 +246,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 629.5
+    "width": 684.5
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -232,42 +265,43 @@
   },
   "active": "ea7bbb95ddfba7c6",
   "lastOpenFiles": [
+    "Projects/Одежда/Одежда база данных.md",
+    "assets/Pasted image 20260403190918.png",
+    "assets/Pasted image 20260403190917.png",
+    "Projects/Одежда/Образы.md",
+    "Projects/Одежда/Подбор одежды.md",
+    "Projects/Одежда/Корзина грязного белья.md",
+    "Projects/Одежда/Вес вещей и оценка загруженности стиральной машины.md",
     "Tasks/Daily/2026-04-03.md",
-    "Study/index.md",
-    "Tasks/Daily/2026-04-02.md",
-    "Templates/Daily-Note.md",
-    "Tasks/Daily/2026-03-31.md",
-    "00-Inbox/checked/Белые списки - существующие способы обхода.md",
-    "Tasks/Waiting.md",
+    "Projects/Одежда",
     "Projects/Библиотека личной музыки.md",
-    "Projects/Obsidian Hotkeys.md",
-    "00-Inbox/Без названия 3.md",
-    "00-Inbox/Без названия 1.md",
-    "00-Inbox/Без названия 2.md",
-    "00-Inbox/Без названия.md",
-    "Projects/Сделать универсального бота телеграм для скачивания всего подряд.md",
-    "00-Inbox/Wishlist.md",
-    "00-main/Парадигмы этого хранилища.md",
-    "Tasks/Waiting/TODO.md",
-    "Tasks/Waiting/00-task.md",
-    "00-Inbox/Linux Audio Stack & MPD Setup Log.md",
-    "00-Inbox/!11.md",
-    "00-Inbox/Типо вот шаблон для денег по месяцам.md",
-    "00-Inbox/Все виды графиков.md",
-    "00-Inbox/Загранпаспорт — чек-лист.md",
-    "00-Inbox/Как оформить загранпаспорт взрослому.md",
-    "00-Inbox/Финансы.md",
+    "Projects/Интеграция расписания.md",
+    "Tasks/Daily/2026-04-10.md",
     "Tasks/Daily/2026-04-05.md",
-    "Study/КАСД/labs/oop/05-DelegatesAndEvents/bin/Debug/net8.0/runtimes/browser/lib/net8.0/System.Text.Encodings.Web.dll",
-    "Study/КАСД/labs/oop/03-04-FileDirectoryIO-DelegatesAndInterfaces/bin/Debug/net8.0/runtimes/browser/lib/net8.0/System.Text.Encodings.Web.dll",
-    "Study/КАСД/labs/oop/05-DelegatesAndEvents/bin/Debug/net8.0/runtimes/browser/lib/net8.0",
-    "Study/КАСД/labs/oop/03-04-FileDirectoryIO-DelegatesAndInterfaces/bin/Debug/net8.0/runtimes/browser/lib/net8.0",
-    "Study/КАСД/labs/oop/05-DelegatesAndEvents/bin/Debug/net8.0/runtimes/browser/lib",
-    "Study/КАСД/labs/oop/03-04-FileDirectoryIO-DelegatesAndInterfaces/bin/Debug/net8.0/runtimes/browser/lib",
-    "Study/КАСД/tasks/03-sorting-algorithms/Algorithms/obj/Debug/net8.0/refint/ConsoleApp1.dll",
-    "Study/КАСД/tasks/03-sorting-algorithms/Algorithms/obj/Debug/net8.0/ref/ConsoleApp1.dll",
-    "Study/КАСД/labs/oop/05-DelegatesAndEvents/obj/Debug/net8.0/refint/ЛР5.dll",
-    "Study/КАСД/labs/oop/05-DelegatesAndEvents/obj/Debug/net8.0/refint/DelegatesAndEvents.dll",
+    "Tasks/Daily/2026-04-04.md",
+    "Templates/Daily-Note.md",
+    "Study/index.md",
+    "Projects/Человеческий корм.md",
+    "Templates/Project-Note.md",
+    "Tasks/Daily/2026-04-02.md",
+    "Projects/Obsidian Hotkeys.md",
+    "Projects/Миграция из России.md",
+    "Projects/Расписание стирок.md",
+    "Projects/Финансы автопроект.md",
+    "Projects/Сделать универсального бота телеграм для скачивания всего подряд.md",
+    "Study/КАСД/tasks/21/obj/Debug/net8.0/Task21.csproj.FileListAbsolute.txt",
+    "Study/КАСД/tasks/21/bin/Debug/net8.0/Task21.pdb",
+    "Study/КАСД/tasks/21/obj/Debug/net8.0/ref/Task21.dll",
+    "Study/КАСД/tasks/21/bin/Debug/net8.0/Task21.dll",
+    "Study/КАСД/tasks/21/bin/Debug/net8.0/Task21.runtimeconfig.json",
+    "Study/КАСД/tasks/21/obj/Debug/net8.0/Task21.genruntimeconfig.cache",
+    "Study/КАСД/tasks/21/bin/Debug/net8.0/Task21.deps.json",
+    "Study/КАСД/tasks/21/bin/Debug/net8.0/Task21",
+    "Study/КАСД/tasks/21/obj/Debug/net8.0/apphost",
+    "Templates/Daily-Note-Dataview.md",
+    "Study/Атестация.md",
+    "00-main/Index.md",
+    "Study/КАСД/index.md",
     "Study/КАСД/labs/db/images/user.svg",
     "Study/КАСД/labs/db/images/uml.svg",
     "Study/КАСД/labs/db/images/graphviz.svg",
@@ -276,8 +310,6 @@
     "Study/КАСД/labs/db/images/UseVar-Diagram (1).svg",
     "Study/КАСД/labs/db/images/ER-Diagram (2).svg",
     "Study/КАСД/labs/db/images/ER-Diagram (1).svg",
-    "Study/КАСД/labs/db/images/Classes-UML-Diagram(2).svg",
-    "Study/КАСД/labs/db/images/Classes-UML-Diagram(1).svg",
     "Study/КАСД/labs/db/07-lab-backup/Без названия.canvas",
     "Study/КАСД/labs/oop/05-DelegatesAndEvents/Structure.canvas",
     "Study/КАСД/labs/oop/02-Polymorphism/Schedule.canvas",
