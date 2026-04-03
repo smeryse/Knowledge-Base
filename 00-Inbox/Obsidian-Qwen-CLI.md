@@ -107,7 +107,7 @@ qwen --include-directories "$(pwd)/10-Tech"
 
 ## Ссылки
 
-- [[Obsidian]]
+- [[Obsidian Hotkeys]]
 - [[CLI Tools]]
 - [[AI Assistants]]
 

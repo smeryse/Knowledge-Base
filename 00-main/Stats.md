@@ -108,11 +108,26 @@ dv.table(
 ```
 
 ```dataviewjs
+// 📊 GitHub-style активность (синяя палитра)
 const files = app.vault.getMarkdownFiles();
 const activity = {};
 const today = new Date();
-const daysToShow = 215;
+const daysToShow = 365;
 
+// Определение темы (светлая/тёмная)
+const isDarkTheme = document.body.classList.contains('theme-dark');
+
+// GNOME Blue: #3584e4
+// Цвета для тёмной темы (в стиле GNOME)
+const darkColors = ['#1e1e1e', '#2a4a6e', '#3d6a9e', '#3584e4', '#62a0ea', '#99c1f1'];
+// Цвета для светлой темы (в стиле GNOME)
+const lightColors = ['#ffffff', '#dbe4f0', '#b3c7e3', '#62a0ea', '#3584e4', '#1a5fb4'];
+
+const colors = isDarkTheme ? darkColors : lightColors;
+const textColor = isDarkTheme ? 'var(--text-normal)' : '#1a1a1a';
+const mutedColor = isDarkTheme ? 'var(--text-muted)' : '#666666';
+
+// Инициализация массива активности
 for (let i = daysToShow - 1; i >= 0; i--) {
     const date = new Date(today);
     date.setDate(date.getDate() - i);
@@ -120,6 +135,7 @@ for (let i = daysToShow - 1; i >= 0; i--) {
     activity[dateStr] = 0;
 }
 
+// Подсчёт активности по датам (по дате модификации файла)
 for (const file of files) {
     const stat = app.metadataCache.getFileCache(file.path);
     let dateStr;
@@ -138,80 +154,77 @@ for (const file of files) {
     }
 }
 
-const maxCount = Math.max(...Object.values(activity), 1);
-const months = ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'];
-const days = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
-
-function getColor(count) {
-    if (count === 0) return '#242424';
-    const ratio = count / maxCount;
-    if (ratio > 0.8) return '#8AB3F2';
-    if (ratio > 0.6) return '#6A9EF1';
-    if (ratio > 0.4) return '#4A8AF0';
-    if (ratio > 0.2) return '#2A76EF';
-    return '#0A62EE';
-}
-
-let html = '<div style="width: 100%; overflow-x: auto; font-family: -apple-system, BlinkMacSystemFont, sans-serif; text-align: center;">';
-html += '<div style="display: flex; justify-content: center; margin-bottom: 8px;">';
-html += '<div style="width: 50px;"></div>';
-html += '<div style="display: flex; gap: 3px; flex-wrap: nowrap;">';
-
-let currentMonth = -1;
-for (let i = daysToShow - 1; i >= 0; i--) {
-    const date = new Date(today);
-    date.setDate(date.getDate() - i);
-    const month = date.getMonth();
-    if (month !== currentMonth) {
-        html += `<span style="font-size: 10px; color: #8b949e; min-width: 30px;">${months[month]}</span>`;
-        currentMonth = month;
-    }
-}
-html += '</div></div>';
-
-html += '<div style="display: flex; justify-content: flex-start; align-items: flex-start; overflow-x: auto;">';
-html += '<div style="display: flex; flex-direction: column; gap: 3px; margin-right: 8px; flex-shrink: 0;">';
-days.forEach(day => {
-    html += `<div style="height: 10px; font-size: 9px; color: #8b949e; line-height: 10px;">${day}</div>`;
-});
-html += '</div>';
-
-html += '<div style="display: grid; grid-template-rows: repeat(7, 1fr); gap: 3px; flex-shrink: 0;">';
-const weeks = {};
+// Преобразование в массив для рендеринга
+const activityArray = [];
 for (let i = daysToShow - 1; i >= 0; i--) {
     const date = new Date(today);
     date.setDate(date.getDate() - i);
     const dateStr = date.toISOString().split('T')[0];
-    const weekDay = date.getDay();
-    const weekNum = Math.floor((daysToShow - i) / 7);
-
-    if (!weeks[weekNum]) weeks[weekNum] = {};
-    weeks[weekNum][weekDay] = { date: dateStr, count: activity[dateStr] };
+    activityArray.push({ date, count: activity[dateStr] || 0 });
 }
 
-for (let day = 1; day <= 7; day++) {
-    html += '<div style="display: flex; gap: 3px;">';
-    for (let week = 0; week < Object.keys(weeks).length; week++) {
-        const cell = weeks[week][day];
-        const count = cell ? cell.count : 0;
-        const date = cell ? cell.date : '';
-        const color = getColor(count);
-        html += `<div style="width: 10px; height: 10px; background: ${color}; border-radius: 2px;" title="${date}: ${count} файлов"></div>`;
+const maxCount = Math.max(...activityArray.map(d => d.count), 1);
+
+function getColor(count) {
+    if (count === 0) return colors[0];
+    const ratio = count / maxCount;
+    if (ratio > 0.8) return colors[5];
+    if (ratio > 0.6) return colors[4];
+    if (ratio > 0.4) return colors[3];
+    if (ratio > 0.2) return colors[2];
+    return colors[1];
+}
+
+// Группировка по неделям
+const weeks = {};
+for (let i = 0; i < activityArray.length; i++) {
+    const weekNum = Math.floor(i / 7);
+    const dayInWeek = i % 7;
+    if (!weeks[weekNum]) weeks[weekNum] = [];
+    weeks[weekNum][dayInWeek] = activityArray[i];
+}
+
+// Рендеринг HTML
+let html = `<div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">`;
+html += `<h4 style="margin: 0 0 16px 0; color: ${textColor}; font-size: 16px; text-align: center;">Активность</h4>`;
+html += `<div style="display: flex; align-items: flex-start; gap: 4px; overflow-x: auto; padding: 8px 0; justify-content: center;">`;
+
+// Дни недели
+html += `<div style="display: flex; flex-direction: column; gap: 3px; flex-shrink: 0;">`;
+html += `<div style="height: 10px; font-size: 9px; color: ${mutedColor}; line-height: 10px;">Пн</div>`;
+html += `<div style="height: 10px; font-size: 9px; color: ${mutedColor}; line-height: 10px;">Вт</div>`;
+html += `<div style="height: 10px; font-size: 9px; color: ${mutedColor}; line-height: 10px;">Ср</div>`;
+html += `<div style="height: 10px; font-size: 9px; color: ${mutedColor}; line-height: 10px;">Чт</div>`;
+html += `<div style="height: 10px; font-size: 9px; color: ${mutedColor}; line-height: 10px;">Пт</div>`;
+html += `<div style="height: 10px; font-size: 9px; color: ${mutedColor}; line-height: 10px;">Сб</div>`;
+html += `<div style="height: 10px; font-size: 9px; color: ${mutedColor}; line-height: 10px;">Вс</div>`;
+html += '</div>';
+
+// Недели
+html += '<div style="display: flex; gap: 3px; flex-shrink: 0;">';
+Object.keys(weeks).forEach(weekNum => {
+    html += '<div style="display: grid; grid-template-rows: repeat(7, 1fr); gap: 3px;">';
+    for (let day = 0; day < 7; day++) {
+        const dayData = weeks[weekNum][day];
+        const color = getColor(dayData?.count || 0);
+        const dateStr = dayData?.date.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' });
+        html += `<div style="width: 10px; height: 10px; background: ${color}; border-radius: 2px; cursor: pointer;" title="${dateStr}: ${dayData?.count || 0}"></div>`;
     }
     html += '</div>';
-}
+});
+html += '</div></div>';
 
-html += '</div></div></div>';
-
-html += '<div style="display: flex; justify-content: flex-start; align-items: center; gap: 4px; margin-top: 8px; font-size: 11px; color: #8b949e; flex-wrap: wrap;">';
+// Легенда
+html += `<div style="display: flex; justify-content: center; align-items: center; gap: 4px; margin-top: 12px; font-size: 11px; color: ${mutedColor}; flex-wrap: wrap;">`;
 html += '<span>Меньше</span>';
-html += '<div style="width: 10px; height: 10px; background: #0A62EE; border-radius: 2px;"></div>';
-html += '<div style="width: 10px; height: 10px; background: #2A76EF; border-radius: 2px;"></div>';
-html += '<div style="width: 10px; height: 10px; background: #4A8AF0; border-radius: 2px;"></div>';
-html += '<div style="width: 10px; height: 10px; background: #6A9EF1; border-radius: 2px;"></div>';
-html += '<div style="width: 10px; height: 10px; background: #8AB3F2; border-radius: 2px;"></div>';
+html += `<div style="width: 10px; height: 10px; background: ${colors[0]}; border: 1px solid ${mutedColor}; border-radius: 2px;"></div>`;
+html += `<div style="width: 10px; height: 10px; background: ${colors[1]}; border-radius: 2px;"></div>`;
+html += `<div style="width: 10px; height: 10px; background: ${colors[2]}; border-radius: 2px;"></div>`;
+html += `<div style="width: 10px; height: 10px; background: ${colors[3]}; border-radius: 2px;"></div>`;
+html += `<div style="width: 10px; height: 10px; background: ${colors[4]}; border-radius: 2px;"></div>`;
+html += `<div style="width: 10px; height: 10px; background: ${colors[5]}; border-radius: 2px;"></div>`;
 html += '<span>Больше</span>';
-html += '</div>';
+html += '</div></div>';
 
 dv.paragraph(html);
 ```
