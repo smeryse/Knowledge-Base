@@ -4,6 +4,5 @@
   "enabled_templates": [],
   "folder": "Templates",
   "skip_folder": "",
-  "template_file": "Templates/Daily-Note.md",
-  "trigger_on_file_creation": true
+  "trigger_on_file_creation": false
 }

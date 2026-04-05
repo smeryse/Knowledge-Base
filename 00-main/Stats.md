@@ -1,4 +1,4 @@
-## Задачи и монетки 
+## Задачи и монетки
 
 ```dataviewjs
 // Ищем файлы в Completed (отдельные задачи-файлы с frontmatter points)
@@ -86,6 +86,56 @@ yOptions:
   title: Баллы
   beginAtZero: true
 \`\`\``);
+```
+
+---
+
+## 💰 Рубли
+
+```dataviewjs
+// Парсим рубли из daily notes: (+N₽) заработано, (-NР) потрачено
+let incomeTotal = 0;
+let spentTotal = 0;
+
+for (let page of dv.pages().where(p => p.file.path.startsWith("Tasks/Daily/"))) {
+  try {
+    const content = await dv.io.load(page.file.path);
+    if (content && typeof content === "string") {
+      // Заработано: (+5000р)
+      const incomeMatches = [...content.matchAll(/- \[x\].*?\(\+(\d+)р\)/g)];
+      incomeMatches.forEach(m => incomeTotal += parseInt(m[1]));
+      
+      // Потрачено: (-280р)
+      const spentMatches = [...content.matchAll(/- \[x\].*?\(-(\d+)р\)/g)];
+      spentMatches.forEach(m => spentTotal += parseInt(m[1]));
+    }
+  } catch (e) {}
+}
+
+// Распределение
+const savings = Math.round(incomeTotal * 0.50);
+const mandatory = Math.round(incomeTotal * 0.30);
+const freePool = incomeTotal - savings - mandatory;
+const freeRemaining = freePool - spentTotal;
+
+dv.table(
+  ["Показатель", "Сумма"],
+  [
+    ["**Всего заработано**", `${incomeTotal.toLocaleString()}р`],
+    ["💰 Накопления (50%)", `${savings.toLocaleString()}р`],
+    ["🏠 Обязательные (30%)", `${mandatory.toLocaleString()}р`],
+    ["🎉 Свободные (20%)", `${freePool.toLocaleString()}р`],
+    ["**Потрачено из свободных**", `-${spentTotal.toLocaleString()}р`],
+    ["**Остаток свободных**", `${freeRemaining.toLocaleString()}р`]
+  ]
+);
+
+// Прогресс-бар свободных
+const pct = freePool > 0 ? Math.max(0, Math.round((freeRemaining / freePool) * 100)) : 0;
+const barLen = 30;
+const filled = Math.max(0, Math.round((pct / 100) * barLen));
+const bar = freeRemaining < 0 ? '░'.repeat(barLen) : '█'.repeat(filled) + '░'.repeat(barLen - filled);
+dv.paragraph(`\n**Свободные:** \`${bar}\` ${pct}%${freeRemaining < 0 ? ' ⚠️ В МИНУСЕ!' : ''}`);
 ```
 
 ---

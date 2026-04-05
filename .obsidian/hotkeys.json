@@ -7,7 +7,41 @@
       "key": "T"
     }
   ],
-  "templater-obsidian:create-new-note-from-template": [],
+  "templater-obsidian:insert-templater": [
+    {
+      "modifiers": [
+        "Mod",
+        "Shift"
+      ],
+      "key": "D"
+    }
+  ],
+  "templater-obsidian:create-Templates/Daily-Note.md": [
+    {
+      "modifiers": [
+        "Mod"
+      ],
+      "key": "D"
+    }
+  ],
+  "templater-obsidian:create-Templates/Track Outfit.md": [
+    {
+      "modifiers": [
+        "Mod",
+        "Shift"
+      ],
+      "key": "T"
+    }
+  ],
+  "templater-obsidian:create-Templates/Undo Track Outfit.md": [
+    {
+      "modifiers": [
+        "Mod",
+        "Alt"
+      ],
+      "key": "U"
+    }
+  ],
   "templater-obsidian:create-Templates/Note.md": [
     {
       "modifiers": [
