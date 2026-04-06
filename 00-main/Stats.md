@@ -1,4 +1,4 @@
-## Задачи и монетки
+## Баллы
 
 ```dataviewjs
 // Ищем файлы в Completed (отдельные задачи-файлы с frontmatter points)
@@ -90,7 +90,7 @@ yOptions:
 
 ---
 
-## 💰 Рубли
+## Рубли
 
 ```dataviewjs
 // Парсим рубли из daily notes: (+N₽) заработано, (-NР) потрачено
@@ -136,6 +136,31 @@ const barLen = 30;
 const filled = Math.max(0, Math.round((pct / 100) * barLen));
 const bar = freeRemaining < 0 ? '░'.repeat(barLen) : '█'.repeat(filled) + '░'.repeat(barLen - filled);
 dv.paragraph(`\n**Свободные:** \`${bar}\` ${pct}%${freeRemaining < 0 ? ' ⚠️ В МИНУСЕ!' : ''}`);
+```
+
+```dataviewjs
+const daysOfWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
+const earnedData = [0, 0, 0, 0, 0, 0, 0];
+const spentData = [0, 0, 0, 0, 0, 0, 0];
+
+for (let page of dv.pages().where(p => p.file.path.startsWith("Tasks/Daily/"))) {
+  try {
+    const content = await dv.io.load(page.file.path);
+    if (content && typeof content === "string") {
+      const dateMatch = page.file.name.match(/(\d{4}-\d{2}-\d{2})/);
+      if (dateMatch) {
+        const date = new Date(dateMatch[1]);
+        const dayIndex = (date.getDay() + 6) % 7;
+        const earnedMatches = [...content.matchAll(/- \[x\].*?\(\+(\d+)р\)/g)];
+        earnedMatches.forEach(m => earnedData[dayIndex] += parseInt(m[1]));
+        const spentMatches = [...content.matchAll(/- \[x\].*?\(-(\d+)р\)/g)];
+        spentMatches.forEach(m => spentData[dayIndex] += parseInt(m[1]));
+      }
+    }
+  } catch (e) {}
+}
+
+dv.span("```chart\ntype: bar\nlabels:\n  - " + daysOfWeek.join("\n  - ") + "\nseries:\n  - label: Заработано\n    data: [" + earnedData.join(", ") + "]\n    color: \"#27AE60\"\n  - label: Потрачено\n    data: [" + spentData.join(", ") + "]\n    color: \"#E74C3C\"\nxOptions:\n  display: true\n  title: День недели\nyOptions:\n  display: true\n  title: Рубли\n  beginAtZero: true\n```");
 ```
 
 ---

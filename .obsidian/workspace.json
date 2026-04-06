@@ -13,15 +13,30 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "00-main/Stats.md",
+                "file": "Tasks/Daily/2026-04-06.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Stats"
+              "title": "2026-04-06"
+            }
+          },
+          {
+            "id": "cba73108b89b9be2",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Tasks/Daily/2026-04-07.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "2026-04-07"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -246,7 +261,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 1234.5
+    "width": 345.5
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -263,35 +278,35 @@
       "templater-obsidian:Templater": false
     }
   },
-  "active": "ea7bbb95ddfba7c6",
+  "active": "cba73108b89b9be2",
   "lastOpenFiles": [
+    "00-Inbox/Все ссылки для обхода блокировок.md",
     "00-main/Stats.md",
+    "Tasks/Daily/2026-04-06.md",
+    "Tasks/Daily/2026-04-07.md",
+    "Templates/Daily-Note.md",
     "00-main/Budget.md",
-    "00-main/Shop.md",
+    "Tasks/Daily/2026-04-05.md",
+    "Tasks/Daily/2026-04-08.md",
+    "Templates/Daily-Note-Dataview.md",
+    "Templates/Daily-Note-With-Clothes.md",
+    "Templates/Note.md",
+    "Templates/Track Outfit.md",
+    "Templates/Project-Note.md",
+    "Tasks/Daily/2026-04-01.md",
+    "Tasks/Daily/2026-04-04.md",
     "Tasks/Daily/2026-04-02.md",
     "Tasks/Daily/2026-04-03.md",
-    "Tasks/Daily/2026-04-04.md",
-    "Tasks/Daily/2026-04-05.md",
-    "Tasks/Daily/2026-04-06.md",
+    "Projects/Одежда/Подбор одежды.md",
+    "00-main/Balance-Lever.md",
+    "00-main/Shop.md",
     "00-main/Tag Base.md",
     "00-main/Pipeline.md",
     "Projects/Библиотека личной музыки.md",
     "Projects/Миграция из России.md",
     "Projects/Сделать универсального бота телеграм для скачивания всего подряд.md",
     "Projects/Obsidian Hotkeys.md",
-    "Projects/Человеческий корм.md",
-    "Projects/Интеграция расписания.md",
-    "Projects/Расписание стирок.md",
-    "Projects/Финансы автопроект.md",
-    "Templates/Daily-Note.md",
-    "Templates/Daily-Note-With-Clothes.md",
-    "Projects/Одежда/Корзина.md",
-    "00-Inbox/Замороженные овощные смеси.md",
-    "Tasks/Daily/2026-04-01.md",
-    "Projects/Одежда/Состояние.md",
-    "Templates/Undo Track Outfit.md",
     "Study/ТА/02_labs/lab-8/ЛР8.docx",
-    "Projects/Одежда/Образы.md",
     "Templates/scripts/create-daily-note.js",
     "Projects/Одежда/scripts/track-outfit.js",
     "Projects/Одежда/scripts/wardrobe.js",
