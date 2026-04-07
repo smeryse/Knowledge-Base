@@ -46,26 +46,52 @@ dv.table(
 
 ```dataviewjs
 // 📊 Гистограмма: Заработано vs Потрачено (по дням недели)
+// Показывает только ТЕКУЩУЮ неделю (Пн-Вс)
+
+const today = new Date();
+const dayOfWeek = (today.getDay() + 6) % 7;
+const monday = new Date(today.getFullYear(), today.getMonth(), today.getDate() - dayOfWeek);
+const sunday = new Date(today.getFullYear(), today.getMonth(), today.getDate() - dayOfWeek + 6);
+
+const weekLabel = `${monday.toLocaleDateString('ru-RU', {day:'2-digit', month:'short'})} — ${sunday.toLocaleDateString('ru-RU', {day:'2-digit', month:'short'})}`;
+
 const daysOfWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
 const earnedData = [0, 0, 0, 0, 0, 0, 0];
 const spentData = [0, 0, 0, 0, 0, 0, 0];
+
+const pad = n => String(n).padStart(2, '0');
+const weekStart = `${monday.getFullYear()}-${pad(monday.getMonth()+1)}-${pad(monday.getDate())}`;
+const weekEnd = `${sunday.getFullYear()}-${pad(sunday.getMonth()+1)}-${pad(sunday.getDate())}`;
 
 for (let page of dv.pages().where(p => p.file.path.startsWith("Tasks/Daily/"))) {
   try {
     const content = await dv.io.load(page.file.path);
     if (content && typeof content === "string") {
-      const dateMatch = page.file.name.match(/(\d{4}-\d{2}-\d{2})/);
+      // Извлекаем дату из имени файла, а не из page.file.name
+      const dateMatch = page.file.name.match(/(\d{4})-(\d{2})-(\d{2})/);
       if (dateMatch) {
-        const date = new Date(dateMatch[1]);
-        const dayIndex = (date.getDay() + 6) % 7;
-        const earnedMatches = [...content.matchAll(/- \[x\].*?\(\+(\d+)\)/g)];
-        earnedMatches.forEach(m => earnedData[dayIndex] += parseInt(m[1]));
-        const spentMatches = [...content.matchAll(/- \[x\].*?\(-(\d+)\)/g)];
-        spentMatches.forEach(m => spentData[dayIndex] += parseInt(m[1]));
+        const dateStr = `${dateMatch[1]}-${dateMatch[2]}-${dateMatch[3]}`;
+        if (dateStr >= weekStart && dateStr <= weekEnd) {
+          // Создаём дату локально, без timezone-проблем
+          const year = parseInt(dateMatch[1]);
+          const month = parseInt(dateMatch[2]) - 1;
+          const day = parseInt(dateMatch[3]);
+          const date = new Date(year, month, day);
+          const dayIndex = (date.getDay() + 6) % 7;
+          const earnedMatches = [...content.matchAll(/- \[x\].*?\(\+(\d+)\)/g)];
+          earnedMatches.forEach(m => earnedData[dayIndex] += parseInt(m[1]));
+          const spentMatches = [...content.matchAll(/- \[x\].*?\(-(\d+)\)/g)];
+          spentMatches.forEach(m => spentData[dayIndex] += parseInt(m[1]));
+        }
       }
     }
   } catch (e) {}
 }
+
+const totalEarned = earnedData.reduce((a,b) => a+b, 0);
+const totalSpent = spentData.reduce((a,b) => a+b, 0);
+
+dv.paragraph(`**📅 Неделя:** ${weekLabel} | **Заработано:** ${totalEarned} | **Потрачено:** ${totalSpent}`);
 
 dv.span(`\`\`\`chart
 type: bar
@@ -74,10 +100,10 @@ labels:
 series:
   - label: Заработано
     data: [${earnedData.join(', ')}]
-    color: "#275EE91"
+    color: "#27AE60"
   - label: Потрачено
     data: [${spentData.join(', ')}]
-    color: "#275EE919"
+    color: "#E74C3C"
 xOptions:
   display: true
   title: День недели

@@ -4,25 +4,25 @@
     "type": "split",
     "children": [
       {
-        "id": "61cc7d762d54e2df",
+        "id": "ff19a1faeebc3f8d",
         "type": "tabs",
         "children": [
           {
-            "id": "17606fc3deedc523",
+            "id": "e05e7cd8790fef4b",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Tasks/Daily/2026-04-06.md",
+                "file": "Tasks/Daily/2026-04-07.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "2026-04-06"
+              "title": "2026-04-07"
             }
           },
           {
-            "id": "cba73108b89b9be2",
+            "id": "be0a12a15c80a7e0",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -37,6 +37,26 @@
           }
         ],
         "currentTab": 1
+      },
+      {
+        "id": "fc8ad51687a4c994",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "156bdd829ffb21c6",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Tasks/Daily/2026-04-14.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "2026-04-14"
+            }
+          }
+        ]
       }
     ],
     "direction": "vertical"
@@ -261,7 +281,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 345.5
+    "width": 1180.5
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -278,34 +298,36 @@
       "templater-obsidian:Templater": false
     }
   },
-  "active": "cba73108b89b9be2",
+  "active": "ea7bbb95ddfba7c6",
   "lastOpenFiles": [
-    "00-Inbox/Все ссылки для обхода блокировок.md",
-    "00-main/Stats.md",
-    "Tasks/Daily/2026-04-06.md",
+    "Tasks/Daily/2026-04-22.md",
+    "Tasks/Daily/2026-04-15.md",
+    "Tasks/Daily/2026-04-17.md",
+    "Tasks/Daily/2026-04-18.md",
+    "Tasks/Daily/2026-04-16.md",
+    "Tasks/Daily/2026-04-19.md",
     "Tasks/Daily/2026-04-07.md",
-    "Templates/Daily-Note.md",
-    "00-main/Budget.md",
+    "Tasks/Daily/2026-04-27.md",
+    "Tasks/Daily/2026-04-26.md",
+    "Tasks/Daily/2026-04-25.md",
+    "Tasks/Daily/2026-04-24.md",
+    "Tasks/Daily/2026-04-23.md",
+    "Tasks/Daily/2026-04-21.md",
+    "Tasks/Daily/2026-04-20.md",
+    "00-main/Stats.md",
+    "Tasks/Waiting.md",
+    "Tasks/Daily/2026-04-13.md",
+    "Tasks/Daily/2026-04-06.md",
     "Tasks/Daily/2026-04-05.md",
-    "Tasks/Daily/2026-04-08.md",
-    "Templates/Daily-Note-Dataview.md",
-    "Templates/Daily-Note-With-Clothes.md",
-    "Templates/Note.md",
-    "Templates/Track Outfit.md",
-    "Templates/Project-Note.md",
-    "Tasks/Daily/2026-04-01.md",
-    "Tasks/Daily/2026-04-04.md",
-    "Tasks/Daily/2026-04-02.md",
-    "Tasks/Daily/2026-04-03.md",
-    "Projects/Одежда/Подбор одежды.md",
-    "00-main/Balance-Lever.md",
-    "00-main/Shop.md",
-    "00-main/Tag Base.md",
+    "Tasks/Daily/2026-04-12.md",
     "00-main/Pipeline.md",
-    "Projects/Библиотека личной музыки.md",
-    "Projects/Миграция из России.md",
-    "Projects/Сделать универсального бота телеграм для скачивания всего подряд.md",
-    "Projects/Obsidian Hotkeys.md",
+    "Study/index.md",
+    "Study/КАСД/index.md",
+    "Study/КАСД/TODO.md",
+    "Study/КАСД/README.md",
+    "Study/КАСД/REPO_RULES.md",
+    "Study/ВЕБ/table.csv",
+    "Study/ВЕБ/01_docs/lectures-ppt/08_JQuery.ppt",
     "Study/ТА/02_labs/lab-8/ЛР8.docx",
     "Templates/scripts/create-daily-note.js",
     "Projects/Одежда/scripts/track-outfit.js",
@@ -314,8 +336,6 @@
     "Projects/Одежда/convert-wardrobe.js",
     "Templates/scripts/track-outfit.js",
     "Templates/scripts/wardrobe.js",
-    "Templates/scripts/convert-wardrobe.js",
-    "Projects/Одежда/items/штаны",
     "assets/Pasted image 20260403190918.png",
     "assets/Pasted image 20260403190917.png",
     "Study/КАСД/labs/db/images/user.svg",
