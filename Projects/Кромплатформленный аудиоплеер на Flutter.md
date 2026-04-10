@@ -1,0 +1,6 @@
+---
+tags:
+  - project
+  - player
+  - music
+---
