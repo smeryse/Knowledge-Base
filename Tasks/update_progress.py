@@ -17,18 +17,29 @@ def parse_tasks(content: str) -> tuple[int, int]:
     """
     completed_points = 0
     total_points = 0
-    
+
     # Находим все задачи с баллами в формате (- [x] или - [ ]) и (+N)
     pattern = r'-\s?\[([xX ])\].*?\(\+(\d+)\)'
-    
+    # Находим задачи с рублями (+Nр) — 5% конвертируется в баллы
+    ruble_pattern = r'-\s?\[([xX ])\].*?\(\+(\d+)р\)'
+
     for match in re.finditer(pattern, content):
         is_completed = match.group(1).lower() == 'x'
         points = int(match.group(2))
-        
+
         total_points += points
         if is_completed:
             completed_points += points
-    
+
+    # 5% от заработанных рублей → баллы
+    for match in re.finditer(ruble_pattern, content):
+        is_completed = match.group(1).lower() == 'x'
+        ruble_points = round(int(match.group(2)) * 0.05)
+
+        total_points += ruble_points
+        if is_completed:
+            completed_points += ruble_points
+
     return completed_points, total_points
 
 

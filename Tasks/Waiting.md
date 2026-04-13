@@ -22,6 +22,7 @@ tags:
 - [Proxy для Telegram](https://storage.yandexcloud.net/ocean/mossad/tg.html)
 - [OpenClaw (Habr)](https://habr.com/ru/companies/raft/articles/1001286/)
 - [Yggdrasil (Habr)](https://habr.com/ru/articles/701200/)
+- [Flipper Zero (Habr)](https://habr.com/ru/articles/734294/)
 
 ---
 

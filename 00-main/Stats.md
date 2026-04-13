@@ -24,6 +24,10 @@ for (let page of dv.pages().where(p => p.file.path.startsWith("Tasks/Daily/"))) 
       // Потрачено: (-80) — только выполненные [x]
       const spentMatches = [...content.matchAll(/- \[x\].*?\(-(\d+)\)/g)];
       spentMatches.forEach(m => spentFromInline += parseInt(m[1]));
+
+      // 5% от заработанных рублей → баллы
+      const rubleMatches = [...content.matchAll(/- \[x\].*?\(\+(\d+)р\)/g)];
+      rubleMatches.forEach(m => earnedFromInline += Math.round(parseInt(m[1]) * 0.05));
     }
   } catch (e) {
     // Игнорируем ошибки чтения
@@ -80,6 +84,9 @@ for (let page of dv.pages().where(p => p.file.path.startsWith("Tasks/Daily/"))) 
           const dayIndex = (date.getDay() + 6) % 7;
           const earnedMatches = [...content.matchAll(/- \[x\].*?\(\+(\d+)\)/g)];
           earnedMatches.forEach(m => earnedData[dayIndex] += parseInt(m[1]));
+          // 5% от рублей → баллы
+          const rubleMatches = [...content.matchAll(/- \[x\].*?\(\+(\d+)р\)/g)];
+          rubleMatches.forEach(m => earnedData[dayIndex] += Math.round(parseInt(m[1]) * 0.05));
           const spentMatches = [...content.matchAll(/- \[x\].*?\(-(\d+)\)/g)];
           spentMatches.forEach(m => spentData[dayIndex] += parseInt(m[1]));
         }

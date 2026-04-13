@@ -5,6 +5,7 @@ const content = await app.vault.read(file);
 
 // Парсим задачи с баллами
 const taskRegex = /-\s?\[([xX ])\].*?\(\+(\d+)\)/g;
+const rubleRegex = /-\s?\[([xX ])\].*?\(\+(\d+)р\)/g;
 let completed = 0;
 let total = 0;
 
@@ -13,6 +14,14 @@ for (const match of content.matchAll(taskRegex)) {
     const points = parseInt(match[2]);
     total += points;
     if (isCompleted) completed += points;
+}
+
+// 5% от заработанных рублей → баллы
+for (const match of content.matchAll(rubleRegex)) {
+    const isCompleted = match[1].toLowerCase() === 'x';
+    const rublePoints = Math.round(parseInt(match[2]) * 0.05);
+    total += rublePoints;
+    if (isCompleted) completed += rublePoints;
 }
 
 // Создаём прогресс-бар
