@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Tasks/Daily/2026-04-13.md",
+                "file": "00-Inbox/checked/Белые списки - существующие способы обхода.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "2026-04-13"
+              "title": "Белые списки - существующие способы обхода"
             }
           }
         ]
@@ -251,8 +251,9 @@
       "templater-obsidian:Templater": false
     }
   },
-  "active": "c10eff49ec51f964",
+  "active": "517eae5d86ad86f1",
   "lastOpenFiles": [
+    "Tasks/Daily/2026-04-13.md",
     "Tasks/Daily/2026-04-30.md",
     "Tasks/Daily/2026-04-25.md",
     "Tasks/Daily/2026-04-26.md",
@@ -262,7 +263,6 @@
     "Tasks/Daily/2026-04-16.md",
     "Tasks/Daily/2026-04-15.md",
     "Tasks/Daily/2026-04-14.md",
-    "Tasks/Daily/2026-04-13.md",
     "Tasks/Daily/2026-04-12.md",
     "Study/КАСД/labs/db/07-lab-backup/07-lab-report.md",
     "Study/КАСД/ау.zip",
