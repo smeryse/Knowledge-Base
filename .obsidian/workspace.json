@@ -8,37 +8,39 @@
         "type": "tabs",
         "children": [
           {
-            "id": "517eae5d86ad86f1",
+            "id": "81286652d72da183",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "00-Inbox/checked/Белые списки - существующие способы обхода.md",
+                "file": "Tasks/Daily/2026-04-15.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Белые списки - существующие способы обхода"
+              "title": "2026-04-15"
             }
           }
         ]
       },
       {
-        "id": "91542a6e61673bc9",
+        "id": "a11c2b96669aacd4",
         "type": "tabs",
         "children": [
           {
-            "id": "0b419ee60478b9c5",
+            "id": "2a9c31c0eced38c8",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "pdf",
               "state": {
-                "file": "00-main/Stats.md",
-                "mode": "source",
-                "source": false
+                "file": "Study/КАСД/docs/02-lectures/lecture-5.pdf",
+                "page": 2,
+                "left": -36,
+                "top": 483,
+                "zoom": 0.4182624470872808
               },
-              "icon": "lucide-file",
-              "title": "Stats"
+              "icon": "lucide-file-text",
+              "title": "lecture-5"
             }
           }
         ]
@@ -228,13 +230,46 @@
               "icon": "lucide-list",
               "title": "Структура"
             }
+          },
+          {
+            "id": "32b493b58aec1240",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Study/ТВ/01_docs/literatures/Гмурман В. Е. - Руководство к решению задач по теории вероятностей и математической статистике.pdf",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Обратные ссылки для Гмурман В. Е. - Руководство к решению задач по теории вероятностей и математической статистике"
+            }
+          },
+          {
+            "id": "b5781fa1c2f4fd46",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Study/ТВ/01_docs/literatures/Гмурман В. Е. - Руководство к решению задач по теории вероятностей и математической статистике.pdf",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Исходящие ссылки из Гмурман В. Е. - Руководство к решению задач по теории вероятностей и математической статистике"
+            }
           }
         ],
         "currentTab": 1
       }
     ],
     "direction": "horizontal",
-    "width": 736.5
+    "width": 605.5
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -248,51 +283,53 @@
       "terminal:Open terminal": false,
       "obsidian-git:Open Git source control": false,
       "pomodoro-timer:Toggle timer panel": false,
-      "templater-obsidian:Templater": false
+      "templater-obsidian:Templater": false,
+      "pdf-plus:PDF++: Toggle auto-copy": false,
+      "pdf-plus:PDF++: Toggle auto-focus": false,
+      "pdf-plus:PDF++: Toggle auto-paste": false
     }
   },
-  "active": "517eae5d86ad86f1",
+  "active": "81286652d72da183",
   "lastOpenFiles": [
+    "Tasks/Daily/2026-04-16.md",
+    "Tasks/Daily/2026-04-15.md",
+    "Tasks/Daily/2026-04-14.md",
+    "Study/КАСД/docs/02-lectures/lecture-5.pdf",
+    "Study/КАСД/docs/02-lectures/lecture-4.pdf",
+    "00-main/Stats.md",
     "Tasks/Daily/2026-04-13.md",
+    "Tasks/Daily/2026-04-12.md",
+    "Tasks/Daily/2026-04-10.md",
+    "Tasks/Daily/2026-04-11.md",
+    "00-Inbox/Без названия 6.md",
+    "Study/ТВ/01_docs/literatures/Гмурман В. Е. - Руководство к решению задач по теории вероятностей и математической статистике.pdf",
+    "Tasks/Waiting.md",
+    "Study/КАСД/contests/CT11/Explanations/E.md",
+    "Study/КАСД/contests/CT11/Explanations/D.md",
+    "Study/КАСД/contests/CT11/Explanations/C.md",
+    "Study/КАСД/contests/CT11/Explanations/B.md",
+    "Study/КАСД/contests/CT11/Explanations/A.md",
+    "Study/КАСД/contests/CT11/Tasks/E-QuickSearchInArray.cs",
+    "Study/КАСД/contests/CT11/Tasks/D-MaxHeap.cs",
+    "Study/КАСД/coding_style_profile.md",
+    "Study/КАСД/contests/CT11/Tasks/C-CountInversions.cs",
+    "Study/КАСД/contests/CT11/Tasks/Stubs.cs",
+    "Study/КАСД/contests/CT11/Tasks/B-CountSort.cs",
+    "Study/КАСД/contests/CT11/bin/Debug/net8.0/CT11.pdb",
+    "Study/КАСД/contests/CT11/bin/Debug/net8.0/CT11.dll",
+    "Study/КАСД/contests/CT2/Kukushka.md",
+    "Study/КАСД/contests/CT11/tasks.md",
+    "Study/КАСД/tasks/24-map-comparison/coding_style_profile.md",
+    "00-Inbox/checked/Белые списки - существующие способы обхода.md",
+    "00-Inbox/Ubuntu dotfiles config.md",
     "Tasks/Daily/2026-04-30.md",
     "Tasks/Daily/2026-04-25.md",
     "Tasks/Daily/2026-04-26.md",
     "Tasks/Daily/2026-04-19.md",
-    "Tasks/Daily/2026-04-18.md",
-    "Tasks/Daily/2026-04-17.md",
-    "Tasks/Daily/2026-04-16.md",
-    "Tasks/Daily/2026-04-15.md",
-    "Tasks/Daily/2026-04-14.md",
-    "Tasks/Daily/2026-04-12.md",
-    "Study/КАСД/labs/db/07-lab-backup/07-lab-report.md",
-    "Study/КАСД/ау.zip",
     "Study/КАСД/labs/db/07-lab-backup/Без названия.canvas",
-    "Study/КАСД/labs/db/07-lab-backup/07-instruction.pdf",
-    "00-main/Stats.md",
-    "Tasks/Daily/2026-04-05.md",
-    "Tasks/Daily/2026-04-11.md",
-    "Study/КАСД/labs/db/08/08-instruction.pdf",
-    "00-main/Shop.md",
     "Study/КАСД/tasks/24-map-comparison/remove_chart.svg",
     "Study/КАСД/tasks/24-map-comparison/get_chart.svg",
     "Study/КАСД/tasks/24-map-comparison/put_chart.svg",
-    "Study/КАСД/tasks/24-map-comparison/obj/ce515ff0-4d3f-48ab-83e4-0ce0660ad9e3.tmp",
-    "Study/КАСД/tasks/24-map-comparison/obj/849f1d13-4935-4956-b56f-5d153fd3ab9e.tmp",
-    "Study/КАСД/tasks/23-variable-file-parser/Samples/test2.out",
-    "Study/КАСД/tasks/23-variable-file-parser/Samples/test2.in",
-    "Study/КАСД/tasks/23-variable-file-parser/Samples/self_test.out",
-    "Study/КАСД/tasks/23-variable-file-parser/output.txt",
-    "Study/КАСД/tasks/24-map-comparison/analysis.md",
-    "Study/КАСД/tasks/24-map-comparison/benchmark_results.csv",
-    "Study/КАСД/labs/db/03-lab-make-db-test/03-lab-report.md",
-    "Tasks/Daily/2026-04-10.md",
-    "00-Inbox/Easy Effect Config Folder.md",
-    "Tasks/Waiting.md",
-    "00-Inbox/Куриные окорочка — расчёт выхода.md",
-    "Tasks/Daily/2026-04-09.md",
-    "Tasks/Daily/2026-04-08.md",
-    "Tasks/Daily/2026-04-07.md",
-    "Tasks/Daily/2026-04-06.md",
     "Study/КАСД/tasks/22-my-html-tag-parser/Samples/Задача - A - Codeforces_files/ajax-loading-24x24.gif",
     "Study/КАСД/tasks/22-my-html-tag-parser/Samples/Задача - A - Codeforces_files/control-270.png",
     "Study/КАСД/tasks/22-my-html-tag-parser/Samples/Задача - A - Codeforces_files/codeforces-logo-550x67.png",
