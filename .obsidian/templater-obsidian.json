@@ -1,0 +1,8 @@
+{
+  "command_timeout": 5,
+  "enable_folder_watcher": false,
+  "enabled_templates": [],
+  "folder": "Templates",
+  "skip_folder": "",
+  "trigger_on_file_creation": false
+}
