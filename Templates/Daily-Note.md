@@ -1,3 +1,6 @@
+---
+date: <% tp.date.now("YYYY-MM-DD") %>
+---
 <%*
 const fileName = tp.file.title;
 const isDailyNote = /^\d{4}-\d{2}-\d{2}$/.test(fileName);
@@ -31,7 +34,9 @@ if (scheduleFile) {
 %>
 
 ---
-## Задачи
+## Задачи на сегодня
+
+## Перенесенные задачи
 
 ```dataviewjs
 const file = dv.current().file.path;
@@ -60,6 +65,7 @@ const bar = '█'.repeat(filled) + '░'.repeat(width - filled);
 
 dv.paragraph(`**Прогресс:** \` ${bar} \` **${completed}/${total}** (${percent}%)`);
 ```
+
 
 ---
 ## Траты
