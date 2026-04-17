@@ -4,46 +4,69 @@
     "type": "split",
     "children": [
       {
-        "id": "56f8ae6aa55d4b4b",
+        "id": "6de10cc5b2706533",
         "type": "tabs",
         "children": [
           {
-            "id": "81286652d72da183",
+            "id": "c866b9d862661b51",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Tasks/Daily/2026-04-15.md",
+                "file": "Study/КАСД/labs/db/08/08-lab-report.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "2026-04-15"
+              "title": "08-lab-report"
             }
-          }
-        ]
-      },
-      {
-        "id": "a11c2b96669aacd4",
-        "type": "tabs",
-        "children": [
+          },
           {
-            "id": "2a9c31c0eced38c8",
+            "id": "7b6e9197e7425ac6",
             "type": "leaf",
             "state": {
               "type": "pdf",
               "state": {
-                "file": "Study/КАСД/docs/02-lectures/lecture-5.pdf",
-                "page": 2,
-                "left": -36,
-                "top": 483,
-                "zoom": 0.4182624470872808
+                "file": "Study/КАСД/labs/db/08/08-instruction.pdf",
+                "page": 1,
+                "left": -14,
+                "top": 844,
+                "zoom": 1.1105042016806723
               },
               "icon": "lucide-file-text",
-              "title": "lecture-5"
+              "title": "08-instruction"
+            }
+          },
+          {
+            "id": "2a9c31c0eced38c8",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Tasks/Daily/2026-04-16.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "2026-04-16"
+            }
+          },
+          {
+            "id": "857dafb0b1d97423",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "00-Inbox/Светофор.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Светофор"
             }
           }
-        ]
+        ],
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -113,7 +136,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "tag:#vpn",
+                "query": "",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -289,43 +312,46 @@
       "pdf-plus:PDF++: Toggle auto-paste": false
     }
   },
-  "active": "81286652d72da183",
+  "active": "2a9c31c0eced38c8",
   "lastOpenFiles": [
+    "00-Inbox/Светофор.md",
+    "assets/Pasted image 20260418004926.png",
+    "assets/Pasted image 20260418004917.png",
     "Tasks/Daily/2026-04-16.md",
-    "Tasks/Daily/2026-04-15.md",
-    "Tasks/Daily/2026-04-14.md",
-    "Study/КАСД/docs/02-lectures/lecture-5.pdf",
-    "Study/КАСД/docs/02-lectures/lecture-4.pdf",
-    "00-main/Stats.md",
-    "Tasks/Daily/2026-04-13.md",
-    "Tasks/Daily/2026-04-12.md",
-    "Tasks/Daily/2026-04-10.md",
-    "Tasks/Daily/2026-04-11.md",
-    "00-Inbox/Без названия 6.md",
-    "Study/ТВ/01_docs/literatures/Гмурман В. Е. - Руководство к решению задач по теории вероятностей и математической статистике.pdf",
-    "Tasks/Waiting.md",
-    "Study/КАСД/contests/CT11/Explanations/E.md",
-    "Study/КАСД/contests/CT11/Explanations/D.md",
-    "Study/КАСД/contests/CT11/Explanations/C.md",
-    "Study/КАСД/contests/CT11/Explanations/B.md",
-    "Study/КАСД/contests/CT11/Explanations/A.md",
-    "Study/КАСД/contests/CT11/Tasks/E-QuickSearchInArray.cs",
-    "Study/КАСД/contests/CT11/Tasks/D-MaxHeap.cs",
-    "Study/КАСД/coding_style_profile.md",
-    "Study/КАСД/contests/CT11/Tasks/C-CountInversions.cs",
-    "Study/КАСД/contests/CT11/Tasks/Stubs.cs",
-    "Study/КАСД/contests/CT11/Tasks/B-CountSort.cs",
-    "Study/КАСД/contests/CT11/bin/Debug/net8.0/CT11.pdb",
-    "Study/КАСД/contests/CT11/bin/Debug/net8.0/CT11.dll",
-    "Study/КАСД/contests/CT2/Kukushka.md",
-    "Study/КАСД/contests/CT11/tasks.md",
-    "Study/КАСД/tasks/24-map-comparison/coding_style_profile.md",
-    "00-Inbox/checked/Белые списки - существующие способы обхода.md",
-    "00-Inbox/Ubuntu dotfiles config.md",
+    "Tasks/Daily/2026-04-17.md",
+    "Tasks/Daily/2026-04-18.md",
+    "Tasks/Daily/2026-04-20.md",
+    "Tasks/Daily/2026-04-27.md",
+    "Tasks/Daily/2026-04-29.md",
     "Tasks/Daily/2026-04-30.md",
-    "Tasks/Daily/2026-04-25.md",
     "Tasks/Daily/2026-04-26.md",
+    "Tasks/Daily/2026-04-25.md",
+    "Tasks/Daily/2026-04-24.md",
+    "Tasks/Daily/2026-04-22.md",
+    "Tasks/Daily/2026-04-21.md",
+    "Tasks/Daily/2026-04-28.md",
+    "Tasks/Daily/2026-04-23.md",
+    "Study/КАСД/tasks/25-my-tree-set/MyTreeSet.cs",
+    "Study/КАСД/tasks/25-my-tree-set",
+    "Study/КАСД/tasks/25-ьн",
+    "Study/КАСД/labs/db/08/08-instruction.pdf",
+    "Study/КАСД/labs/db/08/08-lab-report.md",
+    "assets/Pasted image 20260416130934.png",
+    "00-main/Stats.md",
+    "Study/КАСД/docs/02-lectures/lecture-8.pdf",
+    "Study/КАСД/docs/02-lectures/lecture-7.pdf",
+    "Study/КАСД/docs/02-lectures/lecture-6.pdf",
+    "Study/КАСД/contests/CT12/Tasks/A-MCMF.cs",
+    "Study/КАСД/contests/CT12/Tasks/Ф",
+    "Tasks/Daily/2026-04-14.md",
+    "Tasks/Daily/2026-04-13.md",
+    "Tasks/Daily/2026-04-15.md",
+    "Tasks/Waiting.md",
+    "Study/КАСД/docs/02-lectures/lecture-5.pdf",
     "Tasks/Daily/2026-04-19.md",
+    "Tasks/Daily/2026-04-12.md",
+    "Tasks/Daily/2026-04-11.md",
+    "00-Inbox/Где хранить информацию. Книги и прочее.md",
     "Study/КАСД/labs/db/07-lab-backup/Без названия.canvas",
     "Study/КАСД/tasks/24-map-comparison/remove_chart.svg",
     "Study/КАСД/tasks/24-map-comparison/get_chart.svg",
@@ -334,9 +360,6 @@
     "Study/КАСД/tasks/22-my-html-tag-parser/Samples/Задача - A - Codeforces_files/control-270.png",
     "Study/КАСД/tasks/22-my-html-tag-parser/Samples/Задача - A - Codeforces_files/codeforces-logo-550x67.png",
     "Study/КАСД/tasks/22-my-html-tag-parser/Samples/Задача - A - Codeforces_files/codeforces-sponsored-by-ton.png",
-    "Study/КАСД/tasks/22-my-html-tag-parser/Samples/Задача - A - Codeforces_files/magnifier-medium.png",
-    "assets/Pasted image 20260403190918.png",
-    "assets/Pasted image 20260403190917.png",
     "Study/КАСД/labs/oop/05-DelegatesAndEvents/Structure.canvas",
     "Study/КАСД/labs/oop/02-Polymorphism/Schedule.canvas",
     "Study/КАСД/labs/oop/03-04-FileDirectoryIO-DelegatesAndInterfaces/Structure.canvas",

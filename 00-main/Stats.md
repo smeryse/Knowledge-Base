@@ -145,26 +145,27 @@ for (let page of dv.pages().where(p => p.file.path.startsWith("Tasks/Daily/"))) 
   } catch (e) {}
 }
 
-// Распределение
-const savings = Math.round(incomeTotal * 0.50);
-const mandatory = Math.round(incomeTotal * 0.30);
-const freePool = incomeTotal - savings - mandatory;
+// Распределение: 80% накопления, 20% свободные
+const savings = Math.round(incomeTotal * 0.80);
+const freePool = incomeTotal - savings;
 const freeRemaining = freePool - spentTotal;
+
+// Сколько нужно заработать, чтобы покрыть перерасход (берем 20% от будущего дохода)
+const needToEarn = freeRemaining < 0 ? Math.ceil(Math.abs(freeRemaining) / 0.2) : 0;
 
 dv.table(
   ["Показатель", "Сумма"],
   [
     ["**Всего заработано**", `${incomeTotal.toLocaleString()}р`],
-    ["💰 Накопления (50%)", `${savings.toLocaleString()}р`],
-    ["🏠 Обязательные (30%)", `${mandatory.toLocaleString()}р`],
+    ["💰 Накопления (80%)", `${savings.toLocaleString()}р`],
     ["🎉 Свободные (20%)", `${freePool.toLocaleString()}р`],
-    ["**Потрачено из свободных**", `-${spentTotal.toLocaleString()}р`],
-    ["**Остаток свободных**", `${freeRemaining.toLocaleString()}р`]
+    ["**Остаток свободных**", `${freeRemaining.toLocaleString()}р`],
+    ["**Нужно заработать чтобы погасить**", `${needToEarn.toLocaleString()}р`]
   ]
 );
 
 // Прогресс-бар свободных
-const pct = freePool > 0 ? Math.max(0, Math.round((freeRemaining / freePool) * 100)) : 0;
+const pct = freePool > 0 ? Math.max(0, Math.min(100, Math.round((freeRemaining / freePool) * 100))) : 0;
 const barLen = 30;
 const filled = Math.max(0, Math.round((pct / 100) * barLen));
 const bar = freeRemaining < 0 ? '░'.repeat(barLen) : '█'.repeat(filled) + '░'.repeat(barLen - filled);
