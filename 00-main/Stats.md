@@ -152,6 +152,7 @@ const freeRemaining = freePool - spentTotal;
 
 // Сколько нужно заработать, чтобы покрыть перерасход (берем 20% от будущего дохода)
 const needToEarn = freeRemaining < 0 ? Math.ceil(Math.abs(freeRemaining) / 0.2) : 0;
+const workHours = Math.ceil(needToEarn / 220);
 
 dv.table(
   ["Показатель", "Сумма"],
@@ -160,7 +161,8 @@ dv.table(
     ["💰 Накопления (80%)", `${savings.toLocaleString()}р`],
     ["🎉 Свободные (20%)", `${freePool.toLocaleString()}р`],
     ["**Остаток свободных**", `${freeRemaining.toLocaleString()}р`],
-    ["**Нужно заработать чтобы погасить**", `${needToEarn.toLocaleString()}р`]
+    ["**Нужно заработать чтобы погасить**", `${needToEarn.toLocaleString()}р`],
+    ["**Нужно отработать часов**", `~${workHours.toLocaleString()} часов работы (220руб / час)`]
   ]
 );
 
