@@ -50,3 +50,6 @@ worst quality, low quality, logo, text, watermark, username, ng_deepnegative_v1_
 **Итог:** Конфигурация настроена на минимальное вмешательство модели. Главные точки роста — поднять `Steps` до 20+, `CFG` до 5–7, `Hires steps` до 12–15 и `ADetailer denoising` до 0.4. Иначе результат будет мутным, а лица останутся без существенной доработки.
 
 Нужно подкрутить что-то конкретное или объяснить, как параметры влияют друг на друга — пиши.
+
+
+(monochrome:0.75), (Sketch art, line art, drawn:2),1girl, solo, long hair, breasts, brown hair, standing, underwear, panties, ass, thighs, small breasts, indoors, from behind, bra, white panties, window, back, from below, underwear only, curtains, lingerie, letterboxed, thong, white bra, ass focus, head out of frame, lace-trimmed panties, lace panties, ass | | masterwork, masterpiece, best quality, detailed, depth of field, , high detail, best quality, very aesthetic, 8k, dynamic pose, depth of field, dynamic angle, adult, aged up, Negative prompt: lowres, worst quality, low quality, bad anatomy, bad hands, jpeg artifacts, signature, watermark, text, logo, artist name, extra digits, censored, patreon username, loli Steps: 40, CFG scale: 6, Sampler: Euler a, Seed: 210108720256428, Model: aMixIllustrious_aMix, width: 1536, height: 2304, Version: ComfyUI, Clip skip: 2
