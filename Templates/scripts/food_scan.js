@@ -5,6 +5,7 @@ module.exports = async function foodScan(tp) {
         pantry: `${ROOT}/Pantry`,
         shopping: `${ROOT}/Shopping List`
     };
+    const RESOLVER_CONFIG_PATH = `${ROOT}/resolver-config.json`;
 
     const today = tp.date.now("YYYY-MM-DD");
 
@@ -24,47 +25,296 @@ module.exports = async function foodScan(tp) {
         return cleanBarcode(value).length >= 8;
     }
 
+    function buildBarcodeVariants(barcode) {
+        const clean = cleanBarcode(barcode);
+        const variants = [];
+        const seen = new Set();
+
+        function pushVariant(value, reason) {
+            const normalized = cleanBarcode(value);
+            if (!normalized || seen.has(normalized)) return;
+            seen.add(normalized);
+            variants.push({ code: normalized, reason });
+        }
+
+        pushVariant(clean, "original");
+
+        if (clean.length === 14) {
+            pushVariant(clean.slice(1), "gtin14-drop-leading-digit");
+        }
+
+        if (clean.length === 13 && clean.startsWith("0")) {
+            pushVariant(clean.slice(1), "ean13-drop-leading-zero");
+        }
+
+        return variants;
+    }
+
+    async function readProjectFile(relativePath) {
+        const file = app.vault.getAbstractFileByPath(relativePath);
+        if (!file) return null;
+        return await app.vault.read(file);
+    }
+
+    async function loadResolverConfig() {
+        const defaults = {
+            enabled: true,
+            provider: "lmstudio",
+            endpoint: "http://127.0.0.1:1234/v1",
+            model: "qwen2.5-3b-instruct",
+            temperature: 0.1,
+            timeout_ms: 20000
+        };
+
+        try {
+            const raw = await readProjectFile(RESOLVER_CONFIG_PATH);
+            if (!raw) return defaults;
+            return { ...defaults, ...JSON.parse(raw) };
+        } catch (error) {
+            return defaults;
+        }
+    }
+
+    async function httpGetText(url) {
+        if (typeof requestUrl === "function") {
+            const response = await requestUrl({ url, method: "GET" });
+            return response.text;
+        }
+
+        const response = await fetch(url);
+        return await response.text();
+    }
+
+    async function httpGetJson(url) {
+        if (typeof requestUrl === "function") {
+            const response = await requestUrl({ url, method: "GET" });
+            return response.json;
+        }
+
+        const response = await fetch(url);
+        return await response.json();
+    }
+
+    function stripHtml(value) {
+        return String(value || "")
+            .replace(/<script[\s\S]*?<\/script>/gi, " ")
+            .replace(/<style[\s\S]*?<\/style>/gi, " ")
+            .replace(/<[^>]+>/g, " ")
+            .replace(/&nbsp;/g, " ")
+            .replace(/&amp;/g, "&")
+            .replace(/\s+/g, " ")
+            .trim();
+    }
+
+    function extractJsonObject(text) {
+        const match = String(text || "").match(/\{[\s\S]*\}/);
+        if (!match) return null;
+        try {
+            return JSON.parse(match[0]);
+        } catch (error) {
+            return null;
+        }
+    }
+
+    function parseQuantity(quantity) {
+        const quantityMatch = String(quantity || "").trim().match(/(\d+(?:[\.,]\d+)?)\s*(kg|g|гр|гр\.|l|ml|л|мл|pcs|шт)/i);
+        if (!quantityMatch) {
+            return { typical_pack_size: "", typical_pack_unit: "" };
+        }
+
+        return {
+            typical_pack_size: Number(quantityMatch[1].replace(",", ".")),
+            typical_pack_unit: lower(quantityMatch[2]).replace("гр.", "гр")
+        };
+    }
+
     async function fetchBarcodeSuggestion(barcode) {
         if (!looksLikeBarcode(barcode)) return null;
 
         try {
-            const url = `https://world.openfoodfacts.org/api/v2/product/${cleanBarcode(barcode)}.json`;
-            const response = typeof requestUrl === "function"
-                ? await requestUrl({ url, method: "GET" })
-                : await fetch(url);
+            const candidates = [];
 
-            const data = typeof requestUrl === "function"
-                ? response.json
-                : await response.json();
+            for (const variant of buildBarcodeVariants(barcode)) {
+                const clean = variant.code;
+                const offUrl = `https://world.openfoodfacts.org/api/v2/product/${clean}.json`;
+                const offData = await httpGetJson(offUrl);
 
-            if (!data || !data.product) return null;
+                if (offData && offData.product) {
+                    const product = offData.product;
+                    const title = product.product_name_ru
+                        || product.product_name
+                        || product.generic_name_ru
+                        || product.generic_name
+                        || "";
 
-            const product = data.product;
-            const title = product.product_name_ru
-                || product.product_name
-                || product.generic_name_ru
-                || product.generic_name
-                || "";
+                    if (title) {
+                        const quantity = parseQuantity(product.quantity || "");
+                        candidates.push({
+                            source: "openfoodfacts",
+                            lookup_code: clean,
+                            lookup_reason: variant.reason,
+                            title,
+                            barcode: cleanBarcode(barcode),
+                            brand: String(product.brands || "").split(",")[0].trim(),
+                            category: product.categories_tags?.[0]
+                                ? String(product.categories_tags[0]).replace(/^en:/, "").replace(/^ru:/, "")
+                                : (product.product_type || "прочее"),
+                            description: String(product.generic_name_ru || product.generic_name || "").trim(),
+                            typical_pack_size: quantity.typical_pack_size,
+                            typical_pack_unit: quantity.typical_pack_unit,
+                            perishable: true,
+                            default_shelf_life_days: ""
+                        });
+                    }
+                }
 
-            if (!title) return null;
+                const goUpcHtml = await httpGetText(`https://go-upc.com/search?q=${clean}`);
+                const titleMatch = goUpcHtml.match(/<h1 class="product-name">([\s\S]*?)<\/h1>/i);
+                const brandMatch = goUpcHtml.match(/<td class="metadata-label">Brand<\/td>\s*<td>([\s\S]*?)<\/td>/i);
+                const categoryMatch = goUpcHtml.match(/<td class="metadata-label">Category<\/td>\s*<td>([\s\S]*?)<\/td>/i);
+                const descriptionMatch = goUpcHtml.match(/<h2>\s*Description\s*<\/h2>\s*<span>([\s\S]*?)<\/span>/i);
 
-            const quantity = String(product.quantity || "").trim();
-            const quantityMatch = quantity.match(/(\d+(?:[\.,]\d+)?)\s*(kg|g|гр|гр\.|l|ml|л|мл|pcs|шт)/i);
-            const packSize = quantityMatch ? Number(quantityMatch[1].replace(",", ".")) : "";
-            const packUnit = quantityMatch ? lower(quantityMatch[2]).replace("гр.", "гр") : "";
+                const goTitle = stripHtml(titleMatch?.[1] || "");
+                if (goTitle) {
+                    const quantity = parseQuantity(goTitle);
+                    candidates.push({
+                        source: "go-upc",
+                        lookup_code: clean,
+                        lookup_reason: variant.reason,
+                        title: goTitle,
+                        barcode: cleanBarcode(barcode),
+                        brand: stripHtml(brandMatch?.[1] || ""),
+                        category: stripHtml(categoryMatch?.[1] || "") || "прочее",
+                        description: stripHtml(descriptionMatch?.[1] || ""),
+                        typical_pack_size: quantity.typical_pack_size,
+                        typical_pack_unit: quantity.typical_pack_unit,
+                        perishable: false,
+                        default_shelf_life_days: ""
+                    });
+                }
+
+                const barcodeListHtml = await httpGetText(`https://barcode-list.ru/barcode/RU/Поиск.htm?barcode=${clean}`);
+                const barcodeListTitleMatch = barcodeListHtml.match(/<title>([\s\S]*?)<\/title>/i);
+                const listTitle = stripHtml(barcodeListTitleMatch?.[1] || "");
+                const codePattern = new RegExp(`<td[^>]*>\\s*${clean}\\s*<\\/td>\\s*<td[^>]*>([\\s\\S]*?)<\\/td>`, "gi");
+                const nameMatches = [...barcodeListHtml.matchAll(codePattern)]
+                    .map(match => stripHtml(match[1]))
+                    .filter(Boolean);
+
+                const titleCandidate = /Штрих-код:/i.test(listTitle)
+                    ? listTitle.replace(/\s*-\s*Штрих-код:.*$/i, "").trim()
+                    : "";
+                const topName = nameMatches[0] || titleCandidate;
+                if (topName) {
+                    const quantity = parseQuantity(topName);
+                    candidates.push({
+                        source: "barcode-list",
+                        lookup_code: clean,
+                        lookup_reason: variant.reason,
+                        title: topName,
+                        barcode: cleanBarcode(barcode),
+                        brand: topName.toLowerCase().includes("волжский пекарь") ? "Волжский пекарь" : "",
+                        category: topName.toLowerCase().includes("ваф") ? "сладости" : "прочее",
+                        description: nameMatches.slice(0, 5).join(" | "),
+                        typical_pack_size: quantity.typical_pack_size,
+                        typical_pack_unit: quantity.typical_pack_unit || "pcs",
+                        perishable: false,
+                        default_shelf_life_days: ""
+                    });
+                }
+            }
+
+            if (candidates.length === 0) return null;
+
+            const config = await loadResolverConfig();
+            const normalized = await normalizeWithLocalModel(clean, candidates, config);
+            return normalized || candidates[0];
+        } catch (error) {
+            return null;
+        }
+    }
+
+    async function normalizeWithLocalModel(barcode, candidates, config) {
+        if (!config.enabled || !config.endpoint || !config.model || candidates.length === 0) {
+            return null;
+        }
+
+        const prompt = [
+            "You normalize product lookup results into strict JSON for a personal inventory database.",
+            "Return only one JSON object and no markdown.",
+            "Schema:",
+            '{"title":"","barcode":"","brand":"","category":"","base_unit":"pcs|g|kg|ml|l","typical_pack_size":"","typical_pack_unit":"pcs|g|kg|ml|l","perishable":false,"default_shelf_life_days":"","confidence":0}',
+            "Rules:",
+            "- Prefer Russian product title when possible.",
+            "- Do not invent facts absent from candidates.",
+            "- Keep barcode exact.",
+            "- category should be short and human-friendly in Russian.",
+            "- base_unit and typical_pack_unit must be one of pcs,g,kg,ml,l.",
+            "- confidence is from 0 to 1.",
+            `Barcode: ${barcode}`,
+            `Candidates: ${JSON.stringify(candidates, null, 2)}`
+        ].join("\n");
+
+        try {
+            let raw = "";
+
+            if (config.provider === "ollama") {
+                const response = await fetch(`${String(config.endpoint).replace(/\/$/, "")}/api/generate`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        model: config.model,
+                        prompt,
+                        stream: false,
+                        format: "json",
+                        options: {
+                            temperature: Number(config.temperature || 0.1)
+                        }
+                    })
+                });
+                const data = await response.json();
+                raw = data.response || "";
+            } else if (config.provider === "lmstudio") {
+                const response = await fetch(`${String(config.endpoint).replace(/\/$/, "")}/chat/completions`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        model: config.model,
+                        temperature: Number(config.temperature || 0.1),
+                        response_format: { type: "text" },
+                        messages: [
+                            {
+                                role: "system",
+                                content: "You normalize barcode lookup candidates into strict JSON for a personal inventory database. Return only a JSON object."
+                            },
+                            {
+                                role: "user",
+                                content: prompt
+                            }
+                        ]
+                    })
+                });
+                const data = await response.json();
+                raw = data.choices?.[0]?.message?.content || "";
+            } else {
+                return null;
+            }
+
+            const parsed = extractJsonObject(raw);
+            if (!parsed || !parsed.title) return null;
 
             return {
-                title,
-                barcode: cleanBarcode(barcode),
-                brand: String(product.brands || "").split(",")[0].trim(),
-                category: product.categories_tags?.[0]
-                    ? String(product.categories_tags[0]).replace(/^en:/, "").replace(/^ru:/, "")
-                    : "прочее",
-                typical_pack_size: packSize,
-                typical_pack_unit: packUnit,
-                perishable: true,
-                default_shelf_life_days: "",
-                source: "openfoodfacts"
+                title: String(parsed.title).trim(),
+                barcode: cleanBarcode(parsed.barcode || barcode),
+                brand: String(parsed.brand || "").trim(),
+                category: String(parsed.category || "прочее").trim(),
+                base_unit: lower(parsed.base_unit || parsed.typical_pack_unit || "pcs"),
+                typical_pack_size: parsed.typical_pack_size || "",
+                typical_pack_unit: lower(parsed.typical_pack_unit || parsed.base_unit || ""),
+                perishable: Boolean(parsed.perishable),
+                default_shelf_life_days: parsed.default_shelf_life_days || "",
+                confidence: Number(parsed.confidence || 0),
+                source: "local-llm"
             };
         } catch (error) {
             return null;
