@@ -865,7 +865,6 @@ module.exports = async function foodDb(tp) {
 
         const receiptItemTitle = receiptItemFile.basename;
         let expiresOn = "";
-        let pantryLocation = "";
 
         if (addToPantry) {
             if (product.perishable) {
@@ -874,7 +873,6 @@ module.exports = async function foodDb(tp) {
                     : "";
                 expiresOn = (await tp.system.prompt(`Срок годности для '${product.title}'`, suggestedExpires))?.trim() || "";
             }
-            pantryLocation = (await tp.system.prompt(`Где лежит '${product.title}' дома`, "кухня"))?.trim() || "";
 
             await createNote(DIRS.pantry, `${receiptDate} ${product.title}`, buildPantryContent({
                 productTitle: product.title,
@@ -883,7 +881,7 @@ module.exports = async function foodDb(tp) {
                 unit: product.base_unit || packUnit || "pcs",
                 purchasedOn: receiptDate,
                 expiresOn,
-                location: pantryLocation
+                location: ""
             }));
         }
 

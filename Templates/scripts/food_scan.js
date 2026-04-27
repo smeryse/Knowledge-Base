@@ -747,13 +747,12 @@ module.exports = async function foodScan(tp) {
                 : "";
             expiresOn = (await tp.system.prompt(`Срок годности для '${product.title}'`, suggested))?.trim() || "";
         }
-        const location = (await tp.system.prompt(`Где лежит '${product.title}'`, "кухня"))?.trim() || "";
         const file = await createNote(DIRS.pantry, `${today} ${product.title}`, buildPantryContent({
             productTitle: product.title,
             qtyCurrent,
             unit: product.base_unit || "pcs",
             expiresOn,
-            location
+            location: ""
         }));
         return `# ${product.title}\n\n- Добавлено в запас: [[${file.basename}]]\n- Количество: ${qtyCurrent} ${product.base_unit || "pcs"}\n- Штрихкод: \`${product.barcode || ""}\``;
     }
