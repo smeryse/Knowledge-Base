@@ -131,11 +131,73 @@ module.exports = async function foodDb(tp) {
         };
     }
 
+    function pushCandidate(candidates, candidate, dedupe) {
+        const key = [candidate.source, candidate.lookup_code || candidate.barcode, candidate.title].join("|").toLowerCase();
+        if (!candidate.title || dedupe.has(key)) return;
+        dedupe.add(key);
+        candidates.push(candidate);
+    }
+
+    function extractSearchBlocks(html, source) {
+        const blocks = [];
+
+        if (source === "duckduckgo") {
+            const matches = [...String(html || "").matchAll(/result__title[\s\S]*?<a[^>]*>([\s\S]*?)<\/a>[\s\S]*?result__snippet[^>]*>([\s\S]*?)<\/a?>/gi)];
+            for (const match of matches.slice(0, 5)) {
+                blocks.push({ title: stripHtml(match[1]), snippet: stripHtml(match[2]) });
+            }
+        }
+
+        if (source === "bing") {
+            const matches = [...String(html || "").matchAll(/<li class="b_algo"[\s\S]*?<h2><a[^>]*>([\s\S]*?)<\/a><\/h2>[\s\S]*?<p>([\s\S]*?)<\/p>/gi)];
+            for (const match of matches.slice(0, 5)) {
+                blocks.push({ title: stripHtml(match[1]), snippet: stripHtml(match[2]) });
+            }
+        }
+
+        return blocks.filter(block => block.title && block.snippet);
+    }
+
+    async function fetchWebSearchCandidates(originalBarcode, variant) {
+        const candidates = [];
+        const quoted = encodeURIComponent(`"${variant.code}"`);
+        const sources = [
+            { name: "duckduckgo", url: `https://duckduckgo.com/html/?q=${quoted}` },
+            { name: "bing", url: `https://www.bing.com/search?q=${quoted}` }
+        ];
+
+        for (const source of sources) {
+            try {
+                const html = await httpGetText(source.url);
+                const blocks = extractSearchBlocks(html, source.name);
+                for (const block of blocks) {
+                    candidates.push({
+                        source: `web-search-${source.name}`,
+                        lookup_code: variant.code,
+                        lookup_reason: variant.reason,
+                        title: block.title,
+                        barcode: cleanBarcode(originalBarcode),
+                        brand: "",
+                        category: "прочее",
+                        description: block.snippet,
+                        typical_pack_size: "",
+                        typical_pack_unit: "",
+                        perishable: false,
+                        default_shelf_life_days: ""
+                    });
+                }
+            } catch (error) {}
+        }
+
+        return candidates;
+    }
+
     async function fetchBarcodeSuggestion(barcode) {
         if (!looksLikeBarcode(barcode)) return null;
 
         try {
             const candidates = [];
+            const dedupe = new Set();
 
             for (const variant of buildBarcodeVariants(barcode)) {
                 const clean = variant.code;
@@ -151,7 +213,7 @@ module.exports = async function foodDb(tp) {
 
                     if (title) {
                         const quantity = parseQuantity(product.quantity || "");
-                        candidates.push({
+                        pushCandidate(candidates, {
                             source: "openfoodfacts",
                             lookup_code: clean,
                             lookup_reason: variant.reason,
@@ -166,7 +228,7 @@ module.exports = async function foodDb(tp) {
                             typical_pack_unit: quantity.typical_pack_unit,
                             perishable: true,
                             default_shelf_life_days: ""
-                        });
+                        }, dedupe);
                     }
                 }
 
@@ -179,7 +241,7 @@ module.exports = async function foodDb(tp) {
 
                 if (goTitle) {
                     const quantity = parseQuantity(goTitle);
-                    candidates.push({
+                    pushCandidate(candidates, {
                         source: "go-upc",
                         lookup_code: clean,
                         lookup_reason: variant.reason,
@@ -192,7 +254,7 @@ module.exports = async function foodDb(tp) {
                         typical_pack_unit: quantity.typical_pack_unit,
                         perishable: false,
                         default_shelf_life_days: ""
-                    });
+                    }, dedupe);
                 }
 
                 const barcodeListHtml = await httpGetText(`https://barcode-list.ru/barcode/RU/Поиск.htm?barcode=${clean}`);
@@ -209,7 +271,7 @@ module.exports = async function foodDb(tp) {
 
                 if (topName) {
                     const quantity = parseQuantity(topName);
-                    candidates.push({
+                    pushCandidate(candidates, {
                         source: "barcode-list",
                         lookup_code: clean,
                         lookup_reason: variant.reason,
@@ -222,14 +284,19 @@ module.exports = async function foodDb(tp) {
                         typical_pack_unit: quantity.typical_pack_unit || "pcs",
                         perishable: false,
                         default_shelf_life_days: ""
-                    });
+                    }, dedupe);
+                }
+
+                const searchCandidates = await fetchWebSearchCandidates(barcode, variant);
+                for (const candidate of searchCandidates) {
+                    pushCandidate(candidates, candidate, dedupe);
                 }
             }
 
             if (candidates.length === 0) return null;
 
             const config = await loadResolverConfig();
-            const normalized = await normalizeWithLocalModel(clean, candidates, config);
+            const normalized = await normalizeWithLocalModel(cleanBarcode(barcode), candidates, config);
             return normalized || candidates[0];
         } catch (error) {
             return null;

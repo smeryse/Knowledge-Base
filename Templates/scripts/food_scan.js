@@ -128,16 +128,81 @@ module.exports = async function foodScan(tp) {
         };
     }
 
+    function pushCandidate(candidates, candidate, dedupe) {
+        const key = [candidate.source, candidate.lookup_code || candidate.barcode, candidate.title].join("|").toLowerCase();
+        if (!candidate.title || dedupe.has(key)) return;
+        dedupe.add(key);
+        candidates.push(candidate);
+    }
+
+    function extractSearchBlocks(html, source) {
+        const blocks = [];
+
+        if (source === "duckduckgo") {
+            const matches = [...String(html || "").matchAll(/result__title[\s\S]*?<a[^>]*>([\s\S]*?)<\/a>[\s\S]*?result__snippet[^>]*>([\s\S]*?)<\/a?>/gi)];
+            for (const match of matches.slice(0, 5)) {
+                blocks.push({ title: stripHtml(match[1]), snippet: stripHtml(match[2]) });
+            }
+        }
+
+        if (source === "bing") {
+            const matches = [...String(html || "").matchAll(/<li class="b_algo"[\s\S]*?<h2><a[^>]*>([\s\S]*?)<\/a><\/h2>[\s\S]*?<p>([\s\S]*?)<\/p>/gi)];
+            for (const match of matches.slice(0, 5)) {
+                blocks.push({ title: stripHtml(match[1]), snippet: stripHtml(match[2]) });
+            }
+        }
+
+        return blocks.filter(block => block.title && block.snippet);
+    }
+
+    async function fetchWebSearchCandidates(originalBarcode, variant) {
+        const candidates = [];
+        const quoted = encodeURIComponent(`"${variant.code}"`);
+        const sources = [
+            { name: "duckduckgo", url: `https://duckduckgo.com/html/?q=${quoted}` },
+            { name: "bing", url: `https://www.bing.com/search?q=${quoted}` }
+        ];
+
+        for (const source of sources) {
+            try {
+                const html = await httpGetText(source.url);
+                const blocks = extractSearchBlocks(html, source.name);
+                for (const block of blocks) {
+                    candidates.push({
+                        source: `web-search-${source.name}`,
+                        lookup_code: variant.code,
+                        lookup_reason: variant.reason,
+                        title: block.title,
+                        barcode: cleanBarcode(originalBarcode),
+                        brand: "",
+                        category: "прочее",
+                        description: block.snippet,
+                        typical_pack_size: "",
+                        typical_pack_unit: "",
+                        perishable: false,
+                        default_shelf_life_days: ""
+                    });
+                }
+            } catch (error) {}
+        }
+
+        return candidates;
+    }
+
     async function fetchBarcodeSuggestion(barcode) {
         if (!looksLikeBarcode(barcode)) return null;
 
         try {
             const candidates = [];
+            const dedupe = new Set();
 
             for (const variant of buildBarcodeVariants(barcode)) {
                 const clean = variant.code;
                 const offUrl = `https://world.openfoodfacts.org/api/v2/product/${clean}.json`;
-                const offData = await httpGetJson(offUrl);
+                let offData = null;
+                try {
+                    offData = await httpGetJson(offUrl);
+                } catch (error) {}
 
                 if (offData && offData.product) {
                     const product = offData.product;
@@ -149,7 +214,7 @@ module.exports = async function foodScan(tp) {
 
                     if (title) {
                         const quantity = parseQuantity(product.quantity || "");
-                        candidates.push({
+                        pushCandidate(candidates, {
                             source: "openfoodfacts",
                             lookup_code: clean,
                             lookup_reason: variant.reason,
@@ -164,70 +229,79 @@ module.exports = async function foodScan(tp) {
                             typical_pack_unit: quantity.typical_pack_unit,
                             perishable: true,
                             default_shelf_life_days: ""
-                        });
+                        }, dedupe);
                     }
                 }
 
-                const goUpcHtml = await httpGetText(`https://go-upc.com/search?q=${clean}`);
-                const titleMatch = goUpcHtml.match(/<h1 class="product-name">([\s\S]*?)<\/h1>/i);
-                const brandMatch = goUpcHtml.match(/<td class="metadata-label">Brand<\/td>\s*<td>([\s\S]*?)<\/td>/i);
-                const categoryMatch = goUpcHtml.match(/<td class="metadata-label">Category<\/td>\s*<td>([\s\S]*?)<\/td>/i);
-                const descriptionMatch = goUpcHtml.match(/<h2>\s*Description\s*<\/h2>\s*<span>([\s\S]*?)<\/span>/i);
+                try {
+                    const goUpcHtml = await httpGetText(`https://go-upc.com/search?q=${clean}`);
+                    const titleMatch = goUpcHtml.match(/<h1 class="product-name">([\s\S]*?)<\/h1>/i);
+                    const brandMatch = goUpcHtml.match(/<td class="metadata-label">Brand<\/td>\s*<td>([\s\S]*?)<\/td>/i);
+                    const categoryMatch = goUpcHtml.match(/<td class="metadata-label">Category<\/td>\s*<td>([\s\S]*?)<\/td>/i);
+                    const descriptionMatch = goUpcHtml.match(/<h2>\s*Description\s*<\/h2>\s*<span>([\s\S]*?)<\/span>/i);
 
-                const goTitle = stripHtml(titleMatch?.[1] || "");
-                if (goTitle) {
-                    const quantity = parseQuantity(goTitle);
-                    candidates.push({
-                        source: "go-upc",
-                        lookup_code: clean,
-                        lookup_reason: variant.reason,
-                        title: goTitle,
-                        barcode: cleanBarcode(barcode),
-                        brand: stripHtml(brandMatch?.[1] || ""),
-                        category: stripHtml(categoryMatch?.[1] || "") || "прочее",
-                        description: stripHtml(descriptionMatch?.[1] || ""),
-                        typical_pack_size: quantity.typical_pack_size,
-                        typical_pack_unit: quantity.typical_pack_unit,
-                        perishable: false,
-                        default_shelf_life_days: ""
-                    });
-                }
+                    const goTitle = stripHtml(titleMatch?.[1] || "");
+                    if (goTitle) {
+                        const quantity = parseQuantity(goTitle);
+                        pushCandidate(candidates, {
+                            source: "go-upc",
+                            lookup_code: clean,
+                            lookup_reason: variant.reason,
+                            title: goTitle,
+                            barcode: cleanBarcode(barcode),
+                            brand: stripHtml(brandMatch?.[1] || ""),
+                            category: stripHtml(categoryMatch?.[1] || "") || "прочее",
+                            description: stripHtml(descriptionMatch?.[1] || ""),
+                            typical_pack_size: quantity.typical_pack_size,
+                            typical_pack_unit: quantity.typical_pack_unit,
+                            perishable: false,
+                            default_shelf_life_days: ""
+                        }, dedupe);
+                    }
+                } catch (error) {}
 
-                const barcodeListHtml = await httpGetText(`https://barcode-list.ru/barcode/RU/Поиск.htm?barcode=${clean}`);
-                const barcodeListTitleMatch = barcodeListHtml.match(/<title>([\s\S]*?)<\/title>/i);
-                const listTitle = stripHtml(barcodeListTitleMatch?.[1] || "");
-                const codePattern = new RegExp(`<td[^>]*>\\s*${clean}\\s*<\\/td>\\s*<td[^>]*>([\\s\\S]*?)<\\/td>`, "gi");
-                const nameMatches = [...barcodeListHtml.matchAll(codePattern)]
-                    .map(match => stripHtml(match[1]))
-                    .filter(Boolean);
+                try {
+                    const barcodeListHtml = await httpGetText(`https://barcode-list.ru/barcode/RU/Поиск.htm?barcode=${clean}`);
+                    const barcodeListTitleMatch = barcodeListHtml.match(/<title>([\s\S]*?)<\/title>/i);
+                    const listTitle = stripHtml(barcodeListTitleMatch?.[1] || "");
+                    const codePattern = new RegExp(`<td[^>]*>\\s*${clean}\\s*<\\/td>\\s*<td[^>]*>([\\s\\S]*?)<\\/td>`, "gi");
+                    const nameMatches = [...barcodeListHtml.matchAll(codePattern)]
+                        .map(match => stripHtml(match[1]))
+                        .filter(Boolean);
 
-                const titleCandidate = /Штрих-код:/i.test(listTitle)
-                    ? listTitle.replace(/\s*-\s*Штрих-код:.*$/i, "").trim()
-                    : "";
-                const topName = nameMatches[0] || titleCandidate;
-                if (topName) {
-                    const quantity = parseQuantity(topName);
-                    candidates.push({
-                        source: "barcode-list",
-                        lookup_code: clean,
-                        lookup_reason: variant.reason,
-                        title: topName,
-                        barcode: cleanBarcode(barcode),
-                        brand: topName.toLowerCase().includes("волжский пекарь") ? "Волжский пекарь" : "",
-                        category: topName.toLowerCase().includes("ваф") ? "сладости" : "прочее",
-                        description: nameMatches.slice(0, 5).join(" | "),
-                        typical_pack_size: quantity.typical_pack_size,
-                        typical_pack_unit: quantity.typical_pack_unit || "pcs",
-                        perishable: false,
-                        default_shelf_life_days: ""
-                    });
+                    const titleCandidate = /Штрих-код:/i.test(listTitle)
+                        ? listTitle.replace(/\s*-\s*Штрих-код:.*$/i, "").trim()
+                        : "";
+                    const topName = nameMatches[0] || titleCandidate;
+                    if (topName) {
+                        const quantity = parseQuantity(topName);
+                        pushCandidate(candidates, {
+                            source: "barcode-list",
+                            lookup_code: clean,
+                            lookup_reason: variant.reason,
+                            title: topName,
+                            barcode: cleanBarcode(barcode),
+                            brand: topName.toLowerCase().includes("волжский пекарь") ? "Волжский пекарь" : "",
+                            category: topName.toLowerCase().includes("ваф") ? "сладости" : "прочее",
+                            description: nameMatches.slice(0, 5).join(" | "),
+                            typical_pack_size: quantity.typical_pack_size,
+                            typical_pack_unit: quantity.typical_pack_unit || "pcs",
+                            perishable: false,
+                            default_shelf_life_days: ""
+                        }, dedupe);
+                    }
+                } catch (error) {}
+
+                const searchCandidates = await fetchWebSearchCandidates(barcode, variant);
+                for (const candidate of searchCandidates) {
+                    pushCandidate(candidates, candidate, dedupe);
                 }
             }
 
             if (candidates.length === 0) return null;
 
             const config = await loadResolverConfig();
-            const normalized = await normalizeWithLocalModel(clean, candidates, config);
+            const normalized = await normalizeWithLocalModel(cleanBarcode(barcode), candidates, config);
             return normalized || candidates[0];
         } catch (error) {
             return null;

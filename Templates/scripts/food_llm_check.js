@@ -77,8 +77,36 @@ module.exports = async function foodLlmCheck(tp) {
         };
     }
 
+    function pushCandidate(candidates, candidate, dedupe) {
+        const key = [candidate.source, candidate.lookup_code || candidate.barcode, candidate.title].join("|").toLowerCase();
+        if (!candidate.title || dedupe.has(key)) return;
+        dedupe.add(key);
+        candidates.push(candidate);
+    }
+
+    function extractSearchBlocks(html, source) {
+        const blocks = [];
+
+        if (source === "duckduckgo") {
+            const matches = [...String(html || "").matchAll(/result__title[\s\S]*?<a[^>]*>([\s\S]*?)<\/a>[\s\S]*?result__snippet[^>]*>([\s\S]*?)<\/a?>/gi)];
+            for (const match of matches.slice(0, 5)) {
+                blocks.push({ title: stripHtml(match[1]), snippet: stripHtml(match[2]) });
+            }
+        }
+
+        if (source === "bing") {
+            const matches = [...String(html || "").matchAll(/<li class="b_algo"[\s\S]*?<h2><a[^>]*>([\s\S]*?)<\/a><\/h2>[\s\S]*?<p>([\s\S]*?)<\/p>/gi)];
+            for (const match of matches.slice(0, 5)) {
+                blocks.push({ title: stripHtml(match[1]), snippet: stripHtml(match[2]) });
+            }
+        }
+
+        return blocks.filter(block => block.title && block.snippet);
+    }
+
     async function fetchCandidatesByBarcode(barcode) {
         const candidates = [];
+        const dedupe = new Set();
 
         for (const variant of buildBarcodeVariants(barcode)) {
             const clean = variant.code;
@@ -94,7 +122,7 @@ module.exports = async function foodLlmCheck(tp) {
 
                     if (title) {
                         const quantity = parseQuantity(product.quantity || "");
-                        candidates.push({
+                        pushCandidate(candidates, {
                             source: "openfoodfacts",
                             lookup_code: clean,
                             lookup_reason: variant.reason,
@@ -109,7 +137,7 @@ module.exports = async function foodLlmCheck(tp) {
                             typical_pack_unit: quantity.typical_pack_unit,
                             perishable: true,
                             default_shelf_life_days: ""
-                        });
+                        }, dedupe);
                     }
                 }
             } catch (error) {}
@@ -124,7 +152,7 @@ module.exports = async function foodLlmCheck(tp) {
 
                 if (goTitle) {
                     const quantity = parseQuantity(goTitle);
-                    candidates.push({
+                    pushCandidate(candidates, {
                         source: "go-upc",
                         lookup_code: clean,
                         lookup_reason: variant.reason,
@@ -137,7 +165,7 @@ module.exports = async function foodLlmCheck(tp) {
                         typical_pack_unit: quantity.typical_pack_unit,
                         perishable: false,
                         default_shelf_life_days: ""
-                    });
+                    }, dedupe);
                 }
             } catch (error) {}
 
@@ -156,7 +184,7 @@ module.exports = async function foodLlmCheck(tp) {
 
                 if (topName) {
                     const quantity = parseQuantity(topName);
-                    candidates.push({
+                    pushCandidate(candidates, {
                         source: "barcode-list",
                         lookup_code: clean,
                         lookup_reason: variant.reason,
@@ -169,9 +197,35 @@ module.exports = async function foodLlmCheck(tp) {
                         typical_pack_unit: quantity.typical_pack_unit || "pcs",
                         perishable: false,
                         default_shelf_life_days: ""
-                    });
+                    }, dedupe);
                 }
             } catch (error) {}
+
+            for (const source of [
+                { name: "duckduckgo", url: `https://duckduckgo.com/html/?q=${encodeURIComponent(`"${clean}"`)}` },
+                { name: "bing", url: `https://www.bing.com/search?q=${encodeURIComponent(`"${clean}"`)}` }
+            ]) {
+                try {
+                    const html = await httpGetText(source.url);
+                    const blocks = extractSearchBlocks(html, source.name);
+                    for (const block of blocks) {
+                        pushCandidate(candidates, {
+                            source: `web-search-${source.name}`,
+                            lookup_code: clean,
+                            lookup_reason: variant.reason,
+                            title: block.title,
+                            barcode: cleanBarcode(barcode),
+                            brand: "",
+                            category: "прочее",
+                            description: block.snippet,
+                            typical_pack_size: "",
+                            typical_pack_unit: "",
+                            perishable: false,
+                            default_shelf_life_days: ""
+                        }, dedupe);
+                    }
+                } catch (error) {}
+            }
         }
 
         return candidates;
