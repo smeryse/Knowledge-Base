@@ -19,6 +19,47 @@ module.exports = async function foodDb(tp) {
         return String(value || "").trim().toLowerCase();
     }
 
+    function normalizeCategory(value) {
+        const category = lower(value);
+        const allowed = new Set([
+            "молочка",
+            "яйца",
+            "сладости",
+            "напитки",
+            "крупы",
+            "мясо",
+            "заморозка",
+            "соусы",
+            "овощи",
+            "фрукты",
+            "хлеб",
+            "чай",
+            "кофе",
+            "уход",
+            "быт",
+            "прочее"
+        ]);
+        return allowed.has(category) ? category : "прочее";
+    }
+
+    function normalizeProductTitle(title) {
+        const raw = String(title || "").trim();
+        if (!raw) return "";
+
+        let value = raw
+            .replace(/\s+/g, " ")
+            .replace(/\bКУР\.\b/gi, "куриное")
+            .replace(/\bШТ\.?\b/gi, "шт")
+            .trim();
+
+        if (value === value.toUpperCase()) {
+            value = value.toLowerCase();
+        }
+
+        value = value.charAt(0).toUpperCase() + value.slice(1);
+        return value;
+    }
+
     function cleanBarcode(value) {
         return String(value || "").replace(/\D/g, "");
     }
@@ -178,7 +219,7 @@ module.exports = async function foodDb(tp) {
                         title: block.title,
                         barcode: cleanBarcode(originalBarcode),
                         brand: "",
-                        category: "прочее",
+                        category: "",
                         description: block.snippet,
                         typical_pack_size: "",
                         typical_pack_unit: "",
@@ -222,7 +263,7 @@ module.exports = async function foodDb(tp) {
                             brand: String(product.brands || "").split(",")[0].trim(),
                             category: product.categories_tags?.[0]
                                 ? String(product.categories_tags[0]).replace(/^en:/, "").replace(/^ru:/, "")
-                                : (product.product_type || "прочее"),
+                                : (product.product_type || ""),
                             description: String(product.generic_name_ru || product.generic_name || "").trim(),
                             typical_pack_size: quantity.typical_pack_size,
                             typical_pack_unit: quantity.typical_pack_unit,
@@ -248,7 +289,7 @@ module.exports = async function foodDb(tp) {
                         title: goTitle,
                         barcode: cleanBarcode(barcode),
                         brand: stripHtml(brandMatch?.[1] || ""),
-                        category: stripHtml(categoryMatch?.[1] || "") || "прочее",
+                        category: stripHtml(categoryMatch?.[1] || ""),
                         description: stripHtml(descriptionMatch?.[1] || ""),
                         typical_pack_size: quantity.typical_pack_size,
                         typical_pack_unit: quantity.typical_pack_unit,
@@ -277,8 +318,8 @@ module.exports = async function foodDb(tp) {
                         lookup_reason: variant.reason,
                         title: topName,
                         barcode: cleanBarcode(barcode),
-                        brand: topName.toLowerCase().includes("волжский пекарь") ? "Волжский пекарь" : "",
-                        category: topName.toLowerCase().includes("ваф") ? "сладости" : "прочее",
+                        brand: "",
+                        category: "",
                         description: nameMatches.slice(0, 5).join(" | "),
                         typical_pack_size: quantity.typical_pack_size,
                         typical_pack_unit: quantity.typical_pack_unit || "pcs",
@@ -317,8 +358,13 @@ module.exports = async function foodDb(tp) {
             "- Prefer Russian product title when possible.",
             "- Do not invent facts absent from candidates.",
             "- Keep barcode exact.",
-            "- category should be short and human-friendly in Russian.",
+            "- category must be one of: молочка, яйца, сладости, напитки, крупы, мясо, заморозка, соусы, овощи, фрукты, хлеб, чай, кофе, уход, быт, прочее.",
+            "- brand should be filled when it is explicit in title, snippet, description or source fields; otherwise empty string.",
+            "- title should be human-friendly Russian, not all caps, and should keep meaningful distinctions like fat %, flavor, size, class or grade.",
+            "- do not include store names, prices, dates, promo text or review text in title.",
             "- base_unit and typical_pack_unit must be one of pcs,g,kg,ml,l.",
+            "- if quantity is explicit like 400 г, 0.9 л or 10 шт, extract it.",
+            "- use category 'прочее' only when the product type is genuinely unclear.",
             "- confidence is from 0 to 1.",
             `Barcode: ${barcode}`,
             `Candidates: ${JSON.stringify(candidates, null, 2)}`
@@ -373,10 +419,10 @@ module.exports = async function foodDb(tp) {
             if (!parsed || !parsed.title) return null;
 
             return {
-                title: String(parsed.title).trim(),
+                title: normalizeProductTitle(parsed.title),
                 barcode: cleanBarcode(parsed.barcode || barcode),
                 brand: String(parsed.brand || "").trim(),
-                category: String(parsed.category || "прочее").trim(),
+                category: normalizeCategory(parsed.category || "прочее"),
                 base_unit: normalizeUnit(parsed.base_unit || parsed.typical_pack_unit || "pcs"),
                 typical_pack_size: parsed.typical_pack_size || "",
                 typical_pack_unit: normalizeUnit(parsed.typical_pack_unit || parsed.base_unit || "pcs"),

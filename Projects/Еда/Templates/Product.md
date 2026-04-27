@@ -16,7 +16,6 @@ last_price:
 best_price:
 best_store:
 last_bought:
-aliases: []
 created:
 tags:
   - еда

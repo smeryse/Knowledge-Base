@@ -17,6 +17,99 @@ module.exports = async function foodScan(tp) {
         return String(value || "").trim().toLowerCase();
     }
 
+    function normalizeUnit(unit) {
+        const map = {
+            g: "g",
+            gr: "g",
+            kg: "kg",
+            ml: "ml",
+            l: "l",
+            pcs: "pcs",
+            pc: "pcs",
+            шт: "pcs",
+            штука: "pcs",
+            штук: "pcs",
+            eggs: "pcs"
+        };
+        return map[lower(unit)] || lower(unit || "pcs");
+    }
+
+    function normalizeProductTitle(title) {
+        const raw = String(title || "").trim();
+        if (!raw) return "";
+
+        let value = raw
+            .replace(/\s+/g, " ")
+            .replace(/\bКУР\.\b/gi, "куриное")
+            .replace(/\bШТ\.?\b/gi, "шт")
+            .trim();
+
+        if (value === value.toUpperCase()) {
+            value = value.toLowerCase();
+        }
+
+        value = value.charAt(0).toUpperCase() + value.slice(1);
+        return value;
+    }
+
+    function normalizeCategory(value) {
+        const category = lower(value);
+        const allowed = new Set([
+            "молочка",
+            "яйца",
+            "сладости",
+            "напитки",
+            "крупы",
+            "мясо",
+            "заморозка",
+            "соусы",
+            "овощи",
+            "фрукты",
+            "хлеб",
+            "чай",
+            "кофе",
+            "уход",
+            "быт",
+            "прочее"
+        ]);
+        return allowed.has(category) ? category : "прочее";
+    }
+
+    function deriveProductDefaults(title, seed = {}) {
+        const source = lower(`${title} ${seed.description || ""} ${seed.category || ""}`);
+        const next = { ...seed };
+
+        if (!next.category || next.category === "прочее") {
+            if (/яйц/.test(source)) next.category = "яйца";
+            else if (/молок|кефир|йогурт|творог|сметан/.test(source)) next.category = "молочка";
+            else if (/ваф|печень|конфет|шоколад/.test(source)) next.category = "сладости";
+        }
+
+        if (!next.brand && /щедрый год/.test(source)) {
+            next.brand = "Щедрый год";
+        }
+
+        if (!next.base_unit || next.base_unit === "шт") {
+            if (/яйц/.test(source)) next.base_unit = "pcs";
+        }
+
+        if (!next.typical_pack_unit || next.typical_pack_unit === "шт") {
+            if (/яйц/.test(source)) next.typical_pack_unit = "pcs";
+        }
+
+        if (next.perishable === undefined || next.perishable === null) {
+            if (/яйц|молок|кефир|йогурт|творог|сыр|мяс|куриц/.test(source)) {
+                next.perishable = true;
+            }
+        }
+
+        if ((!next.default_shelf_life_days || next.default_shelf_life_days === "") && /яйц/.test(source)) {
+            next.default_shelf_life_days = "25";
+        }
+
+        return next;
+    }
+
     function cleanBarcode(value) {
         return String(value || "").replace(/\D/g, "");
     }
@@ -175,7 +268,7 @@ module.exports = async function foodScan(tp) {
                         title: block.title,
                         barcode: cleanBarcode(originalBarcode),
                         brand: "",
-                        category: "прочее",
+                        category: "",
                         description: block.snippet,
                         typical_pack_size: "",
                         typical_pack_unit: "",
@@ -223,7 +316,7 @@ module.exports = async function foodScan(tp) {
                             brand: String(product.brands || "").split(",")[0].trim(),
                             category: product.categories_tags?.[0]
                                 ? String(product.categories_tags[0]).replace(/^en:/, "").replace(/^ru:/, "")
-                                : (product.product_type || "прочее"),
+                                : (product.product_type || ""),
                             description: String(product.generic_name_ru || product.generic_name || "").trim(),
                             typical_pack_size: quantity.typical_pack_size,
                             typical_pack_unit: quantity.typical_pack_unit,
@@ -250,7 +343,7 @@ module.exports = async function foodScan(tp) {
                             title: goTitle,
                             barcode: cleanBarcode(barcode),
                             brand: stripHtml(brandMatch?.[1] || ""),
-                            category: stripHtml(categoryMatch?.[1] || "") || "прочее",
+                            category: stripHtml(categoryMatch?.[1] || ""),
                             description: stripHtml(descriptionMatch?.[1] || ""),
                             typical_pack_size: quantity.typical_pack_size,
                             typical_pack_unit: quantity.typical_pack_unit,
@@ -281,8 +374,8 @@ module.exports = async function foodScan(tp) {
                             lookup_reason: variant.reason,
                             title: topName,
                             barcode: cleanBarcode(barcode),
-                            brand: topName.toLowerCase().includes("волжский пекарь") ? "Волжский пекарь" : "",
-                            category: topName.toLowerCase().includes("ваф") ? "сладости" : "прочее",
+                            brand: "",
+                            category: "",
                             description: nameMatches.slice(0, 5).join(" | "),
                             typical_pack_size: quantity.typical_pack_size,
                             typical_pack_unit: quantity.typical_pack_unit || "pcs",
@@ -322,8 +415,13 @@ module.exports = async function foodScan(tp) {
             "- Prefer Russian product title when possible.",
             "- Do not invent facts absent from candidates.",
             "- Keep barcode exact.",
-            "- category should be short and human-friendly in Russian.",
+            "- category must be one of: молочка, яйца, сладости, напитки, крупы, мясо, заморозка, соусы, овощи, фрукты, хлеб, чай, кофе, уход, быт, прочее.",
+            "- brand should be filled when it is explicit in title, snippet, description or source fields; otherwise empty string.",
+            "- title should be human-friendly Russian, not all caps, and should keep meaningful distinctions like fat %, flavor, size, class or grade.",
+            "- do not include store names, prices, dates, promo text or review text in title.",
             "- base_unit and typical_pack_unit must be one of pcs,g,kg,ml,l.",
+            "- if quantity is explicit like 400 г, 0.9 л or 10 шт, extract it.",
+            "- use category 'прочее' only when the product type is genuinely unclear.",
             "- confidence is from 0 to 1.",
             `Barcode: ${barcode}`,
             `Candidates: ${JSON.stringify(candidates, null, 2)}`
@@ -378,13 +476,13 @@ module.exports = async function foodScan(tp) {
             if (!parsed || !parsed.title) return null;
 
             return {
-                title: String(parsed.title).trim(),
+                title: normalizeProductTitle(parsed.title),
                 barcode: cleanBarcode(parsed.barcode || barcode),
                 brand: String(parsed.brand || "").trim(),
-                category: String(parsed.category || "прочее").trim(),
-                base_unit: lower(parsed.base_unit || parsed.typical_pack_unit || "pcs"),
+                category: normalizeCategory(parsed.category || "прочее"),
+                base_unit: normalizeUnit(parsed.base_unit || parsed.typical_pack_unit || "pcs"),
                 typical_pack_size: parsed.typical_pack_size || "",
-                typical_pack_unit: lower(parsed.typical_pack_unit || parsed.base_unit || ""),
+                typical_pack_unit: normalizeUnit(parsed.typical_pack_unit || parsed.base_unit || ""),
                 perishable: Boolean(parsed.perishable),
                 default_shelf_life_days: parsed.default_shelf_life_days || "",
                 confidence: Number(parsed.confidence || 0),
@@ -551,16 +649,18 @@ module.exports = async function foodScan(tp) {
     }
 
     async function createProduct(rawInput, seed = {}) {
-        const barcode = cleanBarcode(seed.barcode || (looksLikeBarcode(rawInput) ? rawInput : (await tp.system.prompt("Штрихкод", ""))?.trim() || ""));
-        const title = (await tp.system.prompt("Название нового товара", seed.title || (looksLikeBarcode(rawInput) ? "" : rawInput)))?.trim();
-        if (!title) return null;
-        const category = (await tp.system.prompt(`Категория для '${title}'`, seed.category || "прочее"))?.trim() || "прочее";
-        const brand = (await tp.system.prompt(`Бренд для '${title}'`, seed.brand || ""))?.trim() || "";
-        const baseUnit = lower((await tp.system.prompt(`Базовая единица для '${title}'`, seed.base_unit || "pcs"))?.trim() || "pcs");
-        const typicalPackSize = (await tp.system.prompt(`Типичная фасовка числами для '${title}'`, String(seed.typical_pack_size || "")))?.trim() || "";
-        const typicalPackUnit = lower((await tp.system.prompt(`Типичная единица фасовки для '${title}'`, seed.typical_pack_unit || ""))?.trim() || "");
-        const perishable = ["y", "yes", "д"].includes(lower(await tp.system.prompt(`Скоропортящийся? (y/n) для '${title}'`, seed.perishable ? "y" : "n")));
-        const shelfLife = perishable ? ((await tp.system.prompt(`Типичный срок годности в днях для '${title}'`, seed.default_shelf_life_days || "7"))?.trim() || "") : "";
+        const defaults = deriveProductDefaults(seed.title || rawInput, seed);
+        const barcode = cleanBarcode(defaults.barcode || (looksLikeBarcode(rawInput) ? rawInput : (await tp.system.prompt("Штрихкод", ""))?.trim() || ""));
+        const titleInput = (await tp.system.prompt("Название нового товара", normalizeProductTitle(defaults.title || (looksLikeBarcode(rawInput) ? "" : rawInput))))?.trim();
+        if (!titleInput) return null;
+        const title = normalizeProductTitle(titleInput);
+        const category = (await tp.system.prompt(`Категория для '${title}'`, defaults.category || "прочее"))?.trim() || "прочее";
+        const brand = (await tp.system.prompt(`Бренд для '${title}'`, defaults.brand || ""))?.trim() || "";
+        const baseUnit = normalizeUnit((await tp.system.prompt(`Базовая единица для '${title}'`, defaults.base_unit || "pcs"))?.trim() || "pcs");
+        const typicalPackSize = (await tp.system.prompt(`Типичная фасовка числами для '${title}'`, String(defaults.typical_pack_size || "")))?.trim() || "";
+        const typicalPackUnit = normalizeUnit((await tp.system.prompt(`Типичная единица фасовки для '${title}'`, defaults.typical_pack_unit || ""))?.trim() || "");
+        const perishable = ["y", "yes", "д"].includes(lower(await tp.system.prompt(`Скоропортящийся? (y/n) для '${title}'`, defaults.perishable ? "y" : "n")));
+        const shelfLife = perishable ? ((await tp.system.prompt(`Типичный срок годности в днях для '${title}'`, defaults.default_shelf_life_days || "7"))?.trim() || "") : "";
         const file = await createNote(DIRS.products, title, buildProductContent({
             title,
             barcode,
