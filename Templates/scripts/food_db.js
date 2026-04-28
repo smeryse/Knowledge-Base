@@ -503,7 +503,6 @@ module.exports = async function foodDb(tp) {
                 for (const word of words) {
                     if (title.includes(word)) score += 5;
                 }
-                if (row.last_bought) score += 2;
                 return { row, score };
             })
             .filter(entry => entry.score > 0)
@@ -545,10 +544,6 @@ module.exports = async function foodDb(tp) {
             `default_shelf_life_days: ${data.default_shelf_life_days || ""}`,
             `buy_again: ${data.buy_again !== false}`,
             "priority: medium",
-            `last_price: ${data.last_price || ""}`,
-            `best_price: ${data.best_price || ""}`,
-            `best_store: ${quoteYaml(data.best_store || "")}`,
-            `last_bought: ${data.last_bought || ""}`,
             `created: ${today}`,
             "tags:",
             "  - еда",
@@ -728,23 +723,6 @@ module.exports = async function foodDb(tp) {
         return matches[labels.indexOf(selected) - 1];
     }
 
-    async function updateProductStats(product, itemData, storeTitle, date) {
-        let content = product.content;
-        const priceForStats = itemData.price_per_base_unit || itemData.price_total || "";
-
-        if (priceForStats !== "") {
-            content = updateScalar(content, "last_price", priceForStats);
-            content = updateScalar(content, "last_bought", date);
-            const bestNow = Number(product.best_price || 0);
-            if (!bestNow || Number(priceForStats) < bestNow) {
-                content = updateScalar(content, "best_price", Number(priceForStats));
-                content = updateScalar(content, "best_store", storeTitle);
-            }
-        }
-
-        await app.vault.modify(product.file, content);
-    }
-
     function buildReceiptItemContent(item) {
         return [
             "---",
@@ -833,7 +811,7 @@ module.exports = async function foodDb(tp) {
         const qty = Number((await tp.system.prompt(`Количество '${product.title}'`, "1"))?.trim() || "1");
         const packSizeInput = (await tp.system.prompt(`Фасовка числами для '${product.title}'`, String(product.typical_pack_size || "")))?.trim() || "";
         const packUnit = normalizeUnit((await tp.system.prompt(`Единица фасовки для '${product.title}'`, product.typical_pack_unit || product.base_unit || "pcs"))?.trim() || product.base_unit || "pcs");
-        const priceTotal = Number((await tp.system.prompt(`Цена за позицию '${product.title}'`, String(product.last_price || "")))?.trim() || "0");
+        const priceTotal = Number((await tp.system.prompt(`Цена за позицию '${product.title}'`, ""))?.trim() || "0");
         const discountAnswer = lower(await tp.system.prompt(`Была скидка на '${product.title}'? (y/n)`, "n"));
         const discount = discountAnswer === "y" || discountAnswer === "yes" || discountAnswer === "д";
         const review = (await tp.system.prompt(`Отзыв по '${product.title}'`, ""))?.trim() || "";
@@ -884,8 +862,6 @@ module.exports = async function foodDb(tp) {
                 location: ""
             }));
         }
-
-        await updateProductStats(product, { price_total: priceTotal, price_per_base_unit: pricePerBaseUnit }, store.title, receiptDate);
 
         createdItems.push({
             productTitle: product.title,

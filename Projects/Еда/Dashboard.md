@@ -71,7 +71,7 @@ LIMIT 15
 ## Последние добавленные товары
 
 ```dataview
-TABLE category as "Категория", brand as "Бренд", best_price as "Лучшая цена", best_store as "Где"
+TABLE category as "Категория", brand as "Бренд", barcode as "Штрихкод"
 FROM "Projects/Еда/Products"
 WHERE type = "product"
 SORT file.ctime DESC

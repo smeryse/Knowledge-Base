@@ -12,10 +12,6 @@ perishable: false
 default_shelf_life_days:
 buy_again: true
 priority: medium
-last_price:
-best_price:
-best_store:
-last_bought:
 created:
 tags:
   - еда
