@@ -10,8 +10,7 @@ typical_pack_size:
 typical_pack_unit:
 perishable: false
 default_shelf_life_days:
-buy_again: true
-priority: medium
+price:
 created:
 tags:
   - еда

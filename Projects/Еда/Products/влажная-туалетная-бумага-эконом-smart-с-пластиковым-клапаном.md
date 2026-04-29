@@ -11,8 +11,7 @@ typical_pack_size: 150
 typical_pack_unit: pcs
 perishable: false
 default_shelf_life_days:
-buy_again: true
-priority: medium
+price:
 created: 2026-04-27
 tags:
   - еда

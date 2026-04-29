@@ -14,7 +14,7 @@ aliases:
 const products = dv.pages('"Projects/Еда/Products"').where(p => p.type === "product");
 const receipts = dv.pages('"Projects/Еда/Receipts"').where(p => p.type === "receipt");
 const receiptItems = dv.pages('"Projects/Еда/Receipt Items"').where(p => p.type === "receipt-item");
-const pantry = dv.pages('"Projects/Еда/Pantry"').where(p => p.type === "pantry-item" && p.status != "consumed" && p.status != "discarded");
+const pantry = dv.pages('"Projects/Еда/Pantry"').where(p => p.type === "pantry-item");
 const shopping = dv.pages('"Projects/Еда/Shopping List"').where(p => p.type === "shopping-item" && p.status != "done" && p.status != "cancelled");
 
 const today = dv.date('today');
@@ -47,10 +47,10 @@ LIMIT 10
 ## Срочно купить
 
 ```dataview
-TABLE product as "Товар", priority as "Приоритет", preferred_store as "Магазин", max_target_price as "Лимит"
+TABLE product as "Товар", target_qty as "Нужно", unit as "Ед.", preferred_store as "Магазин"
 FROM "Projects/Еда/Shopping List"
 WHERE type = "shopping-item" AND status != "done" AND status != "cancelled"
-SORT priority DESC, file.mtime DESC
+SORT file.mtime DESC
 LIMIT 15
 ```
 

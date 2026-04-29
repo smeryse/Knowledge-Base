@@ -107,6 +107,10 @@ module.exports = async function foodScan(tp) {
             next.default_shelf_life_days = "25";
         }
 
+        if (next.price === undefined || next.price === null) {
+            next.price = "";
+        }
+
         return next;
     }
 
@@ -573,8 +577,7 @@ module.exports = async function foodScan(tp) {
             `typical_pack_unit: ${data.typical_pack_unit || ""}`,
             `perishable: ${Boolean(data.perishable)}`,
             `default_shelf_life_days: ${data.default_shelf_life_days || ""}`,
-            "buy_again: true",
-            "priority: medium",
+            `price: ${data.price || ""}`,
             `created: ${today}`,
             "tags:",
             "  - еда",
@@ -599,8 +602,6 @@ module.exports = async function foodScan(tp) {
             "source_receipt_item: ",
             `qty_current: ${data.qtyCurrent}`,
             `unit: ${data.unit}`,
-            "opened: false",
-            "status: fresh",
             `purchased_on: ${today}`,
             `expires_on: ${data.expiresOn || ""}`,
             `location: ${quoteYaml(data.location || "")}`,
@@ -625,7 +626,6 @@ module.exports = async function foodScan(tp) {
             `product: [[${data.productTitle}]]`,
             `target_qty: ${data.targetQty}`,
             `unit: ${data.unit}`,
-            `priority: ${data.priority}`,
             "status: active",
             "preferred_store: ",
             "max_target_price: ",
@@ -657,6 +657,7 @@ module.exports = async function foodScan(tp) {
         const typicalPackUnit = normalizeUnit((await tp.system.prompt(`Типичная единица фасовки для '${title}'`, defaults.typical_pack_unit || ""))?.trim() || "");
         const perishable = ["y", "yes", "д"].includes(lower(await tp.system.prompt(`Скоропортящийся? (y/n) для '${title}'`, defaults.perishable ? "y" : "n")));
         const shelfLife = perishable ? ((await tp.system.prompt(`Типичный срок годности в днях для '${title}'`, defaults.default_shelf_life_days || "7"))?.trim() || "") : "";
+        const price = (await tp.system.prompt(`Обычная цена для '${title}'`, String(defaults.price || "")))?.trim() || "";
         const file = await createNote(DIRS.products, title, buildProductContent({
             title,
             barcode,
@@ -666,7 +667,8 @@ module.exports = async function foodScan(tp) {
             typical_pack_size: typicalPackSize,
             typical_pack_unit: typicalPackUnit,
             perishable,
-            default_shelf_life_days: shelfLife
+            default_shelf_life_days: shelfLife,
+            price
         }));
         notice(`Добавлен новый товар: ${title}`);
         return await readFrontmatter(file);
@@ -754,14 +756,11 @@ module.exports = async function foodScan(tp) {
     }
 
     const targetQty = Number((await tp.system.prompt(`Сколько купить '${product.title}'`, "1"))?.trim() || "1");
-    const priorityChoices = ["high", "medium", "low"];
-    const priority = await tp.system.suggester(priorityChoices, priorityChoices, false, "Приоритет");
     const reason = (await tp.system.prompt(`Почему добавить '${product.title}' в список`, "добавлено сканером"))?.trim() || "добавлено сканером";
     const file = await createNote(DIRS.shopping, `${product.title}`, buildShoppingContent({
         productTitle: product.title,
         targetQty,
         unit: product.base_unit || "pcs",
-        priority: priority || "medium",
         reason
     }));
     return `# ${product.title}\n\n- Добавлено в покупки: [[${file.basename}]]\n- Нужно: ${targetQty} ${product.base_unit || "pcs"}\n- Штрихкод: \`${product.barcode || ""}\``;
