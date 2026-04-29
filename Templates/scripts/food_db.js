@@ -322,7 +322,7 @@ module.exports = async function foodDb(tp) {
                         category: "",
                         description: nameMatches.slice(0, 5).join(" | "),
                         typical_pack_size: quantity.typical_pack_size,
-                        typical_pack_unit: quantity.typical_pack_unit || "pcs",
+                        typical_pack_unit: quantity.typical_pack_unit || "шт",
                         perishable: false,
                         default_shelf_life_days: ""
                     }, dedupe);
@@ -353,7 +353,7 @@ module.exports = async function foodDb(tp) {
             "You normalize product lookup results into strict JSON for a personal inventory database.",
             "Return only one JSON object and no markdown.",
             "Schema:",
-            '{"title":"","barcode":"","brand":"","category":"","base_unit":"pcs|g|kg|ml|l","typical_pack_size":"","typical_pack_unit":"pcs|g|kg|ml|l","perishable":false,"default_shelf_life_days":"","confidence":0}',
+            '{"title":"","barcode":"","brand":"","category":"","base_unit":"шт|г|кг|мл|л","typical_pack_size":"","typical_pack_unit":"шт|г|кг|мл|л","perishable":false,"default_shelf_life_days":"","confidence":0}',
             "Rules:",
             "- Prefer Russian product title when possible.",
             "- Do not invent facts absent from candidates.",
@@ -362,7 +362,7 @@ module.exports = async function foodDb(tp) {
             "- brand should be filled when it is explicit in title, snippet, description or source fields; otherwise empty string.",
             "- title should be human-friendly Russian, not all caps, and should keep meaningful distinctions like fat %, flavor, size, class or grade.",
             "- do not include store names, prices, dates, promo text or review text in title.",
-            "- base_unit and typical_pack_unit must be one of pcs,g,kg,ml,l.",
+            "- base_unit and typical_pack_unit must be one of: шт, г, кг, мл, л.",
             "- if quantity is explicit like 400 г, 0.9 л or 10 шт, extract it.",
             "- use category 'прочее' only when the product type is genuinely unclear.",
             "- confidence is from 0 to 1.",
@@ -423,9 +423,9 @@ module.exports = async function foodDb(tp) {
                 barcode: cleanBarcode(parsed.barcode || barcode),
                 brand: String(parsed.brand || "").trim(),
                 category: normalizeCategory(parsed.category || "прочее"),
-                base_unit: normalizeUnit(parsed.base_unit || parsed.typical_pack_unit || "pcs"),
+                base_unit: normalizeUnit(parsed.base_unit || parsed.typical_pack_unit || "шт"),
                 typical_pack_size: parsed.typical_pack_size || "",
-                typical_pack_unit: normalizeUnit(parsed.typical_pack_unit || parsed.base_unit || "pcs"),
+                typical_pack_unit: normalizeUnit(parsed.typical_pack_unit || parsed.base_unit || "шт"),
                 perishable: Boolean(parsed.perishable),
                 default_shelf_life_days: parsed.default_shelf_life_days || "",
                 confidence: Number(parsed.confidence || 0),
@@ -537,12 +537,14 @@ module.exports = async function foodDb(tp) {
             `  - ${quoteYaml(data.title)}`,
             `category: ${quoteYaml(data.category || "прочее")}`,
             `brand: ${quoteYaml(data.brand || "")}`,
-            `base_unit: ${data.base_unit || "pcs"}`,
+            `store: ${data.store ? `[[${data.store}]]` : ""}`,
+            `base_unit: ${data.base_unit || "шт"}`,
             `typical_pack_size: ${data.typical_pack_size || ""}`,
             `typical_pack_unit: ${data.typical_pack_unit || ""}`,
             `perishable: ${Boolean(data.perishable)}`,
             `default_shelf_life_days: ${data.default_shelf_life_days || ""}`,
             `price: ${data.price || ""}`,
+            `image: ${data.image ? quoteYaml(data.image) : ""}`,
             `created: ${today}`,
             "tags:",
             "  - еда",
@@ -596,18 +598,20 @@ module.exports = async function foodDb(tp) {
 
     function normalizeUnit(unit) {
         const map = {
-            g: "g",
-            gr: "g",
-            kg: "kg",
-            ml: "ml",
-            l: "l",
-            pcs: "pcs",
-            pc: "pcs",
-            шт: "pcs",
-            штука: "pcs",
-            штук: "pcs"
+            g: "г",
+            gr: "г",
+            "гр": "г",
+            "гр.": "г",
+            kg: "кг",
+            ml: "мл",
+            l: "л",
+            pcs: "шт",
+            pc: "шт",
+            шт: "шт",
+            штука: "шт",
+            штук: "шт"
         };
-        return map[String(unit || "").trim().toLowerCase()] || String(unit || "pcs").trim().toLowerCase();
+        return map[String(unit || "").trim().toLowerCase()] || String(unit || "шт").trim().toLowerCase();
     }
 
     function convertToBaseUnit(packSize, packUnit, baseUnit) {
@@ -618,10 +622,10 @@ module.exports = async function foodDb(tp) {
         const to = normalizeUnit(baseUnit);
 
         if (from === to) return size;
-        if (from === "kg" && to === "g") return size * 1000;
-        if (from === "g" && to === "kg") return size / 1000;
-        if (from === "l" && to === "ml") return size * 1000;
-        if (from === "ml" && to === "l") return size / 1000;
+        if (from === "кг" && to === "г") return size * 1000;
+        if (from === "г" && to === "кг") return size / 1000;
+        if (from === "л" && to === "мл") return size * 1000;
+        if (from === "мл" && to === "л") return size / 1000;
         return null;
     }
 
@@ -640,7 +644,7 @@ module.exports = async function foodDb(tp) {
         const title = (await tp.system.prompt("Название нового магазина"))?.trim();
         if (!title) return null;
 
-        const kind = (await tp.system.prompt("Тип магазина", "supermarket"))?.trim() || "supermarket";
+        const kind = (await tp.system.prompt("Тип магазина", "обычный"))?.trim() || "обычный";
         const location = (await tp.system.prompt("Локация / примечание", ""))?.trim() || "";
         const file = await createNote(DIRS.stores, title, buildStoreContent({ title, kind, location, is_online: false }));
         notice(`Добавлен новый магазин: ${title}`);
@@ -656,26 +660,32 @@ module.exports = async function foodDb(tp) {
         const barcode = cleanBarcode((await tp.system.prompt(`Штрихкод для '${finalTitle}'`, suggestedBarcode))?.trim() || suggestedBarcode);
         const category = (await tp.system.prompt(`Категория для '${finalTitle}'`, seed.category || "прочее"))?.trim() || "прочее";
         const brand = (await tp.system.prompt(`Бренд для '${finalTitle}'`, seed.brand || ""))?.trim() || "";
-        const baseUnit = normalizeUnit((await tp.system.prompt(`Базовая единица для '${finalTitle}'`, seed.base_unit || "pcs"))?.trim() || "pcs");
+        const store = await pickStore();
+        const baseUnit = normalizeUnit((await tp.system.prompt(`Базовая единица для '${finalTitle}'`, seed.base_unit || "шт"))?.trim() || "шт");
         const typicalPackSize = (await tp.system.prompt(`Типичная фасовка числами для '${finalTitle}'`, String(seed.typical_pack_size || "")))?.trim() || "";
         const typicalPackUnit = normalizeUnit((await tp.system.prompt(`Типичная единица фасовки для '${finalTitle}'`, seed.typical_pack_unit || ""))?.trim() || "");
-        const perishableAnswer = lower(await tp.system.prompt(`Скоропортящийся? (y/n) для '${finalTitle}'`, seed.perishable ? "y" : "n"));
-        const perishable = perishableAnswer === "y" || perishableAnswer === "yes" || perishableAnswer === "д";
+        const perishableAnswer = lower(await tp.system.prompt(`Скоропортящийся? (д/н) для '${finalTitle}'`, seed.perishable ? "д" : "н"));
+        const perishable = perishableAnswer === "д" || perishableAnswer === "да" || perishableAnswer === "y" || perishableAnswer === "yes";
         let shelfLife = "";
         if (perishable) {
             shelfLife = (await tp.system.prompt(`Типичный срок годности в днях для '${finalTitle}'`, seed.default_shelf_life_days || "7"))?.trim() || "";
         }
+        const price = (await tp.system.prompt(`Обычная цена для '${finalTitle}'`, String(seed.price || "")))?.trim() || "";
+        const image = (await tp.system.prompt(`Картинка для '${finalTitle}' (путь или ссылка)`, String(seed.image || "")))?.trim() || "";
 
         const file = await createNote(DIRS.products, finalTitle, buildProductContent({
             title: finalTitle,
             barcode,
             category,
             brand,
+            store: store?.title || "",
             base_unit: baseUnit,
             typical_pack_size: typicalPackSize,
             typical_pack_unit: typicalPackUnit,
             perishable,
-            default_shelf_life_days: shelfLife
+            default_shelf_life_days: shelfLife,
+            price,
+            image
         }));
         return await readFrontmatter(file);
     }
@@ -807,14 +817,14 @@ module.exports = async function foodDb(tp) {
 
         const qty = Number((await tp.system.prompt(`Количество '${product.title}'`, "1"))?.trim() || "1");
         const packSizeInput = (await tp.system.prompt(`Фасовка числами для '${product.title}'`, String(product.typical_pack_size || "")))?.trim() || "";
-        const packUnit = normalizeUnit((await tp.system.prompt(`Единица фасовки для '${product.title}'`, product.typical_pack_unit || product.base_unit || "pcs"))?.trim() || product.base_unit || "pcs");
+        const packUnit = normalizeUnit((await tp.system.prompt(`Единица фасовки для '${product.title}'`, product.typical_pack_unit || product.base_unit || "шт"))?.trim() || product.base_unit || "шт");
         const priceTotal = Number((await tp.system.prompt(`Цена за позицию '${product.title}'`, ""))?.trim() || "0");
-        const discountAnswer = lower(await tp.system.prompt(`Была скидка на '${product.title}'? (y/n)`, "n"));
-        const discount = discountAnswer === "y" || discountAnswer === "yes" || discountAnswer === "д";
+        const discountAnswer = lower(await tp.system.prompt(`Была скидка на '${product.title}'? (д/н)`, "н"));
+        const discount = discountAnswer === "д" || discountAnswer === "да" || discountAnswer === "y" || discountAnswer === "yes";
         const review = (await tp.system.prompt(`Отзыв по '${product.title}'`, ""))?.trim() || "";
         const ratingInput = (await tp.system.prompt(`Оценка 1-5 для '${product.title}'`, ""))?.trim() || "";
-        const addToPantryAnswer = lower(await tp.system.prompt(`Добавить '${product.title}' в домашний запас? (y/n)`, "y"));
-        const addToPantry = addToPantryAnswer === "y" || addToPantryAnswer === "yes" || addToPantryAnswer === "д";
+        const addToPantryAnswer = lower(await tp.system.prompt(`Добавить '${product.title}' в домашний запас? (д/н)`, "д"));
+        const addToPantry = addToPantryAnswer === "д" || addToPantryAnswer === "да" || addToPantryAnswer === "y" || addToPantryAnswer === "yes";
 
         const packSize = packSizeInput === "" ? "" : Number(packSizeInput);
         const normalizedPack = convertToBaseUnit(packSize, packUnit, product.base_unit || packUnit);
@@ -867,7 +877,7 @@ module.exports = async function foodDb(tp) {
                 productTitle: product.title,
                 receiptItemTitle,
                 qtyCurrent: totalBaseUnits ?? qty,
-                unit: product.base_unit || packUnit || "pcs",
+                unit: product.base_unit || packUnit || "шт",
                 purchasedOn: receiptDate,
                 expiresOn,
                 location: ""

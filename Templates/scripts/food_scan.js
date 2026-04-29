@@ -2,6 +2,7 @@ module.exports = async function foodScan(tp) {
     const ROOT = "Projects/Еда";
     const DIRS = {
         products: `${ROOT}/Products`,
+        stores: `${ROOT}/Stores`,
         pantry: `${ROOT}/Pantry`,
         shopping: `${ROOT}/Shopping List`
     };
@@ -19,19 +20,21 @@ module.exports = async function foodScan(tp) {
 
     function normalizeUnit(unit) {
         const map = {
-            g: "g",
-            gr: "g",
-            kg: "kg",
-            ml: "ml",
-            l: "l",
-            pcs: "pcs",
-            pc: "pcs",
-            шт: "pcs",
-            штука: "pcs",
-            штук: "pcs",
-            eggs: "pcs"
+            g: "г",
+            gr: "г",
+            "гр": "г",
+            "гр.": "г",
+            kg: "кг",
+            ml: "мл",
+            l: "л",
+            pcs: "шт",
+            pc: "шт",
+            шт: "шт",
+            штука: "шт",
+            штук: "шт",
+            eggs: "шт"
         };
-        return map[lower(unit)] || lower(unit || "pcs");
+        return map[lower(unit)] || lower(unit || "шт");
     }
 
     function normalizeProductTitle(title) {
@@ -90,11 +93,11 @@ module.exports = async function foodScan(tp) {
         }
 
         if (!next.base_unit || next.base_unit === "шт") {
-            if (/яйц/.test(source)) next.base_unit = "pcs";
+            if (/яйц/.test(source)) next.base_unit = "шт";
         }
 
         if (!next.typical_pack_unit || next.typical_pack_unit === "шт") {
-            if (/яйц/.test(source)) next.typical_pack_unit = "pcs";
+            if (/яйц/.test(source)) next.typical_pack_unit = "шт";
         }
 
         if (next.perishable === undefined || next.perishable === null) {
@@ -233,11 +236,50 @@ module.exports = async function foodScan(tp) {
         const to = normalizeUnit(baseUnit);
 
         if (from === to) return size;
-        if (from === "kg" && to === "g") return size * 1000;
-        if (from === "g" && to === "kg") return size / 1000;
-        if (from === "l" && to === "ml") return size * 1000;
-        if (from === "ml" && to === "l") return size / 1000;
+        if (from === "кг" && to === "г") return size * 1000;
+        if (from === "г" && to === "кг") return size / 1000;
+        if (from === "л" && to === "мл") return size * 1000;
+        if (from === "мл" && to === "л") return size / 1000;
         return null;
+    }
+
+    async function pickStore() {
+        const stores = await loadFolder(DIRS.stores);
+        const labels = stores.map(store => store.title);
+        labels.unshift("+ Новый магазин");
+
+        const selected = await tp.system.suggester(labels, labels, false, "Из какого магазина товар?");
+        if (!selected) return null;
+
+        if (selected !== "+ Новый магазин") {
+            return stores.find(store => store.title === selected);
+        }
+
+        const title = (await tp.system.prompt("Название нового магазина"))?.trim();
+        if (!title) return null;
+
+        const file = await createNote(DIRS.stores, title, [
+            "---",
+            "type: store",
+            `title: ${quoteYaml(title)}`,
+            "aliases:",
+            `  - ${quoteYaml(title)}`,
+            "kind: supermarket",
+            "location: \"\"",
+            "is_online: false",
+            `created: ${today}`,
+            "tags:",
+            "  - еда",
+            "  - store",
+            "---",
+            "",
+            `# ${title}`,
+            "",
+            "## Заметки",
+            "",
+            ">"
+        ].join("\n"));
+        return await readFrontmatter(file);
     }
 
     function pushCandidate(candidates, candidate, dedupe) {
@@ -397,7 +439,7 @@ module.exports = async function foodScan(tp) {
                             category: "",
                             description: nameMatches.slice(0, 5).join(" | "),
                             typical_pack_size: quantity.typical_pack_size,
-                            typical_pack_unit: quantity.typical_pack_unit || "pcs",
+                            typical_pack_unit: quantity.typical_pack_unit || "шт",
                             perishable: false,
                             default_shelf_life_days: ""
                         }, dedupe);
@@ -429,7 +471,7 @@ module.exports = async function foodScan(tp) {
             "You normalize product lookup results into strict JSON for a personal inventory database.",
             "Return only one JSON object and no markdown.",
             "Schema:",
-            '{"title":"","barcode":"","brand":"","category":"","base_unit":"pcs|g|kg|ml|l","typical_pack_size":"","typical_pack_unit":"pcs|g|kg|ml|l","perishable":false,"default_shelf_life_days":"","confidence":0}',
+            '{"title":"","barcode":"","brand":"","category":"","base_unit":"шт|г|кг|мл|л","typical_pack_size":"","typical_pack_unit":"шт|г|кг|мл|л","perishable":false,"default_shelf_life_days":"","confidence":0}',
             "Rules:",
             "- Prefer Russian product title when possible.",
             "- Do not invent facts absent from candidates.",
@@ -438,7 +480,7 @@ module.exports = async function foodScan(tp) {
             "- brand should be filled when it is explicit in title, snippet, description or source fields; otherwise empty string.",
             "- title should be human-friendly Russian, not all caps, and should keep meaningful distinctions like fat %, flavor, size, class or grade.",
             "- do not include store names, prices, dates, promo text or review text in title.",
-            "- base_unit and typical_pack_unit must be one of pcs,g,kg,ml,l.",
+            "- base_unit and typical_pack_unit must be one of: шт, г, кг, мл, л.",
             "- if quantity is explicit like 400 г, 0.9 л or 10 шт, extract it.",
             "- use category 'прочее' only when the product type is genuinely unclear.",
             "- confidence is from 0 to 1.",
@@ -499,9 +541,9 @@ module.exports = async function foodScan(tp) {
                 barcode: cleanBarcode(parsed.barcode || barcode),
                 brand: String(parsed.brand || "").trim(),
                 category: normalizeCategory(parsed.category || "прочее"),
-                base_unit: normalizeUnit(parsed.base_unit || parsed.typical_pack_unit || "pcs"),
+                base_unit: normalizeUnit(parsed.base_unit || parsed.typical_pack_unit || "шт"),
                 typical_pack_size: parsed.typical_pack_size || "",
-                typical_pack_unit: normalizeUnit(parsed.typical_pack_unit || parsed.base_unit || ""),
+                typical_pack_unit: normalizeUnit(parsed.typical_pack_unit || parsed.base_unit || "шт"),
                 perishable: Boolean(parsed.perishable),
                 default_shelf_life_days: parsed.default_shelf_life_days || "",
                 confidence: Number(parsed.confidence || 0),
@@ -587,12 +629,14 @@ module.exports = async function foodScan(tp) {
             `  - ${quoteYaml(data.title)}`,
             `category: ${quoteYaml(data.category || "прочее")}`,
             `brand: ${quoteYaml(data.brand || "")}`,
-            `base_unit: ${data.base_unit || "pcs"}`,
+            `store: ${data.store ? `[[${data.store}]]` : ""}`,
+            `base_unit: ${data.base_unit || "шт"}`,
             `typical_pack_size: ${data.typical_pack_size || ""}`,
             `typical_pack_unit: ${data.typical_pack_unit || ""}`,
             `perishable: ${Boolean(data.perishable)}`,
             `default_shelf_life_days: ${data.default_shelf_life_days || ""}`,
             `price: ${data.price || ""}`,
+            `image: ${data.image ? quoteYaml(data.image) : ""}`,
             `created: ${today}`,
             "tags:",
             "  - еда",
@@ -667,23 +711,27 @@ module.exports = async function foodScan(tp) {
         const title = normalizeProductTitle(titleInput);
         const category = (await tp.system.prompt(`Категория для '${title}'`, defaults.category || "прочее"))?.trim() || "прочее";
         const brand = (await tp.system.prompt(`Бренд для '${title}'`, defaults.brand || ""))?.trim() || "";
-        const baseUnit = normalizeUnit((await tp.system.prompt(`Базовая единица для '${title}'`, defaults.base_unit || "pcs"))?.trim() || "pcs");
+        const store = await pickStore();
+        const baseUnit = normalizeUnit((await tp.system.prompt(`Базовая единица для '${title}'`, defaults.base_unit || "шт"))?.trim() || "шт");
         const typicalPackSize = (await tp.system.prompt(`Типичная фасовка числами для '${title}'`, String(defaults.typical_pack_size || "")))?.trim() || "";
         const typicalPackUnit = normalizeUnit((await tp.system.prompt(`Типичная единица фасовки для '${title}'`, defaults.typical_pack_unit || ""))?.trim() || "");
-        const perishable = ["y", "yes", "д"].includes(lower(await tp.system.prompt(`Скоропортящийся? (y/n) для '${title}'`, defaults.perishable ? "y" : "n")));
+        const perishable = ["д", "да", "y", "yes"].includes(lower(await tp.system.prompt(`Скоропортящийся? (д/н) для '${title}'`, defaults.perishable ? "д" : "н")));
         const shelfLife = perishable ? ((await tp.system.prompt(`Типичный срок годности в днях для '${title}'`, defaults.default_shelf_life_days || "7"))?.trim() || "") : "";
         const price = (await tp.system.prompt(`Обычная цена для '${title}'`, String(defaults.price || "")))?.trim() || "";
+        const image = (await tp.system.prompt(`Картинка для '${title}' (путь или ссылка)`, String(defaults.image || "")))?.trim() || "";
         const file = await createNote(DIRS.products, title, buildProductContent({
             title,
             barcode,
             category,
             brand,
+            store: store?.title || "",
             base_unit: baseUnit,
             typical_pack_size: typicalPackSize,
             typical_pack_unit: typicalPackUnit,
             perishable,
             default_shelf_life_days: shelfLife,
-            price
+            price,
+            image
         }));
         notice(`Добавлен новый товар: ${title}`);
         return await readFrontmatter(file);
@@ -757,7 +805,7 @@ module.exports = async function foodScan(tp) {
             hasPackInfo ? `Сколько упаковок добавить '${product.title}'` : `Сколько добавить '${product.title}'`,
             "1"
         ))?.trim() || "1");
-        const packSizeInBase = convertToBaseUnit(product.typical_pack_size, product.typical_pack_unit, product.base_unit || "pcs");
+        const packSizeInBase = convertToBaseUnit(product.typical_pack_size, product.typical_pack_unit, product.base_unit || "шт");
         const qtyCurrent = hasPackInfo && packSizeInBase
             ? Number((packSizeInBase * packCount).toFixed(3))
             : packCount;
@@ -785,11 +833,13 @@ module.exports = async function foodScan(tp) {
         const file = await createNote(DIRS.pantry, `${today} ${product.title}`, buildPantryContent({
             productTitle: product.title,
             qtyCurrent,
-            unit: product.base_unit || "pcs",
+            unit: product.base_unit || "шт",
             expiresOn,
             location: ""
         }));
-        return `# ${product.title}\n\n- Добавлено в запас: [[${file.basename}]]\n- Количество: ${qtyCurrent} ${product.base_unit || "pcs"}\n- Штрихкод: \`${product.barcode || ""}\``;
+        const productFile = app.vault.getAbstractFileByPath(product.file.path);
+        if (productFile) await app.workspace.getLeaf(true).openFile(productFile);
+        return `# ${product.title}\n\n- Добавлено в запас: [[${file.basename}]]\n- Количество: ${qtyCurrent} ${product.base_unit || "шт"}\n- Штрихкод: \`${product.barcode || ""}\``;
     }
 
     const targetQty = Number((await tp.system.prompt(`Сколько купить '${product.title}'`, "1"))?.trim() || "1");
@@ -797,8 +847,10 @@ module.exports = async function foodScan(tp) {
     const file = await createNote(DIRS.shopping, `${product.title}`, buildShoppingContent({
         productTitle: product.title,
         targetQty,
-        unit: product.base_unit || "pcs",
+        unit: product.base_unit || "шт",
         reason
     }));
-    return `# ${product.title}\n\n- Добавлено в покупки: [[${file.basename}]]\n- Нужно: ${targetQty} ${product.base_unit || "pcs"}\n- Штрихкод: \`${product.barcode || ""}\``;
+    const productFile = app.vault.getAbstractFileByPath(product.file.path);
+    if (productFile) await app.workspace.getLeaf(true).openFile(productFile);
+    return `# ${product.title}\n\n- Добавлено в покупки: [[${file.basename}]]\n- Нужно: ${targetQty} ${product.base_unit || "шт"}\n- Штрихкод: \`${product.barcode || ""}\``;
 };
