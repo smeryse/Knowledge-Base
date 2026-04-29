@@ -843,16 +843,30 @@ module.exports = async function foodDb(tp) {
 
         if (addToPantry) {
             if (product.perishable) {
-                const suggestedExpires = product.default_shelf_life_days
-                    ? window.moment(receiptDate).add(Number(product.default_shelf_life_days), "days").format("YYYY-MM-DD")
-                    : "";
-                expiresOn = (await tp.system.prompt(`Срок годности для '${product.title}'`, suggestedExpires))?.trim() || "";
+                const shelfLifeDays = Number(product.default_shelf_life_days || 0);
+                const manufactureDate = (await tp.system.prompt(
+                    `Дата изготовления для '${product.title}' (YYYY-MM-DD, пусто = ввести срок годности вручную)`,
+                    receiptDate
+                ))?.trim() || "";
+
+                if (manufactureDate && shelfLifeDays) {
+                    expiresOn = window.moment(manufactureDate).add(shelfLifeDays, "days").format("YYYY-MM-DD");
+                    new Notice(`Срок годности рассчитан: ${expiresOn}`, 5000);
+                } else {
+                    const suggestedExpires = shelfLifeDays
+                        ? window.moment(receiptDate).add(shelfLifeDays, "days").format("YYYY-MM-DD")
+                        : "";
+                    const expiryPrompt = shelfLifeDays
+                        ? `Срок годности для '${product.title}' (если дата изготовления неизвестна, ориентир из ${shelfLifeDays} дней)`
+                        : `Срок годности для '${product.title}'`;
+                    expiresOn = (await tp.system.prompt(expiryPrompt, suggestedExpires))?.trim() || "";
+                }
             }
 
             await createNote(DIRS.pantry, `${receiptDate} ${product.title}`, buildPantryContent({
                 productTitle: product.title,
                 receiptItemTitle,
-                qtyCurrent: qty,
+                qtyCurrent: totalBaseUnits ?? qty,
                 unit: product.base_unit || packUnit || "pcs",
                 purchasedOn: receiptDate,
                 expiresOn,

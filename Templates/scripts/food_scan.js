@@ -225,6 +225,21 @@ module.exports = async function foodScan(tp) {
         };
     }
 
+    function convertToBaseUnit(packSize, packUnit, baseUnit) {
+        const size = Number(packSize);
+        if (!size || !packUnit || !baseUnit) return null;
+
+        const from = normalizeUnit(packUnit);
+        const to = normalizeUnit(baseUnit);
+
+        if (from === to) return size;
+        if (from === "kg" && to === "g") return size * 1000;
+        if (from === "g" && to === "kg") return size / 1000;
+        if (from === "l" && to === "ml") return size * 1000;
+        if (from === "ml" && to === "l") return size / 1000;
+        return null;
+    }
+
     function pushCandidate(candidates, candidate, dedupe) {
         const key = [candidate.source, candidate.lookup_code || candidate.barcode, candidate.title].join("|").toLowerCase();
         if (!candidate.title || dedupe.has(key)) return;
@@ -737,13 +752,35 @@ module.exports = async function foodScan(tp) {
     }
 
     if (action === "Добавить в запас дома") {
-        const qtyCurrent = Number((await tp.system.prompt(`Сколько добавить '${product.title}'`, "1"))?.trim() || "1");
+        const hasPackInfo = product.typical_pack_size && product.typical_pack_unit;
+        const packCount = Number((await tp.system.prompt(
+            hasPackInfo ? `Сколько упаковок добавить '${product.title}'` : `Сколько добавить '${product.title}'`,
+            "1"
+        ))?.trim() || "1");
+        const packSizeInBase = convertToBaseUnit(product.typical_pack_size, product.typical_pack_unit, product.base_unit || "pcs");
+        const qtyCurrent = hasPackInfo && packSizeInBase
+            ? Number((packSizeInBase * packCount).toFixed(3))
+            : packCount;
         let expiresOn = "";
         if (product.perishable) {
-            const suggested = product.default_shelf_life_days
-                ? window.moment(today).add(Number(product.default_shelf_life_days), "days").format("YYYY-MM-DD")
-                : "";
-            expiresOn = (await tp.system.prompt(`Срок годности для '${product.title}'`, suggested))?.trim() || "";
+            const shelfLifeDays = Number(product.default_shelf_life_days || 0);
+            const manufactureDate = (await tp.system.prompt(
+                `Дата изготовления для '${product.title}' (YYYY-MM-DD, пусто = ввести срок годности вручную)`,
+                today
+            ))?.trim() || "";
+
+            if (manufactureDate && shelfLifeDays) {
+                expiresOn = window.moment(manufactureDate).add(shelfLifeDays, "days").format("YYYY-MM-DD");
+                new Notice(`Срок годности рассчитан: ${expiresOn}`, 5000);
+            } else {
+                const suggested = shelfLifeDays
+                    ? window.moment(today).add(shelfLifeDays, "days").format("YYYY-MM-DD")
+                    : "";
+                const expiryPrompt = shelfLifeDays
+                    ? `Срок годности для '${product.title}' (если дата изготовления неизвестна, ориентир из ${shelfLifeDays} дней)`
+                    : `Срок годности для '${product.title}'`;
+                expiresOn = (await tp.system.prompt(expiryPrompt, suggested))?.trim() || "";
+            }
         }
         const file = await createNote(DIRS.pantry, `${today} ${product.title}`, buildPantryContent({
             productTitle: product.title,
