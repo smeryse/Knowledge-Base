@@ -1,4 +1,10 @@
-Дам тебе **конкретный, проверенный стек ресурсов**, без перегруза. Этого достаточно, чтобы выйти на уверенный junior за 1–2 месяца при нормальном темпе.
+---
+tags:
+  - python
+  - work
+  - roadmap
+---
+
 
 ---
 
@@ -48,15 +54,10 @@
 ### 🔥 Corey Schafer (YouTube)
 
 Смотри:
-
 - Python OOP
-    
 - generators
-    
 - decorators (позже)
-    
 - threading vs multiprocessing
-    
 
 👉 объясняет **чётко и инженерно**
 
