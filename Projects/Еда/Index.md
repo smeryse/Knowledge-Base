@@ -48,6 +48,7 @@ aliases:
 ## Шаблоны
 
 - `Templates/Новый чек.md`
+- `Templates/Новый рецепт.md`
 - `Templates/Скан товара.md`
 - `Templates/Проверка LLM.md`
 - `Templates/OCR чек.md`
