@@ -16,7 +16,7 @@
 ---
 
 ## Быстрый обзор
-
+н
 ```dataviewjs
 const totalFiles = dv.pages().length;
 const today = new Date().toISOString().split('T')[0];
