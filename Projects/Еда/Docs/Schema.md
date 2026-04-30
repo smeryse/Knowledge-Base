@@ -27,6 +27,7 @@ aliases:
 | Папка | Что это в терминах БД | Одна заметка = |
 | --- | --- | --- |
 | `Products/` | таблица товаров | один товар |
+| `Recipes/` | таблица рецептов | один рецепт |
 | `Stores/` | таблица магазинов | один магазин |
 | `Receipts/` | таблица чеков | один чек |
 | `Receipt Items/` | таблица позиций чека | одна позиция внутри чека |
@@ -38,6 +39,7 @@ aliases:
 | Файл | Что это |
 | --- | --- |
 | `Dashboard.md` | общая сводка по базе |
+| `Рецепты.md` | представление базы рецептов |
 | `Что дома.md` | представление домашних запасов |
 | `Что купить.md` | представление списка покупок |
 
@@ -78,6 +80,7 @@ aliases:
 ```mermaid
 erDiagram
     PRODUCTS ||--o{ RECEIPT_ITEMS : used_in
+    PRODUCTS }o--o{ RECIPES : ingredient_for
     STORES ||--o{ RECEIPTS : source_of
     RECEIPTS ||--o{ RECEIPT_ITEMS : contains
     PRODUCTS ||--o{ PANTRY : stored_as
@@ -113,6 +116,24 @@ erDiagram
 - `default_shelf_life_days`
 - `price`
 - `image`
+
+### `Recipes`
+
+Справочник рецептов.
+
+Запись отвечает на вопрос:
+
+- что именно готовим, из каких продуктов и на сколько порций?
+
+Основные поля:
+
+- `title`
+- `dish_type`
+- `servings`
+- `total_time_min`
+- `source`
+- `products`
+- `recipe_status`
 
 ### `Stores`
 
@@ -175,7 +196,7 @@ Receipt -> Receipt Items -> при необходимости Pantry
 ### Планирование
 
 ```text
-Products + Pantry -> Shopping List
+Recipes + Products + Pantry -> Shopping List
 ```
 
 ---
@@ -187,8 +208,10 @@ Products + Pantry -> Shopping List
 | Что ты хочешь сохранить | Куда писать |
 | --- | --- |
 | название товара | `Products` |
+| название рецепта | `Recipes` |
 | штрихкод | `Products` |
 | типичная упаковка | `Products` |
+| состав рецепта | `Recipes.products` + таблица `Ингредиенты` внутри заметки |
 | ориентир по цене | `Products.price` |
 | фактическая цена конкретной покупки | `Receipt Items.price_total` |
 | магазин покупки | `Receipts` / `Receipt Items` |
@@ -202,8 +225,8 @@ Products + Pantry -> Shopping List
 
 Чтобы не путаться, смотри на проект так:
 
-1. `Products`, `Stores`, `Receipts`, `Receipt Items`, `Pantry`, `Shopping List` = таблицы
-2. `Dashboard`, `Что дома`, `Что купить` = экраны
+1. `Products`, `Recipes`, `Stores`, `Receipts`, `Receipt Items`, `Pantry`, `Shopping List` = таблицы
+2. `Dashboard`, `Рецепты`, `Что дома`, `Что купить` = экраны
 3. `Templates` = формы и команды
 4. `Index`, `Docs/README`, `Docs/Schema`, `Docs/Шпаргалка`, `Docs/Будущая логика` = документация
 

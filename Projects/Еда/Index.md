@@ -16,6 +16,7 @@ aliases:
 ## База
 
 - `[[Products]]` - товары
+- `[[Рецепты]]` - рецепты
 - `[[Stores]]` - магазины
 - `[[Receipts]]` - чеки
 - `[[Receipt Items]]` - позиции чеков
@@ -27,6 +28,7 @@ aliases:
 ## Экраны
 
 - `[[Dashboard]]`
+- `[[Рецепты]]`
 - `[[Что купить]]`
 - `[[Что дома]]`
 
@@ -49,6 +51,7 @@ aliases:
 - `Templates/Скан товара.md`
 - `Templates/Проверка LLM.md`
 - `Templates/OCR чек.md`
+- `Templates/Recipe.md`
 
 ---
 
@@ -62,8 +65,8 @@ aliases:
 
 ## Схема чтения
 
-1. `Products`, `Stores`, `Receipts`, `Receipt Items`, `Pantry`, `Shopping List` = таблицы
-2. `Dashboard`, `Что купить`, `Что дома` = представления
+1. `Products`, `Recipes`, `Stores`, `Receipts`, `Receipt Items`, `Pantry`, `Shopping List` = таблицы
+2. `Dashboard`, `Рецепты`, `Что купить`, `Что дома` = представления
 3. `Docs/` = документация и правила
 4. `Templates/` = команды и формы ввода
 5. `Materials/` = рабочие материалы и наработки

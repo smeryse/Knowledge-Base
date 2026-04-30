@@ -12,6 +12,7 @@ aliases:
 
 ```dataviewjs
 const products = dv.pages('"Projects/Еда/Products"').where(p => p.type === "product");
+const recipes = dv.pages('"Projects/Еда/Recipes"').where(p => p.type === "recipe" && p.recipe_status !== "archived");
 const receipts = dv.pages('"Projects/Еда/Receipts"').where(p => p.type === "receipt");
 const receiptItems = dv.pages('"Projects/Еда/Receipt Items"').where(p => p.type === "receipt-item");
 const pantry = dv.pages('"Projects/Еда/Pantry"').where(p => p.type === "pantry-item");
@@ -22,6 +23,7 @@ const expiringSoon = pantry.where(p => p.expires_on && dv.date(p.expires_on) <= 
 
 dv.table(["Показатель", "Значение"], [
   ["Товаров в базе", products.length],
+  ["Рецептов", recipes.length],
   ["Чеков", receipts.length],
   ["Позиций в чеках", receiptItems.length],
   ["Запасов дома", pantry.length],
@@ -76,4 +78,16 @@ FROM "Projects/Еда/Products"
 WHERE type = "product"
 SORT file.ctime DESC
 LIMIT 15
+```
+
+---
+
+## Последние рецепты
+
+```dataview
+TABLE dish_type as "Тип", servings as "Порций", total_time_min as "Мин"
+FROM "Projects/Еда/Recipes"
+WHERE type = "recipe" AND recipe_status != "archived"
+SORT file.ctime DESC
+LIMIT 10
 ```
