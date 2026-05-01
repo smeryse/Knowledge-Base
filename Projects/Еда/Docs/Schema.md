@@ -36,6 +36,16 @@ aliases:
 | `Meal Plans/` | таблица планов питания | один месячный план питания |
 | `Shopping List/` | таблица планируемых покупок | один пункт списка покупок |
 
+### Логические связующие сущности
+
+Это нормализующие сущности уровня модели данных. Сейчас часть из них еще может жить как встроенные таблицы внутри заметок, но в схеме они должны читаться именно как отдельные связи, а не как many-to-many напрямую.
+
+| Сущность | Что связывает | Одна запись = |
+| --- | --- | --- |
+| `Recipe Ingredients` | `Recipes` <-> `Products` | один продукт внутри одного рецепта |
+| `Meal Plan Slots` | `Meal Plans` <-> `Recipes` | один слот готовки в плане |
+| `Cooking Consumptions` | `Cooking Log` <-> `Pantry` | одно списание одного запаса в одном приготовлении |
+
 ### Представления
 
 | Файл | Что это |
@@ -85,15 +95,18 @@ aliases:
 ```mermaid
 erDiagram
     PRODUCTS ||--o{ RECEIPT_ITEMS : used_in
-    PRODUCTS }o--o{ RECIPES : ingredient_for
     STORES ||--o{ RECEIPTS : source_of
-    RECEIPTS ||--o{ RECEIPT_ITEMS : contains
+    RECEIPTS ||--|{ RECEIPT_ITEMS : contains
     PRODUCTS ||--o{ PANTRY : stored_as
     PRODUCTS ||--o{ SHOPPING_LIST : planned_as
     RECEIPT_ITEMS o|--|| PANTRY : can_create
     RECIPES ||--o{ COOKING_LOG : cooked_as
-    PANTRY }o--o{ COOKING_LOG : consumed_by
-    RECIPES }o--o{ MEAL_PLANS : scheduled_in
+    COOKING_LOG ||--o{ COOKING_CONSUMPTIONS : has
+    PANTRY ||--o{ COOKING_CONSUMPTIONS : consumed_from
+    RECIPES ||--o{ RECIPE_INGREDIENTS : has
+    PRODUCTS ||--o{ RECIPE_INGREDIENTS : used_as
+    MEAL_PLANS ||--|{ MEAL_PLAN_SLOTS : has
+    RECIPES ||--o{ MEAL_PLAN_SLOTS : scheduled_as
 ```
 
 ---
@@ -169,6 +182,8 @@ erDiagram
 
 Именно здесь должна жить фактическая цена покупки.
 
+Чек без позиций в этой модели невалиден: если `Receipt` существует, у него должна быть минимум одна запись в `Receipt Items`.
+
 ### `Pantry`
 
 Текущие домашние запасы.
@@ -203,6 +218,36 @@ erDiagram
 
 - какие рецепты и в какие дни месяца планируется готовить?
 
+### `Recipe Ingredients`
+
+Связующая сущность между `Recipes` и `Products`.
+
+Запись отвечает на вопрос:
+
+- какой именно продукт входит в конкретный рецепт, в каком количестве и в какой единице?
+
+Именно эта сущность убирает прямую many-to-many связь между рецептами и продуктами.
+
+### `Meal Plan Slots`
+
+Связующая сущность между `Meal Plans` и `Recipes`.
+
+Запись отвечает на вопрос:
+
+- какой рецепт запланирован на какую дату внутри конкретного месячного плана?
+
+Именно эта сущность убирает прямую many-to-many связь между планами питания и рецептами.
+
+### `Cooking Consumptions`
+
+Связующая сущность между `Cooking Log` и `Pantry`.
+
+Запись отвечает на вопрос:
+
+- какой именно домашний запас был списан в рамках какого приготовления и в каком количестве?
+
+Именно эта сущность убирает прямую many-to-many связь между готовкой и запасами.
+
 ---
 
 ## Базовый поток данных
@@ -222,7 +267,7 @@ Receipt -> Receipt Items -> при необходимости Pantry
 ### Планирование
 
 ```text
-Recipes -> Meal Plans
+Recipes -> Meal Plan Slots -> Meal Plans
 ```
 
 ### Планирование покупок
@@ -234,7 +279,7 @@ Meal Plans + Products + Pantry -> Shopping List
 ### Готовка
 
 ```text
-Recipe -> Cooking Log -> Pantry
+Recipe -> Cooking Log -> Cooking Consumptions -> Pantry
 ```
 
 ---
@@ -249,9 +294,11 @@ Recipe -> Cooking Log -> Pantry
 | название рецепта | `Recipes` |
 | штрихкод | `Products` |
 | типичная упаковка | `Products` |
-| состав рецепта | `Recipes.products` + таблица `Ингредиенты` внутри заметки |
+| состав рецепта | `Recipe Ingredients` |
 | план питания на месяц | `Meal Plans` |
+| конкретный день / слот внутри плана | `Meal Plan Slots` |
 | факт приготовления | `Cooking Log` |
+| списание конкретного запаса в готовке | `Cooking Consumptions` |
 | ориентир по цене | `Products.price` |
 | фактическая цена конкретной покупки | `Receipt Items.price_total` |
 | магазин покупки | `Receipts` / `Receipt Items` |
@@ -271,3 +318,5 @@ Recipe -> Cooking Log -> Pantry
 4. `Index`, `Docs/README`, `Docs/Schema`, `Docs/Шпаргалка`, `Docs/Будущая логика` = документация
 
 Это и есть текущая архитектура в нормальном "бд-шном" виде.
+
+Примечание: сейчас часть данных еще может редактироваться через встроенные таблицы внутри заметок `Recipes` и `Meal Plans`, а списания готовки могут жить прямо в заметке `Cooking Log`, но логическая схема уже должна читаться через связующие сущности, а не через прямые many-to-many связи.

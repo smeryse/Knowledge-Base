@@ -72,8 +72,9 @@ aliases:
 
 ## Схема чтения
 
-1. `Products`, `Recipes`, `Stores`, `Receipts`, `Receipt Items`, `Pantry`, `Shopping List` = таблицы
-2. `Dashboard`, `Рецепты`, `Что купить`, `Что дома` = представления
-3. `Docs/` = документация и правила
-4. `Templates/` = команды и формы ввода
-5. `Materials/` = рабочие материалы и наработки
+1. `Products`, `Recipes`, `Stores`, `Receipts`, `Receipt Items`, `Pantry`, `Cooking Log`, `Meal Plans`, `Shopping List` = основные таблицы
+2. `Recipe Ingredients`, `Meal Plan Slots`, `Cooking Consumptions` = логические связующие сущности схемы
+3. `Dashboard`, `Рецепты`, `Что купить`, `Что дома`, `Готовка`, `План питания` = представления
+4. `Docs/` = документация и правила
+5. `Templates/` = команды и формы ввода
+6. `Materials/` = рабочие материалы и наработки
