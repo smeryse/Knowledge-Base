@@ -4,6 +4,7 @@ product:
 source_receipt_item:
 qty_current: 1
 unit: pcs
+status: active
 purchased_on:
 expires_on:
 location:

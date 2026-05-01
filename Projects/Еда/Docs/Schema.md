@@ -32,6 +32,7 @@ aliases:
 | `Receipts/` | таблица чеков | один чек |
 | `Receipt Items/` | таблица позиций чека | одна позиция внутри чека |
 | `Pantry/` | таблица домашних запасов | один текущий запас дома |
+| `Cooking Log/` | журнал приготовлений | одно фактическое приготовление блюда |
 | `Shopping List/` | таблица планируемых покупок | один пункт списка покупок |
 
 ### Представления
@@ -41,6 +42,7 @@ aliases:
 | `Dashboard.md` | общая сводка по базе |
 | `Рецепты.md` | представление базы рецептов |
 | `Что дома.md` | представление домашних запасов |
+| `Готовка.md` | журнал и обзор фактической готовки |
 | `Что купить.md` | представление списка покупок |
 
 ### Шаблоны и автоматизация
@@ -86,6 +88,8 @@ erDiagram
     PRODUCTS ||--o{ PANTRY : stored_as
     PRODUCTS ||--o{ SHOPPING_LIST : planned_as
     RECEIPT_ITEMS o|--|| PANTRY : can_create
+    RECIPES ||--o{ COOKING_LOG : cooked_as
+    PANTRY }o--o{ COOKING_LOG : consumed_by
 ```
 
 ---
@@ -169,6 +173,16 @@ erDiagram
 
 - что прямо сейчас есть дома и сколько этого осталось?
 
+Допустимо хранить не только целые упаковки, но и уже пересчитанный расходуемый остаток, например `750 г` вместо `0.75 упаковки`.
+
+### `Cooking Log`
+
+Журнал фактической готовки.
+
+Запись отвечает на вопрос:
+
+- что именно было приготовлено, когда и какие остатки были списаны?
+
 ### `Shopping List`
 
 Планируемые покупки.
@@ -199,6 +213,12 @@ Receipt -> Receipt Items -> при необходимости Pantry
 Recipes + Products + Pantry -> Shopping List
 ```
 
+### Готовка
+
+```text
+Recipe -> Cooking Log -> Pantry
+```
+
 ---
 
 ## Простая логика хранения
@@ -212,6 +232,7 @@ Recipes + Products + Pantry -> Shopping List
 | штрихкод | `Products` |
 | типичная упаковка | `Products` |
 | состав рецепта | `Recipes.products` + таблица `Ингредиенты` внутри заметки |
+| факт приготовления | `Cooking Log` |
 | ориентир по цене | `Products.price` |
 | фактическая цена конкретной покупки | `Receipt Items.price_total` |
 | магазин покупки | `Receipts` / `Receipt Items` |
@@ -225,8 +246,8 @@ Recipes + Products + Pantry -> Shopping List
 
 Чтобы не путаться, смотри на проект так:
 
-1. `Products`, `Recipes`, `Stores`, `Receipts`, `Receipt Items`, `Pantry`, `Shopping List` = таблицы
-2. `Dashboard`, `Рецепты`, `Что дома`, `Что купить` = экраны
+1. `Products`, `Recipes`, `Stores`, `Receipts`, `Receipt Items`, `Pantry`, `Cooking Log`, `Shopping List` = таблицы
+2. `Dashboard`, `Рецепты`, `Что дома`, `Готовка`, `Что купить` = экраны
 3. `Templates` = формы и команды
 4. `Index`, `Docs/README`, `Docs/Schema`, `Docs/Шпаргалка`, `Docs/Будущая логика` = документация
 

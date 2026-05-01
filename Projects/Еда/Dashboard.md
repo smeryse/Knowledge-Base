@@ -16,6 +16,7 @@ const recipes = dv.pages('"Projects/Еда/Recipes"').where(p => p.type === "rec
 const receipts = dv.pages('"Projects/Еда/Receipts"').where(p => p.type === "receipt");
 const receiptItems = dv.pages('"Projects/Еда/Receipt Items"').where(p => p.type === "receipt-item");
 const pantry = dv.pages('"Projects/Еда/Pantry"').where(p => p.type === "pantry-item");
+const cooking = dv.pages('"Projects/Еда/Cooking Log"').where(p => p.type === "cooking-entry");
 const shopping = dv.pages('"Projects/Еда/Shopping List"').where(p => p.type === "shopping-item" && p.status != "done" && p.status != "cancelled");
 
 const today = dv.date('today');
@@ -27,6 +28,7 @@ dv.table(["Показатель", "Значение"], [
   ["Чеков", receipts.length],
   ["Позиций в чеках", receiptItems.length],
   ["Запасов дома", pantry.length],
+  ["Приготовлений", cooking.length],
   ["Пунктов к покупке", shopping.length],
   ["Скоро истекают", expiringSoon.length]
 ]);
@@ -89,5 +91,17 @@ TABLE dish_type as "Тип", servings as "Порций", total_time_min as "Ми
 FROM "Projects/Еда/Recipes"
 WHERE type = "recipe" AND recipe_status != "archived"
 SORT file.ctime DESC
+LIMIT 10
+```
+
+---
+
+## Последняя готовка
+
+```dataview
+TABLE date as "Дата", recipe as "Рецепт", servings_cooked as "Порций"
+FROM "Projects/Еда/Cooking Log"
+WHERE type = "cooking-entry"
+SORT date DESC, file.mtime DESC
 LIMIT 10
 ```

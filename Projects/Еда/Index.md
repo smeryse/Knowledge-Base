@@ -21,6 +21,7 @@ aliases:
 - `[[Receipts]]` - чеки
 - `[[Receipt Items]]` - позиции чеков
 - `[[Pantry]]` - запасы дома
+- `[[Cooking Log]]` - журнал приготовлений
 - `[[Shopping List]]` - список покупок
 
 ---
@@ -31,6 +32,7 @@ aliases:
 - `[[Рецепты]]`
 - `[[Что купить]]`
 - `[[Что дома]]`
+- `[[Готовка]]`
 
 ---
 
@@ -49,6 +51,7 @@ aliases:
 
 - `Templates/Новый чек.md`
 - `Templates/Новый рецепт.md`
+- `Templates/Приготовить блюдо.md`
 - `Templates/Скан товара.md`
 - `Templates/Проверка LLM.md`
 - `Templates/OCR чек.md`
