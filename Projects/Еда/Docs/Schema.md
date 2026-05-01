@@ -10,313 +10,471 @@ aliases:
 
 # Schema
 
-Это не просто набор папок, а маленькая локальная БД внутри Obsidian.
+Это нормализованная схема food-проекта в терминах БД.
 
-Главное правило:
+Главный принцип чтения:
 
 1. каждая папка-таблица хранит записи одного типа;
-2. каждая заметка внутри такой папки = одна запись;
-3. дашборды и инструкции живут отдельно и не считаются данными.
+2. каждая заметка внутри такой папки = одна строка таблицы;
+3. прямых many-to-many в логической схеме нет;
+4. связи many-to-many всегда раскладываются через отдельные связующие таблицы.
 
 ---
 
 ## Карта проекта
 
-### Таблицы
+### Физические таблицы
 
-| Папка | Что это в терминах БД | Одна заметка = |
+| Папка | Таблица | Одна заметка = |
 | --- | --- | --- |
-| `Products/` | таблица товаров | один товар |
-| `Recipes/` | таблица рецептов | один рецепт |
-| `Stores/` | таблица магазинов | один магазин |
-| `Receipts/` | таблица чеков | один чек |
-| `Receipt Items/` | таблица позиций чека | одна позиция внутри чека |
-| `Pantry/` | таблица домашних запасов | один текущий запас дома |
-| `Cooking Log/` | журнал приготовлений | одно фактическое приготовление блюда |
-| `Meal Plans/` | таблица планов питания | один месячный план питания |
-| `Shopping List/` | таблица планируемых покупок | один пункт списка покупок |
+| `Products/` | `products` | один товар |
+| `Recipes/` | `recipes` | один рецепт |
+| `Stores/` | `stores` | один магазин |
+| `Receipts/` | `receipts` | один чек |
+| `Receipt Items/` | `receipt_items` | одна позиция чека |
+| `Pantry/` | `pantry_items` | один домашний запас |
+| `Cooking Log/` | `cooking_log` | одно событие готовки |
+| `Meal Plans/` | `meal_plans` | один месячный план |
+| `Shopping List/` | `shopping_items` | один пункт покупки |
 
-### Логические связующие сущности
+### Логические связующие таблицы
 
-Это нормализующие сущности уровня модели данных. Сейчас часть из них еще может жить как встроенные таблицы внутри заметок, но в схеме они должны читаться именно как отдельные связи, а не как many-to-many напрямую.
+Сейчас часть этих данных еще может жить как встроенные таблицы или секции внутри заметок, но в схеме БД это именно отдельные таблицы связей.
 
-| Сущность | Что связывает | Одна запись = |
+| Таблица | Что связывает | Одна запись = |
 | --- | --- | --- |
-| `Recipe Ingredients` | `Recipes` <-> `Products` | один продукт внутри одного рецепта |
-| `Meal Plan Slots` | `Meal Plans` <-> `Recipes` | один слот готовки в плане |
-| `Cooking Consumptions` | `Cooking Log` <-> `Pantry` | одно списание одного запаса в одном приготовлении |
-
-### Представления
-
-| Файл | Что это |
-| --- | --- |
-| `Dashboard.md` | общая сводка по базе |
-| `Рецепты.md` | представление базы рецептов |
-| `Что дома.md` | представление домашних запасов |
-| `Готовка.md` | журнал и обзор фактической готовки |
-| `План питания.md` | обзор месячных планов питания |
-| `Что купить.md` | представление списка покупок |
-
-### Шаблоны и автоматизация
-
-| Папка/файл | Назначение |
-| --- | --- |
-| `Templates/` | шаблоны и точки входа для Templater |
-| `Projects/Еда/Templates/` | проектные шаблоны сущностей |
-| `resolver-config.json` | настройки локальной LLM и barcode resolver |
-
-### Документация
-
-| Файл | Назначение |
-| --- | --- |
-| `Index.md` | единая точка входа |
-| `Docs/README.md` | общее описание проекта |
-| `Docs/Schema.md` | схема БД |
-| `Docs/Шпаргалка по категориям и единицам.md` | справочник значений |
-| `Docs/Ручное добавление товара.md` | fallback-инструкция |
-| `Docs/Будущая логика планирования.md` | backlog и идеи |
-
-### Рабочие материалы
-
-Это не core БД, а вспомогательные и рабочие материалы:
-
-| Папка/файл | Статус |
-| --- | --- |
-| `Materials/Разработка/` | служебное |
-| `Materials/Выгодные продукты.md` | рабочий документ |
-| `Materials/Человеческий корм.md` | тематическая заметка |
-| `Images/` | вложения/картинки |
-| `items/` | не часть текущей основной схемы |
+| `recipe_ingredients` | `recipes` <-> `products` | один продукт в одном рецепте |
+| `meal_plan_slots` | `meal_plans` <-> `recipes` | один слот плана на одну дату |
+| `cooking_consumptions` | `cooking_log` <-> `pantry_items` | одно списание одного запаса |
 
 ---
 
-## Связи
+## ER Schema
 
 ```mermaid
 erDiagram
-    PRODUCTS ||--o{ RECEIPT_ITEMS : used_in
+    PRODUCTS {
+        string id PK
+        string title
+        string barcode UK
+        string category
+        string brand
+        string default_store_id FK
+        string base_unit
+        number typical_pack_size
+        string typical_pack_unit
+        boolean perishable
+        number default_shelf_life_days
+        number default_price
+        string image
+        string status
+        date created_at
+    }
+
+    STORES {
+        string id PK
+        string title UK
+        string kind
+        string location
+        boolean is_online
+        string status
+        date created_at
+    }
+
+    RECIPES {
+        string id PK
+        string title UK
+        string dish_type
+        number servings_default
+        number total_time_min
+        string source
+        string recipe_status
+        date created_at
+    }
+
+    RECIPE_INGREDIENTS {
+        string id PK
+        string recipe_id FK
+        string product_id FK
+        number qty
+        string unit
+        string note
+        number sort_order
+    }
+
+    RECEIPTS {
+        string id PK
+        date receipt_date
+        string store_id FK
+        number total_amount
+        string receipt_image
+        string status
+        date created_at
+    }
+
+    RECEIPT_ITEMS {
+        string id PK
+        string receipt_id FK
+        string product_id FK
+        number qty
+        number pack_size
+        string pack_unit
+        number price_total
+        number price_per_base_unit
+        boolean discount
+        number rating
+        string review
+        boolean add_to_pantry
+        date created_at
+    }
+
+    PANTRY_ITEMS {
+        string id PK
+        string product_id FK
+        string source_receipt_item_id FK
+        number qty_current
+        string unit
+        date purchased_on
+        date expires_on
+        string location
+        string status
+        date created_at
+    }
+
+    MEAL_PLANS {
+        string id PK
+        string month_key
+        string title
+        string status
+        date created_at
+    }
+
+    MEAL_PLAN_SLOTS {
+        string id PK
+        string meal_plan_id FK
+        string recipe_id FK
+        date planned_date
+        string weekday_key
+        string slot_status
+        number sort_order
+    }
+
+    COOKING_LOG {
+        string id PK
+        date cooked_on
+        string recipe_id FK
+        number servings_cooked
+        number servings_base
+        number scale_factor
+        string status
+        date created_at
+    }
+
+    COOKING_CONSUMPTIONS {
+        string id PK
+        string cooking_log_id FK
+        string pantry_item_id FK
+        number qty_used
+        string unit
+        string consumption_status
+        string note
+    }
+
+    SHOPPING_ITEMS {
+        string id PK
+        string product_id FK
+        number target_qty
+        string unit
+        string preferred_store_id FK
+        number max_target_price
+        string reason
+        string status
+        date created_at
+    }
+
+    STORES ||--o{ PRODUCTS : default_for
     STORES ||--o{ RECEIPTS : source_of
+    PRODUCTS ||--o{ RECIPE_INGREDIENTS : used_in
+    RECIPES ||--|{ RECIPE_INGREDIENTS : has
     RECEIPTS ||--|{ RECEIPT_ITEMS : contains
-    PRODUCTS ||--o{ PANTRY : stored_as
-    PRODUCTS ||--o{ SHOPPING_LIST : planned_as
-    RECEIPT_ITEMS o|--|| PANTRY : can_create
-    RECIPES ||--o{ COOKING_LOG : cooked_as
-    COOKING_LOG ||--o{ COOKING_CONSUMPTIONS : has
-    PANTRY ||--o{ COOKING_CONSUMPTIONS : consumed_from
-    RECIPES ||--o{ RECIPE_INGREDIENTS : has
-    PRODUCTS ||--o{ RECIPE_INGREDIENTS : used_as
+    PRODUCTS ||--o{ RECEIPT_ITEMS : bought_as
+    PRODUCTS ||--o{ PANTRY_ITEMS : stored_as
+    RECEIPT_ITEMS o|--o| PANTRY_ITEMS : creates
     MEAL_PLANS ||--|{ MEAL_PLAN_SLOTS : has
     RECIPES ||--o{ MEAL_PLAN_SLOTS : scheduled_as
+    RECIPES ||--o{ COOKING_LOG : cooked_as
+    COOKING_LOG ||--o{ COOKING_CONSUMPTIONS : consumes
+    PANTRY_ITEMS ||--o{ COOKING_CONSUMPTIONS : spent_from
+    PRODUCTS ||--o{ SHOPPING_ITEMS : planned_as
+    STORES ||--o{ SHOPPING_ITEMS : preferred_for
 ```
 
 ---
 
-## Смысл сущностей
+## Tables
 
-### `Products`
+### `products`
 
 Справочник товаров.
 
-Запись отвечает на вопрос:
+| Поле | Тип | Null | Ключ | Смысл |
+| --- | --- | --- | --- | --- |
+| `id` | string | нет | PK | идентификатор товара |
+| `title` | string | нет |  | название товара |
+| `barcode` | string | да | UK | штрихкод |
+| `category` | string | нет |  | категория |
+| `brand` | string | да |  | бренд |
+| `default_store_id` | string | да | FK -> `stores.id` | магазин по умолчанию |
+| `base_unit` | string | нет |  | базовая единица учета |
+| `typical_pack_size` | number | да |  | типичная фасовка |
+| `typical_pack_unit` | string | да |  | единица фасовки |
+| `perishable` | boolean | нет |  | скоропорт |
+| `default_shelf_life_days` | number | да |  | типичный срок годности |
+| `default_price` | number | да |  | опорная цена |
+| `image` | string | да |  | картинка |
+| `status` | string | нет |  | active, archived |
+| `created_at` | date | нет |  | дата создания |
 
-- что это за товар вообще?
-
-Хранит только описание товара, а не историю цен по магазинам.
-
-Основные поля:
-
-- `barcode`
-- `title`
-- `category`
-- `brand`
-- `store`
-- `base_unit`
-- `typical_pack_size`
-- `typical_pack_unit`
-- `perishable`
-- `default_shelf_life_days`
-- `price`
-- `image`
-
-### `Recipes`
-
-Справочник рецептов.
-
-Запись отвечает на вопрос:
-
-- что именно готовим, из каких продуктов и на сколько порций?
-
-Основные поля:
-
-- `title`
-- `dish_type`
-- `servings`
-- `total_time_min`
-- `source`
-- `products`
-- `recipe_status`
-
-### `Stores`
+### `stores`
 
 Справочник магазинов.
 
-Запись отвечает на вопрос:
+| Поле | Тип | Null | Ключ | Смысл |
+| --- | --- | --- | --- | --- |
+| `id` | string | нет | PK | идентификатор магазина |
+| `title` | string | нет | UK | название магазина |
+| `kind` | string | да |  | тип магазина |
+| `location` | string | да |  | адрес / примечание |
+| `is_online` | boolean | нет |  | онлайн или офлайн |
+| `status` | string | нет |  | active, archived |
+| `created_at` | date | нет |  | дата создания |
 
-- где куплен или где обычно покупается товар?
+### `recipes`
 
-### `Receipts`
+Справочник рецептов.
 
-Журнал фактических покупок.
+| Поле | Тип | Null | Ключ | Смысл |
+| --- | --- | --- | --- | --- |
+| `id` | string | нет | PK | идентификатор рецепта |
+| `title` | string | нет | UK | название рецепта |
+| `dish_type` | string | да |  | тип блюда |
+| `servings_default` | number | нет |  | стандартное число порций |
+| `total_time_min` | number | да |  | время приготовления |
+| `source` | string | да |  | источник |
+| `recipe_status` | string | нет |  | active, archived |
+| `created_at` | date | нет |  | дата создания |
 
-Запись отвечает на вопрос:
+### `recipe_ingredients`
 
-- когда и в каком магазине был этот чек?
+Связующая таблица между рецептами и товарами.
 
-### `Receipt Items`
+| Поле | Тип | Null | Ключ | Смысл |
+| --- | --- | --- | --- | --- |
+| `id` | string | нет | PK | идентификатор строки |
+| `recipe_id` | string | нет | FK -> `recipes.id` | рецепт |
+| `product_id` | string | нет | FK -> `products.id` | товар |
+| `qty` | number | нет |  | количество |
+| `unit` | string | нет |  | единица |
+| `note` | string | да |  | примечание |
+| `sort_order` | number | да |  | порядок в рецепте |
 
-Строки внутри чеков.
+### `receipts`
 
-Запись отвечает на вопрос:
+Журнал чеков.
 
-- какой товар, в каком количестве и по какой цене был куплен?
+| Поле | Тип | Null | Ключ | Смысл |
+| --- | --- | --- | --- | --- |
+| `id` | string | нет | PK | идентификатор чека |
+| `receipt_date` | date | нет |  | дата чека |
+| `store_id` | string | нет | FK -> `stores.id` | магазин |
+| `total_amount` | number | да |  | сумма чека |
+| `receipt_image` | string | да |  | фото чека |
+| `status` | string | нет |  | draft, confirmed, archived |
+| `created_at` | date | нет |  | дата создания |
 
-Именно здесь должна жить фактическая цена покупки.
+Ограничение: чек без позиций невалиден. Каждый `receipts.id` должен иметь минимум одну запись в `receipt_items`.
 
-Чек без позиций в этой модели невалиден: если `Receipt` существует, у него должна быть минимум одна запись в `Receipt Items`.
+### `receipt_items`
 
-### `Pantry`
+Позиции чеков.
 
-Текущие домашние запасы.
+| Поле | Тип | Null | Ключ | Смысл |
+| --- | --- | --- | --- | --- |
+| `id` | string | нет | PK | идентификатор позиции |
+| `receipt_id` | string | нет | FK -> `receipts.id` | чек |
+| `product_id` | string | нет | FK -> `products.id` | товар |
+| `qty` | number | нет |  | количество |
+| `pack_size` | number | да |  | размер упаковки |
+| `pack_unit` | string | да |  | единица упаковки |
+| `price_total` | number | нет |  | полная цена позиции |
+| `price_per_base_unit` | number | да |  | цена за базовую единицу |
+| `discount` | boolean | нет |  | скидка |
+| `rating` | number | да |  | оценка |
+| `review` | string | да |  | отзыв |
+| `add_to_pantry` | boolean | нет |  | переносить ли в запас |
+| `created_at` | date | нет |  | дата создания |
 
-Запись отвечает на вопрос:
+### `pantry_items`
 
-- что прямо сейчас есть дома и сколько этого осталось?
+Домашние запасы.
 
-Допустимо хранить не только целые упаковки, но и уже пересчитанный расходуемый остаток, например `750 г` вместо `0.75 упаковки`.
+| Поле | Тип | Null | Ключ | Смысл |
+| --- | --- | --- | --- | --- |
+| `id` | string | нет | PK | идентификатор запаса |
+| `product_id` | string | нет | FK -> `products.id` | товар |
+| `source_receipt_item_id` | string | да | FK -> `receipt_items.id` | источник из чека |
+| `qty_current` | number | нет |  | текущий остаток |
+| `unit` | string | нет |  | единица остатка |
+| `purchased_on` | date | да |  | дата покупки |
+| `expires_on` | date | да |  | срок годности |
+| `location` | string | да |  | место хранения |
+| `status` | string | нет |  | active, consumed, discarded |
+| `created_at` | date | нет |  | дата создания |
 
-### `Cooking Log`
+### `meal_plans`
 
-Журнал фактической готовки.
+Месячные планы питания.
 
-Запись отвечает на вопрос:
+| Поле | Тип | Null | Ключ | Смысл |
+| --- | --- | --- | --- | --- |
+| `id` | string | нет | PK | идентификатор плана |
+| `month_key` | string | нет |  | месяц вида YYYY-MM |
+| `title` | string | нет |  | название плана |
+| `status` | string | нет |  | active, archived |
+| `created_at` | date | нет |  | дата создания |
 
-- что именно было приготовлено, когда и какие остатки были списаны?
+### `meal_plan_slots`
 
-### `Shopping List`
+Слоты внутри месячного плана.
+
+| Поле | Тип | Null | Ключ | Смысл |
+| --- | --- | --- | --- | --- |
+| `id` | string | нет | PK | идентификатор слота |
+| `meal_plan_id` | string | нет | FK -> `meal_plans.id` | план |
+| `recipe_id` | string | нет | FK -> `recipes.id` | рецепт |
+| `planned_date` | date | нет |  | дата готовки |
+| `weekday_key` | string | нет |  | день недели |
+| `slot_status` | string | нет |  | planned, done, skipped |
+| `sort_order` | number | да |  | порядок слота |
+
+### `cooking_log`
+
+Фактическая готовка.
+
+| Поле | Тип | Null | Ключ | Смысл |
+| --- | --- | --- | --- | --- |
+| `id` | string | нет | PK | идентификатор готовки |
+| `cooked_on` | date | нет |  | дата готовки |
+| `recipe_id` | string | нет | FK -> `recipes.id` | приготовленный рецепт |
+| `servings_cooked` | number | нет |  | фактические порции |
+| `servings_base` | number | нет |  | базовые порции |
+| `scale_factor` | number | нет |  | коэффициент масштабирования |
+| `status` | string | нет |  | done, cancelled |
+| `created_at` | date | нет |  | дата создания |
+
+### `cooking_consumptions`
+
+Списания запасов в рамках готовки.
+
+| Поле | Тип | Null | Ключ | Смысл |
+| --- | --- | --- | --- | --- |
+| `id` | string | нет | PK | идентификатор списания |
+| `cooking_log_id` | string | нет | FK -> `cooking_log.id` | событие готовки |
+| `pantry_item_id` | string | нет | FK -> `pantry_items.id` | конкретный запас |
+| `qty_used` | number | нет |  | сколько списано |
+| `unit` | string | нет |  | единица списания |
+| `consumption_status` | string | нет |  | applied, partial, skipped |
+| `note` | string | да |  | пояснение |
+
+### `shopping_items`
 
 Планируемые покупки.
 
-Запись отвечает на вопрос:
-
-- что нужно купить в ближайший поход?
-
-### `Meal Plans`
-
-Планы питания на месяц.
-
-Запись отвечает на вопрос:
-
-- какие рецепты и в какие дни месяца планируется готовить?
-
-### `Recipe Ingredients`
-
-Связующая сущность между `Recipes` и `Products`.
-
-Запись отвечает на вопрос:
-
-- какой именно продукт входит в конкретный рецепт, в каком количестве и в какой единице?
-
-Именно эта сущность убирает прямую many-to-many связь между рецептами и продуктами.
-
-### `Meal Plan Slots`
-
-Связующая сущность между `Meal Plans` и `Recipes`.
-
-Запись отвечает на вопрос:
-
-- какой рецепт запланирован на какую дату внутри конкретного месячного плана?
-
-Именно эта сущность убирает прямую many-to-many связь между планами питания и рецептами.
-
-### `Cooking Consumptions`
-
-Связующая сущность между `Cooking Log` и `Pantry`.
-
-Запись отвечает на вопрос:
-
-- какой именно домашний запас был списан в рамках какого приготовления и в каком количестве?
-
-Именно эта сущность убирает прямую many-to-many связь между готовкой и запасами.
+| Поле | Тип | Null | Ключ | Смысл |
+| --- | --- | --- | --- | --- |
+| `id` | string | нет | PK | идентификатор пункта |
+| `product_id` | string | нет | FK -> `products.id` | товар |
+| `target_qty` | number | нет |  | сколько купить |
+| `unit` | string | нет |  | единица |
+| `preferred_store_id` | string | да | FK -> `stores.id` | желательный магазин |
+| `max_target_price` | number | да |  | потолок цены |
+| `reason` | string | да |  | причина покупки |
+| `status` | string | нет |  | active, done, cancelled |
+| `created_at` | date | нет |  | дата создания |
 
 ---
 
-## Базовый поток данных
+## Data Flow
 
-### Скан или ручное добавление нового товара
+### Новый товар
 
 ```text
-штрихкод/название -> resolver -> Product
+штрихкод / название -> products
 ```
 
 ### Чек
 
 ```text
-Receipt -> Receipt Items -> при необходимости Pantry
+receipts -> receipt_items -> pantry_items
 ```
 
-### Планирование
+### Рецепт
 
 ```text
-Recipes -> Meal Plan Slots -> Meal Plans
+recipes -> recipe_ingredients -> products
 ```
 
-### Планирование покупок
+### План питания
 
 ```text
-Meal Plans + Products + Pantry -> Shopping List
+meal_plans -> meal_plan_slots -> recipes
 ```
 
 ### Готовка
 
 ```text
-Recipe -> Cooking Log -> Cooking Consumptions -> Pantry
+cooking_log -> cooking_consumptions -> pantry_items
+```
+
+### Покупки под план
+
+```text
+meal_plan_slots + recipe_ingredients + pantry_items -> shopping_items
 ```
 
 ---
 
-## Простая логика хранения
+## Business Rules
 
-### Что где хранить
-
-| Что ты хочешь сохранить | Куда писать |
-| --- | --- |
-| название товара | `Products` |
-| название рецепта | `Recipes` |
-| штрихкод | `Products` |
-| типичная упаковка | `Products` |
-| состав рецепта | `Recipe Ingredients` |
-| план питания на месяц | `Meal Plans` |
-| конкретный день / слот внутри плана | `Meal Plan Slots` |
-| факт приготовления | `Cooking Log` |
-| списание конкретного запаса в готовке | `Cooking Consumptions` |
-| ориентир по цене | `Products.price` |
-| фактическая цена конкретной покупки | `Receipt Items.price_total` |
-| магазин покупки | `Receipts` / `Receipt Items` |
-| сколько есть дома | `Pantry.qty_current` |
-| срок годности конкретного запаса | `Pantry.expires_on` |
-| что нужно купить | `Shopping List` |
+1. `receipts` без `receipt_items` невалиден.
+2. Прямых many-to-many связей в схеме нет.
+3. Состав рецепта хранится через `recipe_ingredients`.
+4. Расписание плана хранится через `meal_plan_slots`.
+5. Списание запасов хранится через `cooking_consumptions`.
+6. `pantry_items` может хранить уже пересчитанный расходуемый остаток, а не только целую упаковку.
+7. История фактических цен живет в `receipt_items`, а не в `products`.
 
 ---
 
-## Правило чтения папок
+## Mapping To Vault
 
-Чтобы не путаться, смотри на проект так:
+| Что в БД | Где сейчас в vault |
+| --- | --- |
+| `products` | `Projects/Еда/Products/` |
+| `recipes` | `Projects/Еда/Recipes/` |
+| `stores` | `Projects/Еда/Stores/` |
+| `receipts` | `Projects/Еда/Receipts/` |
+| `receipt_items` | `Projects/Еда/Receipt Items/` |
+| `pantry_items` | `Projects/Еда/Pantry/` |
+| `meal_plans` | `Projects/Еда/Meal Plans/` |
+| `cooking_log` | `Projects/Еда/Cooking Log/` |
+| `shopping_items` | `Projects/Еда/Shopping List/` |
+| `recipe_ingredients` | пока встроенная таблица `Ингредиенты` в `Recipes/*.md` |
+| `meal_plan_slots` | пока таблица `Расписание` в `Meal Plans/*.md` |
+| `cooking_consumptions` | пока секция списаний в `Cooking Log/*.md` |
 
-1. `Products`, `Recipes`, `Stores`, `Receipts`, `Receipt Items`, `Pantry`, `Cooking Log`, `Meal Plans`, `Shopping List` = таблицы
-2. `Dashboard`, `Рецепты`, `Что дома`, `Готовка`, `План питания`, `Что купить` = экраны
-3. `Templates` = формы и команды
-4. `Index`, `Docs/README`, `Docs/Schema`, `Docs/Шпаргалка`, `Docs/Будущая логика` = документация
+---
 
-Это и есть текущая архитектура в нормальном "бд-шном" виде.
+## Note
 
-Примечание: сейчас часть данных еще может редактироваться через встроенные таблицы внутри заметок `Recipes` и `Meal Plans`, а списания готовки могут жить прямо в заметке `Cooking Log`, но логическая схема уже должна читаться через связующие сущности, а не через прямые many-to-many связи.
+Сейчас реализация еще не везде физически доведена до этой схемы: часть логических таблиц живет внутри заметок как вложенные таблицы или секции. Но целевая модель БД именно такая, и новые скрипты лучше проектировать уже под нее.
