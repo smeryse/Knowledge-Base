@@ -123,7 +123,6 @@ erDiagram
         string pack_unit
         number price_total
         number price_per_base_unit
-        boolean discount
         number rating
         string review
         boolean add_to_pantry
@@ -310,7 +309,6 @@ erDiagram
 | `pack_unit`           | string  | да   |                     | единица упаковки        |
 | `price_total`         | number  | нет  |                     | полная цена позиции     |
 | `price_per_base_unit` | number  | да   |                     | цена за базовую единицу |
-| `discount`            | boolean | нет  |                     | скидка                  |
 | `rating`              | number  | да   |                     | оценка                  |
 | `review`              | string  | да   |                     | отзыв                   |
 | `add_to_pantry`       | boolean | нет  |                     | переносить ли в запас   |
