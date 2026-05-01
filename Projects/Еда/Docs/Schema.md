@@ -255,44 +255,44 @@ erDiagram
 
 Справочник рецептов.
 
-| Поле | Тип | Null | Ключ | Смысл |
-| --- | --- | --- | --- | --- |
-| `id` | string | нет | PK | идентификатор рецепта |
-| `title` | string | нет | UK | название рецепта |
-| `dish_type` | string | да |  | тип блюда |
-| `servings_default` | number | нет |  | стандартное число порций |
-| `total_time_min` | number | да |  | время приготовления |
-| `source` | string | да |  | источник |
-| `recipe_status` | string | нет |  | active, archived |
-| `created_at` | date | нет |  | дата создания |
+| Поле               | Тип    | Null | Ключ | Смысл                    |
+| ------------------ | ------ | ---- | ---- | ------------------------ |
+| `id`               | string | нет  | PK   | идентификатор рецепта    |
+| `title`            | string | нет  | UK   | название рецепта         |
+| `dish_type`        | string | да   |      | тип блюда                |
+| `servings_default` | number | нет  |      | стандартное число порций |
+| `total_time_min`   | number | да   |      | время приготовления      |
+| `source`           | string | да   |      | источник                 |
+| `recipe_status`    | string | нет  |      | active, archived         |
+| `created_at`       | date   | нет  |      | дата создания            |
 
 ### `recipe_ingredients`
 
 Связующая таблица между рецептами и товарами.
 
-| Поле | Тип | Null | Ключ | Смысл |
-| --- | --- | --- | --- | --- |
-| `id` | string | нет | PK | идентификатор строки |
-| `recipe_id` | string | нет | FK -> `recipes.id` | рецепт |
-| `product_id` | string | нет | FK -> `products.id` | товар |
-| `qty` | number | нет |  | количество |
-| `unit` | string | нет |  | единица |
-| `note` | string | да |  | примечание |
-| `sort_order` | number | да |  | порядок в рецепте |
+| Поле         | Тип    | Null | Ключ                | Смысл                |
+| ------------ | ------ | ---- | ------------------- | -------------------- |
+| `id`         | string | нет  | PK                  | идентификатор строки |
+| `recipe_id`  | string | нет  | FK -> `recipes.id`  | рецепт               |
+| `product_id` | string | нет  | FK -> `products.id` | товар                |
+| `qty`        | number | нет  |                     | количество           |
+| `unit`       | string | нет  |                     | единица              |
+| `note`       | string | да   |                     | примечание           |
+| `sort_order` | number | да   |                     | порядок в рецепте    |
 
 ### `receipts`
 
 Журнал чеков.
 
-| Поле | Тип | Null | Ключ | Смысл |
-| --- | --- | --- | --- | --- |
-| `id` | string | нет | PK | идентификатор чека |
-| `receipt_date` | date | нет |  | дата чека |
-| `store_id` | string | нет | FK -> `stores.id` | магазин |
-| `total_amount` | number | да |  | сумма чека |
-| `receipt_image` | string | да |  | фото чека |
-| `status` | string | нет |  | draft, confirmed, archived |
-| `created_at` | date | нет |  | дата создания |
+| Поле            | Тип    | Null | Ключ              | Смысл                      |
+| --------------- | ------ | ---- | ----------------- | -------------------------- |
+| `id`            | string | нет  | PK                | идентификатор чека         |
+| `receipt_date`  | date   | нет  |                   | дата чека                  |
+| `store_id`      | string | нет  | FK -> `stores.id` | магазин                    |
+| `total_amount`  | number | да   |                   | сумма чека                 |
+| `receipt_image` | string | да   |                   | фото чека                  |
+| `status`        | string | нет  |                   | draft, confirmed, archived |
+| `created_at`    | date   | нет  |                   | дата создания              |
 
 Ограничение: чек без позиций невалиден. Каждый `receipts.id` должен иметь минимум одну запись в `receipt_items`.
 
@@ -300,21 +300,21 @@ erDiagram
 
 Позиции чеков.
 
-| Поле | Тип | Null | Ключ | Смысл |
-| --- | --- | --- | --- | --- |
-| `id` | string | нет | PK | идентификатор позиции |
-| `receipt_id` | string | нет | FK -> `receipts.id` | чек |
-| `product_id` | string | нет | FK -> `products.id` | товар |
-| `qty` | number | нет |  | количество |
-| `pack_size` | number | да |  | размер упаковки |
-| `pack_unit` | string | да |  | единица упаковки |
-| `price_total` | number | нет |  | полная цена позиции |
-| `price_per_base_unit` | number | да |  | цена за базовую единицу |
-| `discount` | boolean | нет |  | скидка |
-| `rating` | number | да |  | оценка |
-| `review` | string | да |  | отзыв |
-| `add_to_pantry` | boolean | нет |  | переносить ли в запас |
-| `created_at` | date | нет |  | дата создания |
+| Поле                  | Тип     | Null | Ключ                | Смысл                   |
+| --------------------- | ------- | ---- | ------------------- | ----------------------- |
+| `id`                  | string  | нет  | PK                  | идентификатор позиции   |
+| `receipt_id`          | string  | нет  | FK -> `receipts.id` | чек                     |
+| `product_id`          | string  | нет  | FK -> `products.id` | товар                   |
+| `qty`                 | number  | нет  |                     | количество              |
+| `pack_size`           | number  | да   |                     | размер упаковки         |
+| `pack_unit`           | string  | да   |                     | единица упаковки        |
+| `price_total`         | number  | нет  |                     | полная цена позиции     |
+| `price_per_base_unit` | number  | да   |                     | цена за базовую единицу |
+| `discount`            | boolean | нет  |                     | скидка                  |
+| `rating`              | number  | да   |                     | оценка                  |
+| `review`              | string  | да   |                     | отзыв                   |
+| `add_to_pantry`       | boolean | нет  |                     | переносить ли в запас   |
+| `created_at`          | date    | нет  |                     | дата создания           |
 
 ### `pantry_items`
 
