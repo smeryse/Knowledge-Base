@@ -125,8 +125,8 @@ erDiagram
 
 Основные поля:
 
-- `title`
 - `barcode`
+- `title`
 - `category`
 - `brand`
 - `store`
