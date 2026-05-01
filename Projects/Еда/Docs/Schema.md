@@ -33,6 +33,7 @@ aliases:
 | `Receipt Items/` | таблица позиций чека | одна позиция внутри чека |
 | `Pantry/` | таблица домашних запасов | один текущий запас дома |
 | `Cooking Log/` | журнал приготовлений | одно фактическое приготовление блюда |
+| `Meal Plans/` | таблица планов питания | один месячный план питания |
 | `Shopping List/` | таблица планируемых покупок | один пункт списка покупок |
 
 ### Представления
@@ -43,6 +44,7 @@ aliases:
 | `Рецепты.md` | представление базы рецептов |
 | `Что дома.md` | представление домашних запасов |
 | `Готовка.md` | журнал и обзор фактической готовки |
+| `План питания.md` | обзор месячных планов питания |
 | `Что купить.md` | представление списка покупок |
 
 ### Шаблоны и автоматизация
@@ -50,6 +52,7 @@ aliases:
 | Папка/файл | Назначение |
 | --- | --- |
 | `Templates/` | шаблоны и точки входа для Templater |
+| `Projects/Еда/Templates/` | проектные шаблоны сущностей |
 | `resolver-config.json` | настройки локальной LLM и barcode resolver |
 
 ### Документация
@@ -90,6 +93,7 @@ erDiagram
     RECEIPT_ITEMS o|--|| PANTRY : can_create
     RECIPES ||--o{ COOKING_LOG : cooked_as
     PANTRY }o--o{ COOKING_LOG : consumed_by
+    RECIPES }o--o{ MEAL_PLANS : scheduled_in
 ```
 
 ---
@@ -191,6 +195,14 @@ erDiagram
 
 - что нужно купить в ближайший поход?
 
+### `Meal Plans`
+
+Планы питания на месяц.
+
+Запись отвечает на вопрос:
+
+- какие рецепты и в какие дни месяца планируется готовить?
+
 ---
 
 ## Базовый поток данных
@@ -210,7 +222,13 @@ Receipt -> Receipt Items -> при необходимости Pantry
 ### Планирование
 
 ```text
-Recipes + Products + Pantry -> Shopping List
+Recipes -> Meal Plans
+```
+
+### Планирование покупок
+
+```text
+Meal Plans + Products + Pantry -> Shopping List
 ```
 
 ### Готовка
@@ -232,6 +250,7 @@ Recipe -> Cooking Log -> Pantry
 | штрихкод | `Products` |
 | типичная упаковка | `Products` |
 | состав рецепта | `Recipes.products` + таблица `Ингредиенты` внутри заметки |
+| план питания на месяц | `Meal Plans` |
 | факт приготовления | `Cooking Log` |
 | ориентир по цене | `Products.price` |
 | фактическая цена конкретной покупки | `Receipt Items.price_total` |
@@ -246,8 +265,8 @@ Recipe -> Cooking Log -> Pantry
 
 Чтобы не путаться, смотри на проект так:
 
-1. `Products`, `Recipes`, `Stores`, `Receipts`, `Receipt Items`, `Pantry`, `Cooking Log`, `Shopping List` = таблицы
-2. `Dashboard`, `Рецепты`, `Что дома`, `Готовка`, `Что купить` = экраны
+1. `Products`, `Recipes`, `Stores`, `Receipts`, `Receipt Items`, `Pantry`, `Cooking Log`, `Meal Plans`, `Shopping List` = таблицы
+2. `Dashboard`, `Рецепты`, `Что дома`, `Готовка`, `План питания`, `Что купить` = экраны
 3. `Templates` = формы и команды
 4. `Index`, `Docs/README`, `Docs/Schema`, `Docs/Шпаргалка`, `Docs/Будущая логика` = документация
 

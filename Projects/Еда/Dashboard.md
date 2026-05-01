@@ -17,6 +17,7 @@ const receipts = dv.pages('"Projects/Еда/Receipts"').where(p => p.type === "r
 const receiptItems = dv.pages('"Projects/Еда/Receipt Items"').where(p => p.type === "receipt-item");
 const pantry = dv.pages('"Projects/Еда/Pantry"').where(p => p.type === "pantry-item");
 const cooking = dv.pages('"Projects/Еда/Cooking Log"').where(p => p.type === "cooking-entry");
+const mealPlans = dv.pages('"Projects/Еда/Meal Plans"').where(p => p.type === "meal-plan");
 const shopping = dv.pages('"Projects/Еда/Shopping List"').where(p => p.type === "shopping-item" && p.status != "done" && p.status != "cancelled");
 
 const today = dv.date('today');
@@ -29,6 +30,7 @@ dv.table(["Показатель", "Значение"], [
   ["Позиций в чеках", receiptItems.length],
   ["Запасов дома", pantry.length],
   ["Приготовлений", cooking.length],
+  ["Планов питания", mealPlans.length],
   ["Пунктов к покупке", shopping.length],
   ["Скоро истекают", expiringSoon.length]
 ]);
@@ -103,5 +105,17 @@ TABLE date as "Дата", recipe as "Рецепт", servings_cooked as "Порц
 FROM "Projects/Еда/Cooking Log"
 WHERE type = "cooking-entry"
 SORT date DESC, file.mtime DESC
+LIMIT 10
+```
+
+---
+
+## Последние планы питания
+
+```dataview
+TABLE month as "Месяц", recipe_count as "Рецептов", slot_count as "Слотов"
+FROM "Projects/Еда/Meal Plans"
+WHERE type = "meal-plan"
+SORT month DESC, file.mtime DESC
 LIMIT 10
 ```
