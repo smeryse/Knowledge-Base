@@ -619,6 +619,13 @@ module.exports = async function foodScan(tp) {
         return await app.vault.create(path, content);
     }
 
+    function wikilink(targetPath, alias = "") {
+        const cleanPath = String(targetPath || "").replace(/\.md$/i, "").trim();
+        const cleanAlias = String(alias || "").trim();
+        if (!cleanPath) return cleanAlias;
+        return cleanAlias ? `[[${cleanPath}|${cleanAlias}]]` : `[[${cleanPath}]]`;
+    }
+
     function buildProductContent(data) {
         return [
             "---",
@@ -629,7 +636,7 @@ module.exports = async function foodScan(tp) {
             `  - ${quoteYaml(data.title)}`,
             `category: ${quoteYaml(data.category || "прочее")}`,
             `brand: ${quoteYaml(data.brand || "")}`,
-            `store: ${data.store ? `[[${data.store}]]` : ""}`,
+            `store: ${data.storePath ? wikilink(data.storePath, data.storeTitle || "") : ""}`,
             `base_unit: ${data.base_unit || "шт"}`,
             `typical_pack_size: ${data.typical_pack_size || ""}`,
             `typical_pack_unit: ${data.typical_pack_unit || ""}`,
@@ -657,7 +664,7 @@ module.exports = async function foodScan(tp) {
         return [
             "---",
             "type: pantry-item",
-            `product: [[${data.productTitle}]]`,
+            `product: ${wikilink(data.productPath, data.productTitle)}`,
             "source_receipt_item: ",
             `qty_current: ${data.qtyCurrent}`,
             `unit: ${data.unit}`,
@@ -682,7 +689,7 @@ module.exports = async function foodScan(tp) {
         return [
             "---",
             "type: shopping-item",
-            `product: [[${data.productTitle}]]`,
+            `product: ${wikilink(data.productPath, data.productTitle)}`,
             `target_qty: ${data.targetQty}`,
             `unit: ${data.unit}`,
             "status: active",
@@ -724,7 +731,8 @@ module.exports = async function foodScan(tp) {
             barcode,
             category,
             brand,
-            store: store?.title || "",
+            storePath: store?.file?.path || "",
+            storeTitle: store?.title || "",
             base_unit: baseUnit,
             typical_pack_size: typicalPackSize,
             typical_pack_unit: typicalPackUnit,
@@ -796,7 +804,7 @@ module.exports = async function foodScan(tp) {
     if (action === "Только открыть карточку") {
         const file = app.vault.getAbstractFileByPath(product.file.path);
         if (file) await app.workspace.getLeaf(true).openFile(file);
-        return `# ${product.title}\n\n- Карточка: [[${product.title}]]\n- Штрихкод: \`${product.barcode || ""}\``;
+        return `# ${product.title}\n\n- Карточка: ${wikilink(product.file.path, product.title)}\n- Штрихкод: \`${product.barcode || ""}\``;
     }
 
     if (action === "Добавить в запас дома") {
@@ -832,6 +840,7 @@ module.exports = async function foodScan(tp) {
         }
         const file = await createNote(DIRS.pantry, `${today} ${product.title}`, buildPantryContent({
             productTitle: product.title,
+            productPath: product.file.path,
             qtyCurrent,
             unit: product.base_unit || "шт",
             expiresOn,
@@ -846,6 +855,7 @@ module.exports = async function foodScan(tp) {
     const reason = (await tp.system.prompt(`Почему добавить '${product.title}' в список`, "добавлено сканером"))?.trim() || "добавлено сканером";
     const file = await createNote(DIRS.shopping, `${product.title}`, buildShoppingContent({
         productTitle: product.title,
+        productPath: product.file.path,
         targetQty,
         unit: product.base_unit || "шт",
         reason
