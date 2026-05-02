@@ -69,17 +69,12 @@ erDiagram
         number default_shelf_life_days
         number default_price
         string image
-        string status
         date created_at
     }
 
     STORES {
         string id PK
         string title UK
-        string kind
-        string location
-        boolean is_online
-        string status
         date created_at
     }
 
@@ -87,10 +82,8 @@ erDiagram
         string id PK
         string title UK
         string dish_type
-        number servings_default
         number total_time_min
         string source
-        string recipe_status
         date created_at
     }
 
@@ -110,7 +103,6 @@ erDiagram
         string store_id FK
         number total_amount
         string receipt_image
-        string status
         date created_at
     }
 
@@ -123,8 +115,6 @@ erDiagram
         string pack_unit
         number price_total
         number price_per_base_unit
-        number rating
-        string review
         boolean add_to_pantry
         date created_at
     }
@@ -136,9 +126,7 @@ erDiagram
         number qty_current
         string unit
         date purchased_on
-        date expires_on
-        string location
-        string status
+        date manufactured_on
         date created_at
     }
 
@@ -146,7 +134,6 @@ erDiagram
         string id PK
         string month_key
         string title
-        string status
         date created_at
     }
 
@@ -156,7 +143,6 @@ erDiagram
         string recipe_id FK
         date planned_date
         string weekday_key
-        string slot_status
         number sort_order
     }
 
@@ -167,7 +153,6 @@ erDiagram
         number servings_cooked
         number servings_base
         number scale_factor
-        string status
         date created_at
     }
 
@@ -177,7 +162,6 @@ erDiagram
         string pantry_item_id FK
         number qty_used
         string unit
-        string consumption_status
         string note
     }
 
@@ -189,7 +173,6 @@ erDiagram
         string preferred_store_id FK
         number max_target_price
         string reason
-        string status
         date created_at
     }
 
@@ -218,52 +201,45 @@ erDiagram
 
 Справочник товаров.
 
-| Поле | Тип | Null | Ключ | Смысл |
-| --- | --- | --- | --- | --- |
-| `id` | string | нет | PK | идентификатор товара |
-| `title` | string | нет |  | название товара |
-| `barcode` | string | да | UK | штрихкод |
-| `category` | string | нет |  | категория |
-| `brand` | string | да |  | бренд |
-| `default_store_id` | string | да | FK -> `stores.id` | магазин по умолчанию |
-| `base_unit` | string | нет |  | базовая единица учета |
-| `typical_pack_size` | number | да |  | типичная фасовка |
-| `typical_pack_unit` | string | да |  | единица фасовки |
-| `perishable` | boolean | нет |  | скоропорт |
-| `default_shelf_life_days` | number | да |  | типичный срок годности |
-| `default_price` | number | да |  | опорная цена |
-| `image` | string | да |  | картинка |
-| `status` | string | нет |  | active, archived |
-| `created_at` | date | нет |  | дата создания |
+| Поле                      | Тип     | Null | Ключ              | Смысл                  |
+| ------------------------- | ------- | ---- | ----------------- | ---------------------- |
+| `id`                      | string  | нет  | PK                | идентификатор товара   |
+| `title`                   | string  | нет  |                   | название товара        |
+| `barcode`                 | string  | да   | UK                | штрихкод               |
+| `category`                | string  | нет  |                   | категория              |
+| `brand`                   | string  | да   |                   | бренд                  |
+| `default_store_id`        | string  | да   | FK -> `stores.id` | магазин по умолчанию   |
+| `base_unit`               | string  | нет  |                   | базовая единица учета  |
+| `typical_pack_size`       | number  | да   |                   | типичная фасовка       |
+| `typical_pack_unit`       | string  | да   |                   | единица фасовки        |
+| `perishable`              | boolean | нет  |                   | скоропорт              |
+| `default_shelf_life_days` | number  | да   |                   | типичный срок годности |
+| `default_price`           | number  | да   |                   | опорная цена           |
+| `image`                   | string  | да   |                   | картинка               |
+| `created_at`              | date    | нет  |                   | дата создания          |
 
 ### `stores`
 
 Справочник магазинов.
 
-| Поле | Тип | Null | Ключ | Смысл |
-| --- | --- | --- | --- | --- |
-| `id` | string | нет | PK | идентификатор магазина |
-| `title` | string | нет | UK | название магазина |
-| `kind` | string | да |  | тип магазина |
-| `location` | string | да |  | адрес / примечание |
-| `is_online` | boolean | нет |  | онлайн или офлайн |
-| `status` | string | нет |  | active, archived |
-| `created_at` | date | нет |  | дата создания |
+| Поле         | Тип    | Null | Ключ | Смысл                  |
+| ------------ | ------ | ---- | ---- | ---------------------- |
+| `id`         | string | нет  | PK   | идентификатор магазина |
+| `title`      | string | нет  | UK   | название магазина      |
+| `created_at` | date   | нет  |      | дата создания          |
 
 ### `recipes`
 
 Справочник рецептов.
 
-| Поле               | Тип    | Null | Ключ | Смысл                    |
-| ------------------ | ------ | ---- | ---- | ------------------------ |
-| `id`               | string | нет  | PK   | идентификатор рецепта    |
-| `title`            | string | нет  | UK   | название рецепта         |
-| `dish_type`        | string | да   |      | тип блюда                |
-| `servings_default` | number | нет  |      | стандартное число порций |
-| `total_time_min`   | number | да   |      | время приготовления      |
-| `source`           | string | да   |      | источник                 |
-| `recipe_status`    | string | нет  |      | active, archived         |
-| `created_at`       | date   | нет  |      | дата создания            |
+| Поле               | Тип    | Null | Ключ | Смысл                              |
+| ------------------ | ------ | ---- | ---- | ---------------------------------- |
+| `id`               | string | нет  | PK   | идентификатор рецепта              |
+| `title`            | string | нет  | UK   | название рецепта                   |
+| `dish_type`        | string | да   |      | тип блюда                          |
+| `total_time_min`   | number | да   |      | время приготовления                |
+| `source`           | string | да   |      | источник                           |
+| `created_at`       | date   | нет  |      | дата создания                      |
 
 ### `recipe_ingredients`
 
@@ -290,7 +266,6 @@ erDiagram
 | `store_id`      | string | нет  | FK -> `stores.id` | магазин                    |
 | `total_amount`  | number | да   |                   | сумма чека                 |
 | `receipt_image` | string | да   |                   | фото чека                  |
-| `status`        | string | нет  |                   | draft, confirmed, archived |
 | `created_at`    | date   | нет  |                   | дата создания              |
 
 Ограничение: чек без позиций невалиден. Каждый `receipts.id` должен иметь минимум одну запись в `receipt_items`.
@@ -309,8 +284,6 @@ erDiagram
 | `pack_unit`           | string  | да   |                     | единица упаковки        |
 | `price_total`         | number  | нет  |                     | полная цена позиции     |
 | `price_per_base_unit` | number  | да   |                     | цена за базовую единицу |
-| `rating`              | number  | да   |                     | оценка                  |
-| `review`              | string  | да   |                     | отзыв                   |
 | `add_to_pantry`       | boolean | нет  |                     | переносить ли в запас   |
 | `created_at`          | date    | нет  |                     | дата создания           |
 
@@ -318,59 +291,54 @@ erDiagram
 
 Домашние запасы.
 
-| Поле | Тип | Null | Ключ | Смысл |
-| --- | --- | --- | --- | --- |
-| `id` | string | нет | PK | идентификатор запаса |
-| `product_id` | string | нет | FK -> `products.id` | товар |
-| `source_receipt_item_id` | string | да | FK -> `receipt_items.id` | источник из чека |
-| `qty_current` | number | нет |  | текущий остаток |
-| `unit` | string | нет |  | единица остатка |
-| `purchased_on` | date | да |  | дата покупки |
-| `expires_on` | date | да |  | срок годности |
-| `location` | string | да |  | место хранения |
-| `status` | string | нет |  | active, consumed, discarded |
-| `created_at` | date | нет |  | дата создания |
+| Поле                     | Тип    | Null | Ключ                     | Смысл                |
+| ------------------------ | ------ | ---- | ------------------------ | -------------------- |
+| `id`                     | string | нет  | PK                       | идентификатор запаса |
+| `product_id`             | string | нет  | FK -> `products.id`      | товар                |
+| `source_receipt_item_id` | string | да   | FK -> `receipt_items.id` | источник из чека     |
+| `qty_current`            | number | нет  |                          | текущий остаток      |
+| `unit`                   | string | нет  |                          | единица остатка      |
+| `purchased_on`           | date   | да   |                          | дата покупки         |
+| `manufactured_on`        | date   | да   |                          | дата изготовления    |
+| `created_at`             | date   | нет  |                          | дата создания        |
 
 ### `meal_plans`
 
 Месячные планы питания.
 
-| Поле | Тип | Null | Ключ | Смысл |
-| --- | --- | --- | --- | --- |
-| `id` | string | нет | PK | идентификатор плана |
-| `month_key` | string | нет |  | месяц вида YYYY-MM |
-| `title` | string | нет |  | название плана |
-| `status` | string | нет |  | active, archived |
-| `created_at` | date | нет |  | дата создания |
+| Поле         | Тип    | Null | Ключ | Смысл               |
+| ------------ | ------ | ---- | ---- | ------------------- |
+| `id`         | string | нет  | PK   | идентификатор плана |
+| `month_key`  | string | нет  |      | месяц вида YYYY-MM  |
+| `title`      | string | нет  |      | название плана      |
+| `created_at` | date   | нет  |      | дата создания       |
 
 ### `meal_plan_slots`
 
 Слоты внутри месячного плана.
 
-| Поле | Тип | Null | Ключ | Смысл |
-| --- | --- | --- | --- | --- |
-| `id` | string | нет | PK | идентификатор слота |
-| `meal_plan_id` | string | нет | FK -> `meal_plans.id` | план |
-| `recipe_id` | string | нет | FK -> `recipes.id` | рецепт |
-| `planned_date` | date | нет |  | дата готовки |
-| `weekday_key` | string | нет |  | день недели |
-| `slot_status` | string | нет |  | planned, done, skipped |
-| `sort_order` | number | да |  | порядок слота |
+| Поле           | Тип    | Null | Ключ                  | Смысл               |
+| -------------- | ------ | ---- | --------------------- | ------------------- |
+| `id`           | string | нет  | PK                    | идентификатор слота |
+| `meal_plan_id` | string | нет  | FK -> `meal_plans.id` | план                |
+| `recipe_id`    | string | нет  | FK -> `recipes.id`    | рецепт              |
+| `planned_date` | date   | нет  |                       | дата готовки        |
+| `weekday_key`  | string | нет  |                       | день недели         |
+| `sort_order`   | number | да   |                       | порядок слота       |
 
 ### `cooking_log`
 
 Фактическая готовка.
 
-| Поле | Тип | Null | Ключ | Смысл |
-| --- | --- | --- | --- | --- |
-| `id` | string | нет | PK | идентификатор готовки |
-| `cooked_on` | date | нет |  | дата готовки |
-| `recipe_id` | string | нет | FK -> `recipes.id` | приготовленный рецепт |
-| `servings_cooked` | number | нет |  | фактические порции |
-| `servings_base` | number | нет |  | базовые порции |
-| `scale_factor` | number | нет |  | коэффициент масштабирования |
-| `status` | string | нет |  | done, cancelled |
-| `created_at` | date | нет |  | дата создания |
+| Поле              | Тип    | Null | Ключ               | Смысл                       |
+| ----------------- | ------ | ---- | ------------------ | --------------------------- |
+| `id`              | string | нет  | PK                 | идентификатор готовки       |
+| `cooked_on`       | date   | нет  |                    | дата готовки                |
+| `recipe_id`       | string | нет  | FK -> `recipes.id` | приготовленный рецепт       |
+| `servings_cooked` | number | нет  |                    | фактические порции          |
+| `servings_base`   | number | нет  |                    | базовые порции              |
+| `scale_factor`    | number | нет  |                    | коэффициент масштабирования |
+| `created_at`      | date   | нет  |                    | дата создания               |
 
 ### `cooking_consumptions`
 
@@ -383,7 +351,6 @@ erDiagram
 | `pantry_item_id` | string | нет | FK -> `pantry_items.id` | конкретный запас |
 | `qty_used` | number | нет |  | сколько списано |
 | `unit` | string | нет |  | единица списания |
-| `consumption_status` | string | нет |  | applied, partial, skipped |
 | `note` | string | да |  | пояснение |
 
 ### `shopping_items`
@@ -399,7 +366,6 @@ erDiagram
 | `preferred_store_id` | string | да | FK -> `stores.id` | желательный магазин |
 | `max_target_price` | number | да |  | потолок цены |
 | `reason` | string | да |  | причина покупки |
-| `status` | string | нет |  | active, done, cancelled |
 | `created_at` | date | нет |  | дата создания |
 
 ---
@@ -423,6 +389,8 @@ receipts -> receipt_items -> pantry_items
 ```text
 recipes -> recipe_ingredients -> products
 ```
+
+Все количества в `recipe_ingredients` задаются на 1 порцию. Это системное правило модели, а не отдельное поле в `recipes`.
 
 ### План питания
 
@@ -449,10 +417,13 @@ meal_plan_slots + recipe_ingredients + pantry_items -> shopping_items
 1. `receipts` без `receipt_items` невалиден.
 2. Прямых many-to-many связей в схеме нет.
 3. Состав рецепта хранится через `recipe_ingredients`.
-4. Расписание плана хранится через `meal_plan_slots`.
-5. Списание запасов хранится через `cooking_consumptions`.
-6. `pantry_items` может хранить уже пересчитанный расходуемый остаток, а не только целую упаковку.
-7. История фактических цен живет в `receipt_items`, а не в `products`.
+4. Любой рецепт по определению хранится на 1 порцию; отдельное поле базового числа порций в `recipes` не нужно.
+5. Все ингредиенты рецепта задаются на 1 порцию; масштабирование происходит только в планировании и в `cooking_log`.
+6. Расписание плана хранится через `meal_plan_slots`.
+7. Списание запасов хранится через `cooking_consumptions`.
+8. `pantry_items` может хранить уже пересчитанный расходуемый остаток, а не только целую упаковку.
+9. Срок годности лучше вычислять из `manufactured_on + products.default_shelf_life_days`, а не хранить как отдельное поле.
+10. История фактических цен живет в `receipt_items`.
 
 ---
 

@@ -1,29 +1,18 @@
 {
 	"nodes":[
-		{"id":"products","type":"text","text":"PRODUCTS\n\nPK id\nUK barcode\ntitle\ncategory\nbrand\nFK default_store_id -> stores.id\nbase_unit\ntypical_pack_size\ntypical_pack_unit\nperishable\ndefault_shelf_life_days\ndefault_price\nimage\nstatus\ncreated_at","x":-1480,"y":-180,"width":360,"height":420},
-		{"id":"stores","type":"text","text":"STORES\n\nPK id\nUK title\nkind\nlocation\nis_online\nstatus\ncreated_at","x":-1480,"y":-700,"width":360,"height":220},
-		{"id":"recipes","type":"text","text":"RECIPES\n\nPK id\nUK title\ndish_type\nservings_default\ntotal_time_min\nsource\nrecipe_status\ncreated_at","x":-500,"y":-700,"width":360,"height":240},
+		{"id":"products","type":"text","text":"PRODUCTS\n\nPK id\nUK barcode\ntitle\ncategory\nbrand\nFK default_store_id -> stores.id\nbase_unit\ntypical_pack_size\ntypical_pack_unit\nperishable\ndefault_shelf_life_days\ndefault_price\nimage\ncreated_at","x":-1480,"y":-180,"width":360,"height":400},
+		{"id":"stores","type":"text","text":"STORES\n\nPK id\nUK title\ncreated_at","x":-1480,"y":-700,"width":360,"height":140},
+		{"id":"recipes","type":"text","text":"RECIPES\n\nPK id\nUK title\ndish_type\nservings_default\ntotal_time_min\nsource\ncreated_at","x":-500,"y":-700,"width":360,"height":220},
 		{"id":"recipe_ingredients","type":"text","text":"RECIPE_INGREDIENTS\n\nPK id\nFK recipe_id -> recipes.id\nFK product_id -> products.id\nqty\nunit\nnote\nsort_order","x":-980,"y":-520,"width":380,"height":240},
-		{
-			"id":"receipts",
-			"type":"text",
-			"text":"RECEIPTS\n\nPK id\nreceipt_date\nFK store_id -> stores.id\ntotal_amount\nreceipt_image\nstatus\ncreated_at\n\nRule: must have >= 1 receipt_item",
-			"styleAttributes":{
-				"shape":null
-			},
-			"x":-500,
-			"y":40,
-			"width":360,
-			"height":260
-		},
-		{"id":"receipt_items","type":"text","text":"RECEIPT_ITEMS\n\nPK id\nFK receipt_id -> receipts.id\nFK product_id -> products.id\nqty\npack_size\npack_unit\nprice_total\nprice_per_base_unit\ndiscount\nrating\nreview\nadd_to_pantry\ncreated_at","x":-980,"y":20,"width":380,"height":360},
-		{"id":"pantry_items","type":"text","text":"PANTRY_ITEMS\n\nPK id\nFK product_id -> products.id\nFK source_receipt_item_id -> receipt_items.id\nqty_current\nunit\npurchased_on\nexpires_on\nlocation\nstatus\ncreated_at","x":-980,"y":500,"width":380,"height":300},
-		{"id":"meal_plans","type":"text","text":"MEAL_PLANS\n\nPK id\nmonth_key\ntitle\nstatus\ncreated_at","x":520,"y":-700,"width":320,"height":180},
-		{"id":"meal_plan_slots","type":"text","text":"MEAL_PLAN_SLOTS\n\nPK id\nFK meal_plan_id -> meal_plans.id\nFK recipe_id -> recipes.id\nplanned_date\nweekday_key\nslot_status\nsort_order","x":20,"y":-500,"width":380,"height":240},
-		{"id":"cooking_log","type":"text","text":"COOKING_LOG\n\nPK id\ncooked_on\nFK recipe_id -> recipes.id\nservings_cooked\nservings_base\nscale_factor\nstatus\ncreated_at","x":20,"y":320,"width":360,"height":260},
-		{"id":"cooking_consumptions","type":"text","text":"COOKING_CONSUMPTIONS\n\nPK id\nFK cooking_log_id -> cooking_log.id\nFK pantry_item_id -> pantry_items.id\nqty_used\nunit\nconsumption_status\nnote","x":-460,"y":600,"width":380,"height":240},
-		{"id":"shopping_items","type":"text","text":"SHOPPING_ITEMS\n\nPK id\nFK product_id -> products.id\ntarget_qty\nunit\nFK preferred_store_id -> stores.id\nmax_target_price\nreason\nstatus\ncreated_at","x":20,"y":-120,"width":360,"height":280},
-		{"id":"legend","type":"text","text":"Food DB Schema\n\nPhysical tables:\nproducts, stores, recipes, receipts, receipt_items, pantry_items, meal_plans, meal_plan_slots, cooking_log, cooking_consumptions, shopping_items\n\nRule highlights:\n- no direct many-to-many\n- receipts must have at least 1 receipt_item\n- recipe_ingredients, meal_plan_slots, cooking_consumptions are link tables\n- price history lives in receipt_items","x":520,"y":-380,"width":420,"height":300}
+		{"id":"receipts","type":"text","text":"RECEIPTS\n\nPK id\nreceipt_date\nFK store_id -> stores.id\ntotal_amount\nreceipt_image\ncreated_at\n\nRule: must have >= 1 receipt_item","x":-500,"y":40,"width":360,"height":240},
+		{"id":"receipt_items","type":"text","text":"RECEIPT_ITEMS\n\nPK id\nFK receipt_id -> receipts.id\nFK product_id -> products.id\nqty\npack_size\npack_unit\nprice_total\nprice_per_base_unit\nadd_to_pantry\ncreated_at","x":-980,"y":20,"width":380,"height":300},
+		{"id":"pantry_items","type":"text","text":"PANTRY_ITEMS\n\nPK id\nFK product_id -> products.id\nFK source_receipt_item_id -> receipt_items.id\nqty_current\nunit\npurchased_on\nmanufactured_on\ncreated_at","x":-980,"y":500,"width":380,"height":240},
+		{"id":"meal_plans","type":"text","text":"MEAL_PLANS\n\nPK id\nmonth_key\ntitle\ncreated_at","x":520,"y":-700,"width":320,"height":160},
+		{"id":"meal_plan_slots","type":"text","text":"MEAL_PLAN_SLOTS\n\nPK id\nFK meal_plan_id -> meal_plans.id\nFK recipe_id -> recipes.id\nplanned_date\nweekday_key\nsort_order","x":20,"y":-500,"width":380,"height":220},
+		{"id":"cooking_log","type":"text","text":"COOKING_LOG\n\nPK id\ncooked_on\nFK recipe_id -> recipes.id\nservings_cooked\nservings_base\nscale_factor\ncreated_at","x":20,"y":320,"width":360,"height":220},
+		{"id":"cooking_consumptions","type":"text","text":"COOKING_CONSUMPTIONS\n\nPK id\nFK cooking_log_id -> cooking_log.id\nFK pantry_item_id -> pantry_items.id\nqty_used\nunit\nnote","x":-460,"y":600,"width":380,"height":200},
+		{"id":"shopping_items","type":"text","text":"SHOPPING_ITEMS\n\nPK id\nFK product_id -> products.id\ntarget_qty\nunit\nFK preferred_store_id -> stores.id\nmax_target_price\nreason\ncreated_at","x":20,"y":-120,"width":360,"height":240},
+		{"id":"legend","type":"text","text":"Food DB Schema\n\nPhysical tables:\nproducts, stores, recipes, receipts, receipt_items, pantry_items, meal_plans, meal_plan_slots, cooking_log, cooking_consumptions, shopping_items\n\nRule highlights:\n- no direct many-to-many\n- receipts must have at least 1 receipt_item\n- recipe_ingredients, meal_plan_slots, cooking_consumptions are link tables\n- price history lives in receipt_items\n- expiry is derived from manufactured_on + default_shelf_life_days","x":520,"y":-380,"width":420,"height":320}
 	],
 	"edges":[
 		{"id":"e1","fromNode":"stores","fromSide":"bottom","toNode":"products","toSide":"top","label":"1:N default_for"},

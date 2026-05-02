@@ -12,7 +12,7 @@ module.exports = async function foodRecipe(tp) {
         "Тип блюда"
     );
 
-    const servings = (await tp.system.prompt("Сколько порций", "2")) || "2";
+    const servings = "1";
     const totalTime = await tp.system.prompt("Время приготовления, минут", "30");
     const source = (await tp.system.prompt("Источник", "local")) || "local";
 
@@ -41,6 +41,8 @@ module.exports = async function foodRecipe(tp) {
         "| ------- | ------ | --- | ---------- |",
         "",
         "Для автосписания указывай числовое количество и единицы `г`, `кг`, `мл`, `л` или `шт`.",
+        "",
+        "Все количества в рецепте указывай на 1 порцию. При готовке скрипт сам умножит их на нужное число порций.",
         "",
         "## Шаги",
         "",
