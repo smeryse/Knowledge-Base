@@ -1,6 +1,6 @@
 <mxfile host="Electron" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/29.3.6 Chrome/140.0.7339.249 Electron/38.8.0 Safari/537.36" version="29.3.6">
   <diagram name="Страница-1" id="4Y9GnklT0dM47tbANXRj">
-    <mxGraphModel dx="2254" dy="1180" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1811" dy="814" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -840,7 +840,7 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="i8Il-Gh7Ltz_s5gOQirV-603" parent="1" style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;align=center;resizeLast=1;html=1;" value="COOKING_CONSUMPTIONS" vertex="1">
-          <mxGeometry height="210" width="180" x="600" y="1560" as="geometry" />
+          <mxGeometry height="210" width="180" x="700" y="540" as="geometry" />
         </mxCell>
         <mxCell id="i8Il-Gh7Ltz_s5gOQirV-604" parent="i8Il-Gh7Ltz_s5gOQirV-603" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=1;" value="" vertex="1">
           <mxGeometry height="30" width="180" y="30" as="geometry" />
