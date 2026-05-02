@@ -56,7 +56,7 @@ Canvas-версия: [[Schema.canvas]]
 ```mermaid
 erDiagram
     PRODUCTS {
-        string id PK
+        string product_id PK
         string title
         string barcode UK
         string category
@@ -73,13 +73,13 @@ erDiagram
     }
 
     STORES {
-        string id PK
+        string store_id PK
         string title UK
         date created_at
     }
 
     RECIPES {
-        string id PK
+        string recipe_id PK
         string title UK
         string dish_type
         number total_time_min
@@ -88,7 +88,7 @@ erDiagram
     }
 
     RECIPE_INGREDIENTS {
-        string id PK
+        string recipe_ingredient_id PK
         string recipe_id FK
         string product_id FK
         number qty
@@ -98,7 +98,7 @@ erDiagram
     }
 
     RECEIPTS {
-        string id PK
+        string receipt_id PK
         date receipt_date
         string store_id FK
         number total_amount
@@ -107,7 +107,7 @@ erDiagram
     }
 
     RECEIPT_ITEMS {
-        string id PK
+        string receipt_item_id PK
         string receipt_id FK
         string product_id FK
         number qty
@@ -120,7 +120,7 @@ erDiagram
     }
 
     PANTRY_ITEMS {
-        string id PK
+        string pantry_item_id PK
         string product_id FK
         string source_receipt_item_id FK
         number qty_current
@@ -131,14 +131,14 @@ erDiagram
     }
 
     MEAL_PLANS {
-        string id PK
+        string meal_plan_id PK
         string month_key
         string title
         date created_at
     }
 
     MEAL_PLAN_SLOTS {
-        string id PK
+        string meal_plan_slot_id PK
         string meal_plan_id FK
         string recipe_id FK
         date planned_date
@@ -148,7 +148,7 @@ erDiagram
     }
 
     COOKING_LOG {
-        string id PK
+        string cooking_log_id PK
         date cooked_on
         string recipe_id FK
         number portions
@@ -156,7 +156,7 @@ erDiagram
     }
 
     COOKING_CONSUMPTIONS {
-        string id PK
+        string cooking_consumption_id PK
         string cooking_log_id FK
         string pantry_item_id FK
         number qty_used
@@ -165,7 +165,7 @@ erDiagram
     }
 
     SHOPPING_ITEMS {
-        string id PK
+        string shopping_item_id PK
         string product_id FK
         number target_qty
         string unit
@@ -202,12 +202,12 @@ erDiagram
 
 | Поле                      | Тип     | Null | Ключ              | Смысл                  |
 | ------------------------- | ------- | ---- | ----------------- | ---------------------- |
-| `id`                      | string  | нет  | PK                | идентификатор товара   |
+| `product_id`              | string  | нет  | PK                | идентификатор товара   |
 | `title`                   | string  | нет  |                   | название товара        |
 | `barcode`                 | string  | да   | UK                | штрихкод               |
 | `category`                | string  | нет  |                   | категория              |
 | `brand`                   | string  | да   |                   | бренд                  |
-| `default_store_id`        | string  | да   | FK -> `stores.id` | магазин по умолчанию   |
+| `default_store_id`        | string  | да   | FK -> `stores.store_id` | магазин по умолчанию   |
 | `base_unit`               | string  | нет  |                   | базовая единица учета  |
 | `typical_pack_size`       | number  | да   |                   | типичная фасовка       |
 | `typical_pack_unit`       | string  | да   |                   | единица фасовки        |
@@ -223,7 +223,7 @@ erDiagram
 
 | Поле         | Тип    | Null | Ключ | Смысл                  |
 | ------------ | ------ | ---- | ---- | ---------------------- |
-| `id`         | string | нет  | PK   | идентификатор магазина |
+| `store_id`   | string | нет  | PK   | идентификатор магазина |
 | `title`      | string | нет  | UK   | название магазина      |
 | `created_at` | date   | нет  |      | дата создания          |
 
@@ -233,7 +233,7 @@ erDiagram
 
 | Поле               | Тип    | Null | Ключ | Смысл                              |
 | ------------------ | ------ | ---- | ---- | ---------------------------------- |
-| `id`               | string | нет  | PK   | идентификатор рецепта              |
+| `recipe_id`        | string | нет  | PK   | идентификатор рецепта              |
 | `title`            | string | нет  | UK   | название рецепта                   |
 | `dish_type`        | string | да   |      | тип блюда                          |
 | `total_time_min`   | number | да   |      | время приготовления                |
@@ -246,9 +246,9 @@ erDiagram
 
 | Поле         | Тип    | Null | Ключ                | Смысл                |
 | ------------ | ------ | ---- | ------------------- | -------------------- |
-| `id`         | string | нет  | PK                  | идентификатор строки |
-| `recipe_id`  | string | нет  | FK -> `recipes.id`  | рецепт               |
-| `product_id` | string | нет  | FK -> `products.id` | товар                |
+| `recipe_ingredient_id` | string | нет  | PK                  | идентификатор строки |
+| `recipe_id`           | string | нет  | FK -> `recipes.recipe_id`  | рецепт               |
+| `product_id`          | string | нет  | FK -> `products.product_id` | товар                |
 | `qty`        | number | нет  |                     | количество           |
 | `unit`       | string | нет  |                     | единица              |
 | `note`       | string | да   |                     | примечание           |
@@ -260,14 +260,14 @@ erDiagram
 
 | Поле            | Тип    | Null | Ключ              | Смысл                      |
 | --------------- | ------ | ---- | ----------------- | -------------------------- |
-| `id`            | string | нет  | PK                | идентификатор чека         |
+| `receipt_id`    | string | нет  | PK                | идентификатор чека         |
 | `receipt_date`  | date   | нет  |                   | дата чека                  |
-| `store_id`      | string | нет  | FK -> `stores.id` | магазин                    |
+| `store_id`      | string | нет  | FK -> `stores.store_id` | магазин                    |
 | `total_amount`  | number | да   |                   | сумма чека                 |
 | `receipt_image` | string | да   |                   | фото чека                  |
 | `created_at`    | date   | нет  |                   | дата создания              |
 
-Ограничение: чек без позиций невалиден. Каждый `receipts.id` должен иметь минимум одну запись в `receipt_items`.
+Ограничение: чек без позиций невалиден. Каждый `receipts.receipt_id` должен иметь минимум одну запись в `receipt_items`.
 
 ### `receipt_items`
 
@@ -275,9 +275,9 @@ erDiagram
 
 | Поле                  | Тип     | Null | Ключ                | Смысл                   |
 | --------------------- | ------- | ---- | ------------------- | ----------------------- |
-| `id`                  | string  | нет  | PK                  | идентификатор позиции   |
-| `receipt_id`          | string  | нет  | FK -> `receipts.id` | чек                     |
-| `product_id`          | string  | нет  | FK -> `products.id` | товар                   |
+| `receipt_item_id`     | string  | нет  | PK                  | идентификатор позиции   |
+| `receipt_id`          | string  | нет  | FK -> `receipts.receipt_id` | чек                     |
+| `product_id`          | string  | нет  | FK -> `products.product_id` | товар                   |
 | `qty`                 | number  | нет  |                     | количество              |
 | `pack_size`           | number  | да   |                     | размер упаковки         |
 | `pack_unit`           | string  | да   |                     | единица упаковки        |
@@ -292,9 +292,9 @@ erDiagram
 
 | Поле                     | Тип    | Null | Ключ                     | Смысл                |
 | ------------------------ | ------ | ---- | ------------------------ | -------------------- |
-| `id`                     | string | нет  | PK                       | идентификатор запаса |
-| `product_id`             | string | нет  | FK -> `products.id`      | товар                |
-| `source_receipt_item_id` | string | да   | FK -> `receipt_items.id` | источник из чека     |
+| `pantry_item_id`         | string | нет  | PK                       | идентификатор запаса |
+| `product_id`             | string | нет  | FK -> `products.product_id`      | товар                |
+| `source_receipt_item_id` | string | да   | FK -> `receipt_items.receipt_item_id` | источник из чека     |
 | `qty_current`            | number | нет  |                          | текущий остаток      |
 | `unit`                   | string | нет  |                          | единица остатка      |
 | `purchased_on`           | date   | да   |                          | дата покупки         |
@@ -307,7 +307,7 @@ erDiagram
 
 | Поле         | Тип    | Null | Ключ | Смысл               |
 | ------------ | ------ | ---- | ---- | ------------------- |
-| `id`         | string | нет  | PK   | идентификатор плана |
+| `meal_plan_id` | string | нет  | PK   | идентификатор плана |
 | `month_key`  | string | нет  |      | месяц вида YYYY-MM  |
 | `title`      | string | нет  |      | название плана      |
 | `created_at` | date   | нет  |      | дата создания       |
@@ -318,9 +318,9 @@ erDiagram
 
 | Поле           | Тип    | Null | Ключ                  | Смысл               |
 | -------------- | ------ | ---- | --------------------- | ------------------- |
-| `id`           | string | нет  | PK                    | идентификатор слота |
-| `meal_plan_id` | string | нет  | FK -> `meal_plans.id` | план                |
-| `recipe_id`    | string | нет  | FK -> `recipes.id`    | рецепт              |
+| `meal_plan_slot_id` | string | нет  | PK                    | идентификатор слота |
+| `meal_plan_id`      | string | нет  | FK -> `meal_plans.meal_plan_id` | план                |
+| `recipe_id`         | string | нет  | FK -> `recipes.recipe_id`    | рецепт              |
 | `planned_date` | date   | нет  |                       | дата готовки        |
 | `portions`     | number | нет  |                       | сколько порций      |
 | `weekday_key`  | string | нет  |                       | день недели         |
@@ -332,9 +332,9 @@ erDiagram
 
 | Поле         | Тип    | Null | Ключ               | Смысл                 |
 | ------------ | ------ | ---- | ------------------ | --------------------- |
-| `id`         | string | нет  | PK                 | идентификатор готовки |
+| `cooking_log_id` | string | нет  | PK                 | идентификатор готовки |
 | `cooked_on`  | date   | нет  |                    | дата готовки          |
-| `recipe_id`  | string | нет  | FK -> `recipes.id` | приготовленный рецепт |
+| `recipe_id`  | string | нет  | FK -> `recipes.recipe_id` | приготовленный рецепт |
 | `portions`   | number | нет  |                    | сколько порций        |
 | `created_at` | date   | нет  |                    | дата создания         |
 
@@ -344,9 +344,9 @@ erDiagram
 
 | Поле             | Тип    | Null | Ключ                    | Смысл                  |
 | ---------------- | ------ | ---- | ----------------------- | ---------------------- |
-| `id`             | string | нет  | PK                      | идентификатор списания |
-| `cooking_log_id` | string | нет  | FK -> `cooking_log.id`  | событие готовки        |
-| `pantry_item_id` | string | нет  | FK -> `pantry_items.id` | конкретный запас       |
+| `cooking_consumption_id` | string | нет  | PK                      | идентификатор списания |
+| `cooking_log_id`         | string | нет  | FK -> `cooking_log.cooking_log_id`  | событие готовки        |
+| `pantry_item_id`         | string | нет  | FK -> `pantry_items.pantry_item_id` | конкретный запас       |
 | `qty_used`       | number | нет  |                         | сколько списано        |
 | `unit`           | string | нет  |                         | единица списания       |
 | `note`           | string | да   |                         | пояснение              |
@@ -358,11 +358,11 @@ erDiagram
 
 | Поле | Тип | Null | Ключ | Смысл |
 | --- | --- | --- | --- | --- |
-| `id` | string | нет | PK | идентификатор пункта |
-| `product_id` | string | нет | FK -> `products.id` | товар |
+| `shopping_item_id` | string | нет | PK | идентификатор пункта |
+| `product_id` | string | нет | FK -> `products.product_id` | товар |
 | `target_qty` | number | нет |  | сколько купить |
 | `unit` | string | нет |  | единица |
-| `preferred_store_id` | string | да | FK -> `stores.id` | желательный магазин |
+| `preferred_store_id` | string | да | FK -> `stores.store_id` | желательный магазин |
 | `max_target_price` | number | да |  | потолок цены |
 | `reason` | string | да |  | причина покупки |
 | `created_at` | date | нет |  | дата создания |
