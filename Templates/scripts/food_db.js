@@ -1,5 +1,5 @@
 module.exports = async function foodDb(tp) {
-    const ROOT = "Projects/Еда";
+    const ROOT = "Projects/Кухня";
     const DIRS = {
         products: `${ROOT}/Products`,
         stores: `${ROOT}/Stores`,
@@ -799,7 +799,7 @@ module.exports = async function foodDb(tp) {
     const activeFile = app.workspace.getActiveFile();
     if (!activeFile) {
         notice("Нет активной заметки для создания чека");
-        return "# Чек не создан\n\nОткрой или создай заметку в `Projects/Еда/Receipts/`.";
+        return "# Чек не создан\n\nОткрой или создай заметку в `Projects/Кухня/Receipts/`.";
     }
 
     const receiptDate = (await tp.system.prompt("Дата чека", today))?.trim() || today;

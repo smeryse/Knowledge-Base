@@ -1,5 +1,5 @@
 module.exports = async function foodLlmCheck(tp) {
-    const CONFIG_PATH = "Projects/Еда/resolver-config.json";
+    const CONFIG_PATH = "Projects/Кухня/resolver-config.json";
 
     function cleanBarcode(value) {
         return String(value || "").replace(/\D/g, "");

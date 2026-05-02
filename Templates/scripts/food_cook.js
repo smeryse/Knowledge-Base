@@ -1,5 +1,5 @@
 module.exports = async function foodCook(tp) {
-    const ROOT = "Projects/Еда";
+    const ROOT = "Projects/Кухня";
     const DIRS = {
         recipes: `${ROOT}/Recipes`,
         pantry: `${ROOT}/Pantry`,

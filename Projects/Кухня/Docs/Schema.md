@@ -430,15 +430,15 @@ meal_plan_slots + recipe_ingredients + pantry_items -> shopping_items
 
 | Что в БД | Где сейчас в vault |
 | --- | --- |
-| `products` | `Projects/Еда/Products/` |
-| `recipes` | `Projects/Еда/Recipes/` |
-| `stores` | `Projects/Еда/Stores/` |
-| `receipts` | `Projects/Еда/Receipts/` |
-| `receipt_items` | `Projects/Еда/Receipt Items/` |
-| `pantry_items` | `Projects/Еда/Pantry/` |
-| `meal_plans` | `Projects/Еда/Meal Plans/` |
-| `cooking_log` | `Projects/Еда/Cooking Log/` |
-| `shopping_items` | `Projects/Еда/Shopping List/` |
+| `products` | `Projects/Кухня/Products/` |
+| `recipes` | `Projects/Кухня/Recipes/` |
+| `stores` | `Projects/Кухня/Stores/` |
+| `receipts` | `Projects/Кухня/Receipts/` |
+| `receipt_items` | `Projects/Кухня/Receipt Items/` |
+| `pantry_items` | `Projects/Кухня/Pantry/` |
+| `meal_plans` | `Projects/Кухня/Meal Plans/` |
+| `cooking_log` | `Projects/Кухня/Cooking Log/` |
+| `shopping_items` | `Projects/Кухня/Shopping List/` |
 | `recipe_ingredients` | пока встроенная таблица `Ингредиенты` в `Recipes/*.md` |
 | `meal_plan_slots` | пока таблица `Расписание` в `Meal Plans/*.md` |
 | `cooking_consumptions` | пока секция списаний в `Cooking Log/*.md` |

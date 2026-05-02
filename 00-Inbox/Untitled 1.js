@@ -1,5 +1,5 @@
 module.exports = async function foodScan(tp) {
-    const ROOT = "Projects/Еда";
+    const ROOT = "Projects/Кухня";
     const DIRS = {
         products: `${ROOT}/Products`,
         stores: `${ROOT}/Stores`,
