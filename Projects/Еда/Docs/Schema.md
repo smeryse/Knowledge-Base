@@ -142,6 +142,7 @@ erDiagram
         string meal_plan_id FK
         string recipe_id FK
         date planned_date
+        number portions
         string weekday_key
         number sort_order
     }
@@ -150,9 +151,7 @@ erDiagram
         string id PK
         date cooked_on
         string recipe_id FK
-        number servings_cooked
-        number servings_base
-        number scale_factor
+        number portions
         date created_at
     }
 
@@ -323,6 +322,7 @@ erDiagram
 | `meal_plan_id` | string | нет  | FK -> `meal_plans.id` | план                |
 | `recipe_id`    | string | нет  | FK -> `recipes.id`    | рецепт              |
 | `planned_date` | date   | нет  |                       | дата готовки        |
+| `portions`     | number | нет  |                       | сколько порций      |
 | `weekday_key`  | string | нет  |                       | день недели         |
 | `sort_order`   | number | да   |                       | порядок слота       |
 
@@ -330,28 +330,27 @@ erDiagram
 
 Фактическая готовка.
 
-| Поле              | Тип    | Null | Ключ               | Смысл                       |
-| ----------------- | ------ | ---- | ------------------ | --------------------------- |
-| `id`              | string | нет  | PK                 | идентификатор готовки       |
-| `cooked_on`       | date   | нет  |                    | дата готовки                |
-| `recipe_id`       | string | нет  | FK -> `recipes.id` | приготовленный рецепт       |
-| `servings_cooked` | number | нет  |                    | фактические порции          |
-| `servings_base`   | number | нет  |                    | базовые порции              |
-| `scale_factor`    | number | нет  |                    | коэффициент масштабирования |
-| `created_at`      | date   | нет  |                    | дата создания               |
+| Поле         | Тип    | Null | Ключ               | Смысл                 |
+| ------------ | ------ | ---- | ------------------ | --------------------- |
+| `id`         | string | нет  | PK                 | идентификатор готовки |
+| `cooked_on`  | date   | нет  |                    | дата готовки          |
+| `recipe_id`  | string | нет  | FK -> `recipes.id` | приготовленный рецепт |
+| `portions`   | number | нет  |                    | сколько порций        |
+| `created_at` | date   | нет  |                    | дата создания         |
 
 ### `cooking_consumptions`
 
 Списания запасов в рамках готовки.
 
-| Поле | Тип | Null | Ключ | Смысл |
-| --- | --- | --- | --- | --- |
-| `id` | string | нет | PK | идентификатор списания |
-| `cooking_log_id` | string | нет | FK -> `cooking_log.id` | событие готовки |
-| `pantry_item_id` | string | нет | FK -> `pantry_items.id` | конкретный запас |
-| `qty_used` | number | нет |  | сколько списано |
-| `unit` | string | нет |  | единица списания |
-| `note` | string | да |  | пояснение |
+| Поле             | Тип    | Null | Ключ                    | Смысл                  |
+| ---------------- | ------ | ---- | ----------------------- | ---------------------- |
+| `id`             | string | нет  | PK                      | идентификатор списания |
+| `cooking_log_id` | string | нет  | FK -> `cooking_log.id`  | событие готовки        |
+| `pantry_item_id` | string | нет  | FK -> `pantry_items.id` | конкретный запас       |
+| `qty_used`       | number | нет  |                         | сколько списано        |
+| `unit`           | string | нет  |                         | единица списания       |
+| `note`           | string | да   |                         | пояснение              |
+
 
 ### `shopping_items`
 
@@ -418,7 +417,7 @@ meal_plan_slots + recipe_ingredients + pantry_items -> shopping_items
 2. Прямых many-to-many связей в схеме нет.
 3. Состав рецепта хранится через `recipe_ingredients`.
 4. Любой рецепт по определению хранится на 1 порцию; отдельное поле базового числа порций в `recipes` не нужно.
-5. Все ингредиенты рецепта задаются на 1 порцию; масштабирование происходит только в планировании и в `cooking_log`.
+5. Все ингредиенты рецепта задаются на 1 порцию; в `meal_plan_slots` и `cooking_log` хранится только итоговое число порций.
 6. Расписание плана хранится через `meal_plan_slots`.
 7. Списание запасов хранится через `cooking_consumptions`.
 8. `pantry_items` может хранить уже пересчитанный расходуемый остаток, а не только целую упаковку.
