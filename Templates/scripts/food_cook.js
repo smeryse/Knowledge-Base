@@ -337,7 +337,6 @@ module.exports = async function foodCook(tp) {
         return {
             file: item.file,
             title: productTitle,
-            expiresOn: item.expires_on || "",
             product,
             storedQty: Number(item.qty_current || 0),
             storedUnit: normalizeUnit(item.unit || "шт"),

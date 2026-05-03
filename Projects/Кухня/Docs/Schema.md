@@ -125,7 +125,6 @@ erDiagram
         string source_receipt_item_id FK
         number qty_current
         string unit
-        date purchased_on
         date manufactured_on
         date created_at
     }
@@ -297,7 +296,6 @@ erDiagram
 | `source_receipt_item_id` | string | да   | FK -> `receipt_items.receipt_item_id` | источник из чека     |
 | `qty_current`            | number | нет  |                          | текущий остаток      |
 | `unit`                   | string | нет  |                          | единица остатка      |
-| `purchased_on`           | date   | да   |                          | дата покупки         |
 | `manufactured_on`        | date   | да   |                          | дата изготовления    |
 | `created_at`             | date   | нет  |                          | дата создания        |
 

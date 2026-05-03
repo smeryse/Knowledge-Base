@@ -668,9 +668,7 @@ module.exports = async function foodScan(tp) {
             "source_receipt_item: ",
             `qty_current: ${data.qtyCurrent}`,
             `unit: ${data.unit}`,
-            `purchased_on: ${today}`,
-            `expires_on: ${data.expiresOn || ""}`,
-            `location: ${quoteYaml(data.location || "")}`,
+            `manufactured_on: ${data.manufacturedOn || ""}`,
             `created: ${today}`,
             "tags:",
             "  - еда",
@@ -817,25 +815,17 @@ module.exports = async function foodScan(tp) {
         const qtyCurrent = hasPackInfo && packSizeInBase
             ? Number((packSizeInBase * packCount).toFixed(3))
             : packCount;
-        let expiresOn = "";
+        let manufacturedOn = "";
         if (product.perishable) {
             const shelfLifeDays = Number(product.default_shelf_life_days || 0);
-            const manufactureDate = (await tp.system.prompt(
-                `Дата изготовления для '${product.title}' (YYYY-MM-DD, пусто = ввести срок годности вручную)`,
+            manufacturedOn = (await tp.system.prompt(
+                `Дата изготовления для '${product.title}' (YYYY-MM-DD, можно оставить пустым)`,
                 today
             ))?.trim() || "";
 
-            if (manufactureDate && shelfLifeDays) {
-                expiresOn = window.moment(manufactureDate).add(shelfLifeDays, "days").format("YYYY-MM-DD");
+            if (manufacturedOn && shelfLifeDays) {
+                const expiresOn = window.moment(manufacturedOn).add(shelfLifeDays, "days").format("YYYY-MM-DD");
                 new Notice(`Срок годности рассчитан: ${expiresOn}`, 5000);
-            } else {
-                const suggested = shelfLifeDays
-                    ? window.moment(today).add(shelfLifeDays, "days").format("YYYY-MM-DD")
-                    : "";
-                const expiryPrompt = shelfLifeDays
-                    ? `Срок годности для '${product.title}' (если дата изготовления неизвестна, ориентир из ${shelfLifeDays} дней)`
-                    : `Срок годности для '${product.title}'`;
-                expiresOn = (await tp.system.prompt(expiryPrompt, suggested))?.trim() || "";
             }
         }
         const file = await createNote(DIRS.pantry, `${today} ${product.title}`, buildPantryContent({
@@ -843,8 +833,7 @@ module.exports = async function foodScan(tp) {
             productPath: product.file.path,
             qtyCurrent,
             unit: product.base_unit || "шт",
-            expiresOn,
-            location: ""
+            manufacturedOn
         }));
         const productFile = app.vault.getAbstractFileByPath(product.file.path);
         if (productFile) await app.workspace.getLeaf(true).openFile(productFile);
