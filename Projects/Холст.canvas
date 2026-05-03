@@ -81,42 +81,12 @@
 			"height":60
 		},
 		{
-			"id":"de05298b620bb188",
+			"id":"2a1d1b4b47bfd19b",
 			"type":"text",
-			"text":"Работа",
+			"text":"Проекты",
 			"styleAttributes":{},
-			"x":560,
-			"y":-460,
-			"width":260,
-			"height":60
-		},
-		{
-			"id":"aa2cb4d7c5b77687",
-			"type":"text",
-			"text":"Хобби",
-			"styleAttributes":{},
-			"x":1200,
-			"y":-460,
-			"width":260,
-			"height":60
-		},
-		{
-			"id":"0bfaa2b9dd7722d1",
-			"type":"text",
-			"text":"Учеба",
-			"styleAttributes":{},
-			"x":560,
-			"y":20,
-			"width":260,
-			"height":60
-		},
-		{
-			"id":"0079771a3138fe47",
-			"type":"text",
-			"text":"Баллы",
-			"styleAttributes":{},
-			"x":460,
-			"y":-280,
+			"x":140,
+			"y":-880,
 			"width":260,
 			"height":60
 		},
@@ -125,8 +95,58 @@
 			"type":"text",
 			"text":"Финансы",
 			"styleAttributes":{},
-			"x":540,
-			"y":-110,
+			"x":200,
+			"y":-600,
+			"width":260,
+			"height":60
+		},
+		{
+			"id":"0079771a3138fe47",
+			"type":"text",
+			"text":"Баллы",
+			"styleAttributes":{},
+			"x":440,
+			"y":-750,
+			"width":260,
+			"height":60
+		},
+		{
+			"id":"aa2cb4d7c5b77687",
+			"type":"text",
+			"text":"Хобби",
+			"styleAttributes":{},
+			"x":1300,
+			"y":-400,
+			"width":260,
+			"height":60
+		},
+		{
+			"id":"0bfaa2b9dd7722d1",
+			"type":"text",
+			"text":"Учеба",
+			"styleAttributes":{},
+			"x":1120,
+			"y":-180,
+			"width":260,
+			"height":60
+		},
+		{
+			"id":"de05298b620bb188",
+			"type":"text",
+			"text":"Работа",
+			"styleAttributes":{},
+			"x":820,
+			"y":-400,
+			"width":260,
+			"height":60
+		},
+		{
+			"id":"af3f27da82fc1484",
+			"type":"text",
+			"text":"Задачи",
+			"styleAttributes":{},
+			"x":1080,
+			"y":-660,
 			"width":260,
 			"height":60
 		}
@@ -193,6 +213,42 @@
 			"fromNode":"08ff93ed1c843e10",
 			"fromSide":"bottom",
 			"toNode":"d53e37d0b5b859e9",
+			"toSide":"top"
+		},
+		{
+			"id":"b175770f518b81be",
+			"styleAttributes":{},
+			"toFloating":false,
+			"fromNode":"2a1d1b4b47bfd19b",
+			"fromSide":"bottom",
+			"toNode":"6dc1d53891e4f692",
+			"toSide":"top"
+		},
+		{
+			"id":"65ca6ea897b6db81",
+			"styleAttributes":{},
+			"toFloating":false,
+			"fromNode":"2a1d1b4b47bfd19b",
+			"fromSide":"bottom",
+			"toNode":"0e609c0158efc57d",
+			"toSide":"top"
+		},
+		{
+			"id":"30c4a62e679f0c09",
+			"styleAttributes":{},
+			"toFloating":false,
+			"fromNode":"2a1d1b4b47bfd19b",
+			"fromSide":"bottom",
+			"toNode":"0079771a3138fe47",
+			"toSide":"top"
+		},
+		{
+			"id":"7ae6b48e3e2fedcc",
+			"styleAttributes":{},
+			"toFloating":false,
+			"fromNode":"0e609c0158efc57d",
+			"fromSide":"bottom",
+			"toNode":"d390b2ccd1f87e5a",
 			"toSide":"top"
 		}
 	],
