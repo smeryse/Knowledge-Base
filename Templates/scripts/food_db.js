@@ -573,9 +573,6 @@ module.exports = async function foodDb(tp) {
             `title: ${quoteYaml(data.title)}`,
             "aliases:",
             `  - ${quoteYaml(data.title)}`,
-            `kind: ${data.kind || "supermarket"}`,
-            `location: ${quoteYaml(data.location || "")}`,
-            `is_online: ${Boolean(data.is_online)}`,
             `created: ${today}`,
             "tags:",
             "  - еда",
@@ -651,9 +648,7 @@ module.exports = async function foodDb(tp) {
         const title = (await tp.system.prompt("Название нового магазина"))?.trim();
         if (!title) return null;
 
-        const kind = (await tp.system.prompt("Тип магазина", "обычный"))?.trim() || "обычный";
-        const location = (await tp.system.prompt("Локация / примечание", ""))?.trim() || "";
-        const file = await createNote(DIRS.stores, title, buildStoreContent({ title, kind, location, is_online: false }));
+        const file = await createNote(DIRS.stores, title, buildStoreContent({ title }));
         notice(`Добавлен новый магазин: ${title}`);
         return await readFrontmatter(file);
     }
