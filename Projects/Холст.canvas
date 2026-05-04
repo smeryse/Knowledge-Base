@@ -3,7 +3,7 @@
 		{
 			"id":"6dc1d53891e4f692",
 			"type":"text",
-			"text":"Бытовые",
+			"text":"Быт",
 			"styleAttributes":{},
 			"x":-220,
 			"y":-460,
@@ -23,7 +23,7 @@
 		{
 			"id":"7eef5f4fefed0bd9",
 			"type":"text",
-			"text":"Хранение",
+			"text":"Запасы",
 			"styleAttributes":{},
 			"x":-520,
 			"y":-80,
@@ -43,7 +43,7 @@
 		{
 			"id":"8212dbe1752532ae",
 			"type":"text",
-			"text":"Закупка",
+			"text":"Покупки",
 			"styleAttributes":{},
 			"x":-200,
 			"y":-80,
@@ -63,7 +63,7 @@
 		{
 			"id":"465e6fee247e741c",
 			"type":"text",
-			"text":"Выбор одежды",
+			"text":"Одежда",
 			"styleAttributes":{},
 			"x":20,
 			"y":-80,
@@ -143,7 +143,7 @@
 		{
 			"id":"a525f4229a131d4d",
 			"type":"text",
-			"text":"Система активых заметок. Status - Active, end, just *note*",
+			"text":"Система активных заметок. Статусы: active, end, note.",
 			"styleAttributes":{},
 			"x":340,
 			"y":-440,
@@ -155,8 +155,8 @@
 			"type":"text",
 			"text":"Задачи",
 			"styleAttributes":{},
-			"x":370,
-			"y":-350,
+			"x":690,
+			"y":-110,
 			"width":260,
 			"height":60
 		}
