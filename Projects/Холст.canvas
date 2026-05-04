@@ -141,22 +141,22 @@
 			"height":60
 		},
 		{
+			"id":"a525f4229a131d4d",
+			"type":"text",
+			"text":"Система активых заметок. Status - Active, end, just *note*",
+			"styleAttributes":{},
+			"x":340,
+			"y":-440,
+			"width":320,
+			"height":180
+		},
+		{
 			"id":"af3f27da82fc1484",
 			"type":"text",
 			"text":"Задачи",
 			"styleAttributes":{},
-			"x":1080,
-			"y":-660,
-			"width":260,
-			"height":60
-		},
-		{
-			"id":"a525f4229a131d4d",
-			"type":"text",
-			"text":"Система активых заметок. Status - Active, end, just note",
-			"styleAttributes":{},
-			"x":340,
-			"y":-440,
+			"x":370,
+			"y":-350,
 			"width":260,
 			"height":60
 		}
