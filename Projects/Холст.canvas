@@ -149,6 +149,16 @@
 			"y":-660,
 			"width":260,
 			"height":60
+		},
+		{
+			"id":"a525f4229a131d4d",
+			"type":"text",
+			"text":"Система активых заметок. Status - Active, end, just note",
+			"styleAttributes":{},
+			"x":340,
+			"y":-440,
+			"width":260,
+			"height":60
 		}
 	],
 	"edges":[
@@ -240,15 +250,6 @@
 			"fromNode":"2a1d1b4b47bfd19b",
 			"fromSide":"bottom",
 			"toNode":"0079771a3138fe47",
-			"toSide":"top"
-		},
-		{
-			"id":"7ae6b48e3e2fedcc",
-			"styleAttributes":{},
-			"toFloating":false,
-			"fromNode":"0e609c0158efc57d",
-			"fromSide":"bottom",
-			"toNode":"d390b2ccd1f87e5a",
 			"toSide":"top"
 		}
 	],
