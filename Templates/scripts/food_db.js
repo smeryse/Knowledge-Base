@@ -886,8 +886,7 @@ module.exports = async function foodDb(tp) {
             packSize,
             packUnit,
             priceTotal,
-            addToPantry,
-            expiresOn
+            addToPantry
         });
 
         tableRows.push(`| ${wikilink(product.file.path, product.title)} | ${qty} | ${packSize || "-"} ${packUnit || ""}`.trim() + ` | ${priceTotal} | ${addToPantry ? "Да" : "Нет"} |`);
@@ -926,9 +925,9 @@ module.exports = async function foodDb(tp) {
         "",
         "## Быстрые ссылки",
         "",
-        "- [[Dashboard]]",
-        "- [[Что купить]]",
-        "- [[Что дома]]"
+        "- [[Обзор]]",
+        "- [[Покупки]]",
+        "- [[Запасы]]"
     ];
 
     return lines.join("\n");
