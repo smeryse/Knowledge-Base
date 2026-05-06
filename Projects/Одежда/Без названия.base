@@ -1,0 +1,9 @@
+views:
+  - type: table
+    name: Таблица
+    filters:
+      and:
+        - file.path.contains("Projects/Одежда/items/")
+    groupBy:
+      property: file.folder
+      direction: ASC

@@ -4,7 +4,8 @@ tags:
   - plugins
   - task
 aliases:
-  - task
+  - tasks plugin
+  - плагин таскс
 ---
 
 | Команда                            | Описание и примеры                                                                                                                       |
