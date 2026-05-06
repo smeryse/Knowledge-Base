@@ -633,27 +633,19 @@ module.exports = async function foodScan(tp) {
             `  - ${quoteYaml(data.title)}`,
             `category: ${quoteYaml(data.category || "прочее")}`,
             `brand: ${quoteYaml(data.brand || "")}`,
-            `store: ${data.storePath ? wikilink(data.storePath, data.storeTitle || "") : ""}`,
+            `store: ${data.storePath ? quoteYaml(wikilink(data.storePath, data.storeTitle || "")) : ""}`,
             `base_unit: ${data.base_unit || "шт"}`,
             `typical_pack_size: ${data.typical_pack_size || ""}`,
             `typical_pack_unit: ${data.typical_pack_unit || ""}`,
             `perishable: ${Boolean(data.perishable)}`,
             `default_shelf_life_days: ${data.default_shelf_life_days || ""}`,
             `price: ${data.price || ""}`,
-            `image: ${data.image ? quoteYaml(data.image) : ""}`,
+            `image: ${data.image ? quoteYaml(`[[${data.image}]]`) : ""}`,
             `created: ${today}`,
             "tags:",
             "  - еда",
             "  - product",
-            "---",
-            "",
-            `# ${data.title}`,
-            "",
-            `Штрихкод: \`${data.barcode || ""}\``,
-            "",
-            "## Заметки",
-            "",
-            ">"
+            "---"
         ].join("\n");
     }
 
