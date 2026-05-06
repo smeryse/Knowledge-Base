@@ -98,7 +98,7 @@ openssl rand -base64 24
 ```
 
 Скопировать результат и сохранить в надёжном месте.
-F7dCev5XOCd9W9ZzGoveXD86Z57K8+m+
+Ku8fN0fhQLz1zz8bXMz5lZagKkSbT8je
 ### 3.2. Создать конфиг сервера
 
 ```bash
@@ -118,7 +118,7 @@ nano ~/server_config.json
     "users": [
         {
             "name": "myuser",
-            "password": "ВСТАВЬ_ПАРОЛЬ"
+            "password": "Ku8fN0fhQLz1zz8bXMz5lZagKkSbT8je"
         }
     ],
     "loggingLevel": "INFO",
@@ -196,7 +196,7 @@ ss -tlnp | grep mita
       "server_port": 2015,
       "transport": "TCP",
       "username": "myuser",
-      "password": "F7dCev5XOCd9W9ZzGoveXD86Z57K8+m+",
+      "password": "Ku8fN0fhQLz1zz8bXMz5lZagKkSbT8je",
       "multiplexing": "MULTIPLEXING_HIGH"
     },
     {
