@@ -98,7 +98,7 @@ openssl rand -base64 24
 ```
 
 Скопировать результат и сохранить в надёжном месте.
-
+Rd8uP8pW5DBut7qyWIYAmpOdPRsuaSdC
 ### 3.2. Создать конфиг сервера
 
 ```bash
