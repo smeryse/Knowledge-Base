@@ -98,7 +98,7 @@ openssl rand -base64 24
 ```
 
 Скопировать результат и сохранить в надёжном месте.
-Rd8uP8pW5DBut7qyWIYAmpOdPRsuaSdC
+F7dCev5XOCd9W9ZzGoveXD86Z57K8+m+
 ### 3.2. Создать конфиг сервера
 
 ```bash
@@ -192,11 +192,11 @@ ss -tlnp | grep mita
     {
       "type": "mieru",
       "tag": "mieru-out",
-      "server": "ВАШ_IP_СЕРВЕРА",
+      "server": "45.148.127.9",
       "server_port": 2015,
       "transport": "TCP",
       "username": "myuser",
-      "password": "ВАШ_ПАРОЛЬ",
+      "password": "F7dCev5XOCd9W9ZzGoveXD86Z57K8+m+",
       "multiplexing": "MULTIPLEXING_HIGH"
     },
     {
