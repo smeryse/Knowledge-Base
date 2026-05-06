@@ -2,6 +2,7 @@
 tags:
   - hotkeys
   - obsidian
+  - справочник
 aliases:
   - горячие клавиши
 ---
