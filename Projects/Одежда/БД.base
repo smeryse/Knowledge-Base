@@ -1,5 +1,5 @@
 views:
-  - type: table
+  - type: cards
     name: Таблица
     filters:
       and:
@@ -7,3 +7,4 @@ views:
     groupBy:
       property: file.folder
       direction: ASC
+    cardSize: 180

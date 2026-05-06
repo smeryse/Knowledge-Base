@@ -1,17 +1,17 @@
 ---
-type: "Аксессуары"
-name: "Ремень Bershka с люверсами"
-color: "не указан"
+type: Аксессуары
+name: Ремень Bershka с люверсами
+color: не указан
 color_group: colored
-size: "—"
+size: —
 weight: 150
-weight_str: "~150 г"
+weight_str: ~150 г
 wash_after_wears: 999
 wears_count: 0
 is_dirty: false
-laundry_basket: null
+laundry_basket:
+image:
 ---
-
 # Ремень Bershka с люверсами
 
 - **Цвет:** не указан
