@@ -11,17 +11,10 @@ typical_pack_size: 150
 typical_pack_unit: pcs
 perishable: false
 default_shelf_life_days:
-price:
+price: 3
 created: 2026-04-27
 tags:
   - еда
   - product
+image: "[[Projects/Кухня/Images/Generated/салфетки_светофор.jpg]]"
 ---
-
-# Влажная туалетная бумага Эконом Smart с пластиковым клапаном
-
-Штрихкод: `4610080723162`
-
-## Заметки
-
->

@@ -662,13 +662,7 @@ module.exports = async function foodScan(tp) {
             "tags:",
             "  - еда",
             "  - pantry-item",
-            "---",
-            "",
-            `# ${data.productTitle} - запас`,
-            "",
-            "## Заметки",
-            "",
-            ">"
+            "---"
         ].join("\n");
     }
 
