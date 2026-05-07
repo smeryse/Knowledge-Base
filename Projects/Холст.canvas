@@ -91,16 +91,6 @@
 			"height":60
 		},
 		{
-			"id":"0e609c0158efc57d",
-			"type":"text",
-			"text":"Финансы",
-			"styleAttributes":{},
-			"x":200,
-			"y":-600,
-			"width":260,
-			"height":60
-		},
-		{
 			"id":"0079771a3138fe47",
 			"type":"text",
 			"text":"Баллы",
@@ -131,16 +121,6 @@
 			"height":60
 		},
 		{
-			"id":"de05298b620bb188",
-			"type":"text",
-			"text":"Работа",
-			"styleAttributes":{},
-			"x":820,
-			"y":-400,
-			"width":260,
-			"height":60
-		},
-		{
 			"id":"a525f4229a131d4d",
 			"type":"text",
 			"text":"Система активных заметок. Статусы: active, end, note.",
@@ -157,6 +137,26 @@
 			"styleAttributes":{},
 			"x":690,
 			"y":-110,
+			"width":260,
+			"height":60
+		},
+		{
+			"id":"0e609c0158efc57d",
+			"type":"text",
+			"text":"Финансы",
+			"styleAttributes":{},
+			"x":180,
+			"y":-600,
+			"width":260,
+			"height":60
+		},
+		{
+			"id":"de05298b620bb188",
+			"type":"text",
+			"text":"Работа",
+			"styleAttributes":{},
+			"x":570,
+			"y":-1060,
 			"width":260,
 			"height":60
 		}
@@ -251,6 +251,42 @@
 			"fromSide":"bottom",
 			"toNode":"0079771a3138fe47",
 			"toSide":"top"
+		},
+		{
+			"id":"42a6d6f3c37ced8e",
+			"styleAttributes":{},
+			"toFloating":false,
+			"fromNode":"0e609c0158efc57d",
+			"fromSide":"bottom",
+			"toNode":"8212dbe1752532ae",
+			"toSide":"top"
+		},
+		{
+			"id":"12e944a8a5bf8506",
+			"styleAttributes":{},
+			"toFloating":false,
+			"fromNode":"de05298b620bb188",
+			"fromSide":"bottom",
+			"toNode":"0e609c0158efc57d",
+			"toSide":"top"
+		},
+		{
+			"id":"f85f115582c3e8cb",
+			"styleAttributes":{},
+			"toFloating":false,
+			"fromNode":"8212dbe1752532ae",
+			"fromSide":"bottom",
+			"toNode":"7eef5f4fefed0bd9",
+			"toSide":"bottom"
+		},
+		{
+			"id":"38ed9e314695044f",
+			"styleAttributes":{},
+			"toFloating":false,
+			"fromNode":"7eef5f4fefed0bd9",
+			"fromSide":"bottom",
+			"toNode":"b688a02e3d2b0c5c",
+			"toSide":"bottom"
 		}
 	],
 	"metadata":{
