@@ -7,6 +7,19 @@ aliases:
   - tasks plugin
   - плагин таскс
 ---
+### Официальная документация плагина Tasks
+
+- [**Основная документация**](https://obsidian-tasks-group.github.io/obsidian-tasks/)
+- [**Раздел про запросы (Queries)**](https://obsidian-tasks-group.github.io/obsidian-tasks/queries/)
+- [**Фильтры (Filters)**](https://obsidian-tasks-group.github.io/obsidian-tasks/queries/filters/)
+- [**Фильтр по пути (`path includes`)**](https://obsidian-tasks-group.github.io/obsidian-tasks/queries/filters/path/)
+
+### Ресурсы сообщества
+
+- [**GitHub репозиторий**](https://github.com/obsidian-tasks-group/obsidian-tasks) — для баг-репортов и запросов новых функций
+- [**Obsidian Forum**](https://forum.obsidian.md/c/plugins/10) — обсуждения и примеры (используй фильтр по тегу `tasks`)
+
+---
 
 | Команда                            | Описание и примеры                                                                                                                       |
 | ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |

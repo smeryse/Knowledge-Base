@@ -1,6 +1,10 @@
 ---
 tags:
   - obsidian
+  - plugin
+  - справочник
+aliases:
+  - добавить цитату
 ---
 
 
