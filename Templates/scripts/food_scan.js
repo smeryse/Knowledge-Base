@@ -653,7 +653,7 @@ module.exports = async function foodScan(tp) {
         return [
             "---",
             "type: pantry-item",
-            `product: ${wikilink(data.productPath, data.productTitle)}`,
+            `product: ${quoteYaml(wikilink(data.productPath, data.productTitle))}`,
             "source_receipt_item: ",
             `qty_current: ${data.qtyCurrent}`,
             `unit: ${data.unit}`,
