@@ -6,8 +6,8 @@ aliases:
   - "Энергетик Gorilla Classic 330ml"
 category: "напитки"
 brand: "Gorilla"
-store: [[Projects/Кухня/Stores/fixprice|FixPrice]]
-base_unit: шт
+store: "[[fixprice|фикспрайс]]"
+base_unit: штц
 typical_pack_size: 330
 typical_pack_unit: мл
 perishable: false
@@ -19,9 +19,3 @@ tags:
   - еда
   - product
 ---
-
-# Энергетик Gorilla Classic 330ml
-
-## Заметки
-
->

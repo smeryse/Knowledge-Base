@@ -6,6 +6,7 @@ aliases:
   - "Шоколадная паста Mr. Choco 350г"
 category: "сладости"
 brand: "Mr. Choco"
+store: "[[светофор|Светофор]]"
 base_unit: pcs
 typical_pack_size: 350
 typical_pack_unit: g
@@ -17,11 +18,3 @@ tags:
   - еда
   - product
 ---
-
-# Шоколадная паста Mr. Choco 350г
-
-Штрихкод: `4630058990822`
-
-## Заметки
-
->
