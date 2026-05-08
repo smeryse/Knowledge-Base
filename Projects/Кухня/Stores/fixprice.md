@@ -7,8 +7,3 @@ tags:
   - store
 ---
 
-# FixPrice
-
-## Заметки
-
->

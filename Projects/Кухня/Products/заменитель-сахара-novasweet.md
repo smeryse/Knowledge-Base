@@ -6,6 +6,7 @@ aliases:
   - "Заменитель сахара Novasweet"
 category: "прочее"
 brand: "Novasweet"
+store: "[[магнит|Магнит]]"
 base_unit: pcs
 typical_pack_size: 72
 typical_pack_unit: pcs

@@ -268,13 +268,7 @@ module.exports = async function foodScan(tp) {
             "tags:",
             "  - еда",
             "  - store",
-            "---",
-            "",
-            `# ${title}`,
-            "",
-            "## Заметки",
-            "",
-            ">"
+            "---"
         ].join("\n"));
         return await readFrontmatter(file);
     }

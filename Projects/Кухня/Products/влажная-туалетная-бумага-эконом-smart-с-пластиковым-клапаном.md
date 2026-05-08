@@ -6,6 +6,7 @@ aliases:
   - Влажная туалетная бумага Эконом Smart с пластиковым клапаном
 category: прочее
 brand: ""
+store: "[[Projects/Кухня/Stores/светофор|светофор]]"
 base_unit: pcs
 typical_pack_size: 150
 typical_pack_unit: pcs

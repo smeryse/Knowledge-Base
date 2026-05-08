@@ -6,6 +6,7 @@ aliases:
   - "Батончик Super 40г 5шт"
 category: "снеки"
 brand: "KDV"
+store: "[[Projects/Кухня/Stores/светофор|Светофор]]"
 base_unit: pcs
 typical_pack_size: 5
 typical_pack_unit: pcs
@@ -17,11 +18,5 @@ tags:
   - еда
   - product
 ---
-
-# Батончик Super 40г 5шт
-
-Штрихкод: `4607109844052`
-
-## Заметки
 
 >

@@ -126,9 +126,9 @@
 			"text":"Система активных заметок. Статусы: active, end, note.",
 			"styleAttributes":{},
 			"x":340,
-			"y":-440,
+			"y":-460,
 			"width":320,
-			"height":180
+			"height":200
 		},
 		{
 			"id":"af3f27da82fc1484",
@@ -157,6 +157,26 @@
 			"styleAttributes":{},
 			"x":570,
 			"y":-1060,
+			"width":260,
+			"height":60
+		},
+		{
+			"id":"e9774ef5bd9d4030",
+			"type":"text",
+			"text":"Здоровье",
+			"styleAttributes":{},
+			"x":740,
+			"y":-740,
+			"width":260,
+			"height":60
+		},
+		{
+			"id":"d12b929901366b8d",
+			"type":"text",
+			"text":"Спорт",
+			"styleAttributes":{},
+			"x":620,
+			"y":-660,
 			"width":260,
 			"height":60
 		}
