@@ -6,6 +6,7 @@ aliases:
   - Соевый Соус «ToFo» Терияки, 300 Г
 category: соусы
 brand: Tofo
+store: "[[светофор|Светофор]]"
 base_unit: pcs
 typical_pack_size: 300
 typical_pack_unit: g
@@ -18,11 +19,3 @@ tags:
   - product
 image: "[[Projects/Кухня/Images/Generated/терияки_светофор.jpg]]"
 ---
-
-# Соевый Соус «ToFo» Терияки, 300 Г
-
-Штрихкод: `4650062342752`
-
-## Заметки
-
->
