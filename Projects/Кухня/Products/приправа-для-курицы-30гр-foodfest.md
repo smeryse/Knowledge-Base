@@ -6,6 +6,7 @@ aliases:
   - "Приправа для курицы 30гр foodfest"
 category: "приправа"
 brand: "Foodfest"
+store: "[[чижик|Чижик]]"
 base_unit: g
 typical_pack_size: 30
 typical_pack_unit: g
@@ -17,11 +18,3 @@ tags:
   - еда
   - product
 ---
-
-# Приправа для курицы 30гр foodfest
-
-Штрихкод: `4660043254165`
-
-## Заметки
-
->
