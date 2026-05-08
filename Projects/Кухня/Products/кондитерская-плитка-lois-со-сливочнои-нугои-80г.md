@@ -6,7 +6,7 @@ aliases:
   - "Кондитерская плитка Lois со сливочной нугой 80г"
 category: "сладости"
 brand: "Lois"
-store: [[Projects/Кухня/Stores/победа|Победа]]
+store: "[[победа|Победа]]"
 base_unit: шт
 typical_pack_size: 80
 typical_pack_unit: г

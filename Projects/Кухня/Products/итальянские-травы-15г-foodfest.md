@@ -6,6 +6,7 @@ aliases:
   - "Итальянские травы 15г Foodfest"
 category: "приправы"
 brand: "Foodfest"
+store: "[[чижик|Чижик]]"
 base_unit: g
 typical_pack_size: 15
 typical_pack_unit: g
