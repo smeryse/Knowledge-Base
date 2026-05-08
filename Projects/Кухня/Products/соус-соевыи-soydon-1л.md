@@ -6,6 +6,7 @@ aliases:
   - "Соус соевый soydon 1л"
 category: "соусы"
 brand: "Soydon"
+store: "[[светофор|Светофор]]"
 base_unit: pcs
 typical_pack_size: 1000
 typical_pack_unit: ml
@@ -17,11 +18,3 @@ tags:
   - еда
   - product
 ---
-
-# Соус соевый soydon 1л
-
-Штрихкод: `4660020200581`
-
-## Заметки
-
->
