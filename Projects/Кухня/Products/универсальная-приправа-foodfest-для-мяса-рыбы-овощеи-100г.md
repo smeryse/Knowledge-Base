@@ -6,6 +6,7 @@ aliases:
   - "Универсальная приправа FOODFEST для мяса, рыбы, овощей 100г"
 category: "приправы"
 brand: "Foodfest"
+store: "[[чижик|Чижик]]"
 base_unit: g
 typical_pack_size: 100
 typical_pack_unit: g
@@ -17,11 +18,3 @@ tags:
   - еда
   - product
 ---
-
-# Универсальная приправа FOODFEST для мяса, рыбы, овощей 100г
-
-Штрихкод: `4606038085697`
-
-## Заметки
-
->
