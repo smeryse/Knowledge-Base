@@ -7,6 +7,7 @@ aliases:
 category: "снеки"
 brand: "KDV"
 store: "[[Projects/Кухня/Stores/светофор|Светофор]]"
+image: "[[батончик-super-40г-5шт.jpg]]"
 base_unit: pcs
 typical_pack_size: 5
 typical_pack_unit: pcs
