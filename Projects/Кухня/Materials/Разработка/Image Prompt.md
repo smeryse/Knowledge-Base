@@ -3,5 +3,5 @@
 
 
 ## Для фруктов овощей
-3D product render of a product designed as a high-quality 3D model. The object is levitating in the center, filling around 30% of the frame, casting a soft drop shadow on a neutral white background. Studio lighting, smooth realistic texture, commercial product visualization. High resolution, clean composition, professional photography style.
+3D product render of a product designed as a high-quality 3D model. The object is levitating in the center, filling around 30% of the frame, casting a soft drop shadow on a neutral light background. Studio lighting, smooth realistic texture, commercial product visualization. High resolution, clean composition, professional photography style.
 

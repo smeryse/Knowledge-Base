@@ -7,6 +7,7 @@ aliases:
 category: "прочее"
 brand: "Novasweet"
 store: "[[магнит|Магнит]]"
+image: "[[Projects/Кухня/Images/Generated/заменитель-сахара-novasweet.jpg]]"
 base_unit: pcs
 typical_pack_size: 72
 typical_pack_unit: pcs
@@ -18,11 +19,3 @@ tags:
   - еда
   - product
 ---
-
-# Заменитель сахара Novasweet
-
-Штрихкод: `4607013790216`
-
-## Заметки
-
->
