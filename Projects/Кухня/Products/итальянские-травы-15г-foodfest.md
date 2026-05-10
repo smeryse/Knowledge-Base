@@ -1,22 +1,19 @@
 ---
 type: product
-title: "Итальянские травы 15г Foodfest"
-barcode: "4630112951561"
+title: Итальянские травы 15г Foodfest
+barcode: 4630112951561
 aliases:
   - "Итальянские травы 15г Foodfest"
-category: "приправы"
-brand: "Foodfest"
+category: специи
+brand: Foodfest
 store: "[[чижик|Чижик]]"
 image: "[[Итальянские травы 15г Foodfest.jpg]]"
-base_unit: g
+base_unit: г
 typical_pack_size: 15
-typical_pack_unit: g
+typical_pack_unit: г
 perishable: false
-default_shelf_life_days: 
-price: 
 created: 2026-04-29
 tags:
-  - еда
-  - product
+  - "еда"
+  - "product"
 ---
-

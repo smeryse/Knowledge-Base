@@ -1,21 +1,19 @@
 ---
 type: product
 title: Влажная туалетная бумага Эконом Smart с пластиковым клапаном
-barcode: "4610080723162"
+barcode: 4610080723162
 aliases:
-  - Влажная туалетная бумага Эконом Smart с пластиковым клапаном
+  - "Влажная туалетная бумага Эконом Smart с пластиковым клапаном"
 category: прочее
-brand: ""
-store: "[[Projects/Кухня/Stores/светофор|светофор]]"
-base_unit: pcs
+store: "[[светофор|светофор]]"
+image: "[[Projects/Кухня/Images/Generated/салфетки_светофор.jpg]]"
+base_unit: шт
 typical_pack_size: 150
-typical_pack_unit: pcs
+typical_pack_unit: шт
 perishable: false
-default_shelf_life_days:
 price: 3
 created: 2026-04-27
 tags:
-  - еда
-  - product
-image: "[[Projects/Кухня/Images/Generated/салфетки_светофор.jpg]]"
+  - "еда"
+  - "product"
 ---

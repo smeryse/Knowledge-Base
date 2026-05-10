@@ -1,22 +1,20 @@
 ---
 type: product
-title: "Батончик Super 40г 5шт"
-barcode: "4607109844052"
+title: Батончик Super 40г 5шт
+barcode: 4607109844052
 aliases:
   - "Батончик Super 40г 5шт"
-category: "снеки"
-brand: "KDV"
-store: "[[Projects/Кухня/Stores/светофор|Светофор]]"
+category: снеки
+brand: KDV
+store: "[[светофор|Светофор]]"
 image: "[[батончик-super-40г-5шт.jpg]]"
-base_unit: pcs
+base_unit: шт
 typical_pack_size: 5
-typical_pack_unit: pcs
+typical_pack_unit: шт
 perishable: false
-default_shelf_life_days: 
 price: 52
 created: 2026-04-29
 tags:
-  - еда
-  - product
+  - "еда"
+  - "product"
 ---
-

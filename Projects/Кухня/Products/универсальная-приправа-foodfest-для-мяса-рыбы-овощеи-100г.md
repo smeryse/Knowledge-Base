@@ -1,20 +1,18 @@
 ---
 type: product
 title: "Универсальная приправа FOODFEST для мяса, рыбы, овощей 100г"
-barcode: "4606038085697"
+barcode: 4606038085697
 aliases:
   - "Универсальная приправа FOODFEST для мяса, рыбы, овощей 100г"
-category: "приправы"
-brand: "Foodfest"
+category: специи
+brand: Foodfest
 store: "[[чижик|Чижик]]"
-base_unit: g
+base_unit: г
 typical_pack_size: 100
-typical_pack_unit: g
+typical_pack_unit: г
 perishable: false
-default_shelf_life_days: 
-price: 
 created: 2026-04-29
 tags:
-  - еда
-  - product
+  - "еда"
+  - "product"
 ---

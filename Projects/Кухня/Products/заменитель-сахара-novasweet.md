@@ -1,21 +1,19 @@
 ---
 type: product
-title: "Заменитель сахара Novasweet"
-barcode: "4607013790216"
+title: Заменитель сахара Novasweet
+barcode: 4607013790216
 aliases:
   - "Заменитель сахара Novasweet"
-category: "прочее"
-brand: "Novasweet"
+category: прочее
+brand: Novasweet
 store: "[[магнит|Магнит]]"
 image: "[[Projects/Кухня/Images/Generated/заменитель-сахара-novasweet.jpg]]"
-base_unit: pcs
+base_unit: шт
 typical_pack_size: 72
-typical_pack_unit: pcs
+typical_pack_unit: шт
 perishable: false
-default_shelf_life_days: 
-price:
 created: 2026-04-27
 tags:
-  - еда
-  - product
+  - "еда"
+  - "product"
 ---

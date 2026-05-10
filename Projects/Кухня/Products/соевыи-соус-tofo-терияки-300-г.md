@@ -1,21 +1,20 @@
 ---
 type: product
-title: Соевый Соус «ToFo» Терияки, 300 Г
-barcode: "4650062342752"
+title: "Соевый Соус «ToFo» Терияки, 300 Г"
+barcode: 4650062342752
 aliases:
-  - Соевый Соус «ToFo» Терияки, 300 Г
+  - "Соевый Соус «ToFo» Терияки, 300 Г"
 category: соусы
 brand: Tofo
 store: "[[светофор|Светофор]]"
-base_unit: pcs
+image: "[[Projects/Кухня/Images/Generated/терияки_светофор.jpg]]"
+base_unit: шт
 typical_pack_size: 300
-typical_pack_unit: g
+typical_pack_unit: г
 perishable: false
-default_shelf_life_days:
 price: 83
 created: 2026-04-29
 tags:
-  - еда
-  - product
-image: "[[Projects/Кухня/Images/Generated/терияки_светофор.jpg]]"
+  - "еда"
+  - "product"
 ---

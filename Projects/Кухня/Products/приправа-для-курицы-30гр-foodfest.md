@@ -1,20 +1,18 @@
 ---
 type: product
-title: "Приправа для курицы 30гр foodfest"
-barcode: "4660043254165"
+title: Приправа для курицы 30гр foodfest
+barcode: 4660043254165
 aliases:
   - "Приправа для курицы 30гр foodfest"
-category: "приправа"
-brand: "Foodfest"
+category: специи
+brand: Foodfest
 store: "[[чижик|Чижик]]"
-base_unit: g
+base_unit: г
 typical_pack_size: 30
-typical_pack_unit: g
+typical_pack_unit: г
 perishable: false
-default_shelf_life_days: 
-price: 
 created: 2026-04-29
 tags:
-  - еда
-  - product
+  - "еда"
+  - "product"
 ---
