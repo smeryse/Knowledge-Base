@@ -20,6 +20,7 @@ aliases:
 | `Tasks/Daily/` | `daily_notes` | один день |
 | `Tasks/Waiting/` | `waiting` | inbox-файл (единственная строка-файл) |
 | `Tasks/.qwen-task-rules.md` | `rules` | конфиг оценки (AI-контекст) |
+| `Projects/Рабочий стол/Habits/List.md` | `habits` | мастер-список ежедневных привычек |
 
 ---
 
@@ -38,6 +39,8 @@ date: YYYY-MM-DD
 | `Расписание` | Учебные пары (таблица) |
 | `Задачи на сегодня` | Активные `- [ ] задача (+N)` |
 | `Перенесенные задачи` | Задачи из прошлых дней (auto-insert) |
+| `Привычки` | Ежедневные чекбоксы привычек из `Habits/List.md` |
+| `Общий прогресс` | Dataview: задачи + привычки + рубли |
 | `Траты` | Расходы дня |
 | `Накопления` | Сбережения / цели |
 
@@ -72,6 +75,7 @@ erDiagram
         date date PK
         string schedule "таблица пар"
         string tasks "markdown-список"
+        string habits "markdown-список"
         string expenses "markdown-список"
         string savings "markdown-список"
     }
@@ -86,6 +90,12 @@ erDiagram
         date completed_date
     }
 
+    HABIT {
+        string title
+        int points "+N"
+        boolean active
+    }
+
     WAITING {
         tags tags
         string tasks "входящие"
@@ -95,6 +105,7 @@ erDiagram
     }
 
     DAILY_NOTE ||--o{ TASK : contains
+    DAILY_NOTE ||--o{ HABIT : tracks
     WAITING ||--o{ TASK : contains
 ```
 
@@ -117,6 +128,7 @@ erDiagram
 | Технические | +10 – +25 |
 | Проекты | +20 – +50 |
 | Организация | +10 – +25 |
+| Привычки | +5 – +20 |
 | Работа/заработок | по сумме |
 
 ---

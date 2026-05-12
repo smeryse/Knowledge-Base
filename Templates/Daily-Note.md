@@ -38,6 +38,54 @@ if (scheduleFile) {
 
 ## Перенесенные задачи
 
+---
+## Привычки
+
+<%*
+try {
+    let habitsFile = app.vault.getAbstractFileByPath("Projects/Рабочий стол/Habits/List.md");
+    if (!habitsFile) {
+        habitsFile = app.vault.getFiles().find(f => f.path === "Projects/Рабочий стол/Habits/List.md");
+    }
+    if (habitsFile) {
+        const habitsContent = await app.vault.read(habitsFile);
+        const habitLines = habitsContent.split('\n').filter(line => line.trim().startsWith('- ['));
+        const resetLines = habitLines.map(line => line.replace(/^(\s*-\s*)\[[xX ]\]/, '$1[ ]'));
+        tR += resetLines.join('\n') + '\n';
+    } else {
+        tR += '*Привычки: файл List.md не найден*\n';
+    }
+} catch (e) {
+    tR += '*Привычки: ошибка загрузки — ' + e.message + '*\n';
+}
+%>
+
+```dataviewjs
+const file = dv.current().file.path;
+const content = await dv.io.load(file);
+const afterHabits = content.split('## Привычки')[1] || '';
+const nextHeader = afterHabits.search(/^## /m);
+const habitsPart = nextHeader > -1 ? afterHabits.slice(0, nextHeader) : afterHabits;
+
+const taskRegex = /-\s?\[([xX ])\].*?\(\+(\d+)\)/g;
+let hCompleted = 0, hTotal = 0;
+
+for (const match of habitsPart.matchAll(taskRegex)) {
+    hTotal += parseInt(match[2]);
+    if (match[1].toLowerCase() === 'x') hCompleted += parseInt(match[2]);
+}
+
+const width = 25;
+const filled = hTotal > 0 ? Math.round((hCompleted / hTotal) * width) : 0;
+const percent = hTotal > 0 ? Math.round((hCompleted / hTotal) * 100) : 0;
+const bar = '█'.repeat(filled) + '░'.repeat(width - filled);
+
+dv.paragraph(`**Привычки:** \` ${bar} \` **${hCompleted}/${hTotal}** (${percent}%)`);
+```
+
+---
+## Общий прогресс
+
 ```dataviewjs
 const file = dv.current().file.path;
 const content = await dv.io.load(file);
