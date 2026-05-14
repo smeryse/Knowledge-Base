@@ -1,8 +1,4 @@
 module.exports = async function foodReceiptApi(tp) {
-    if (typeof requestUrl !== "function") {
-        new Notice("Ошибка: requestUrl недоступен. Этот скрипт работает только внутри Obsidian.");
-        throw new Error("requestUrl is not available");
-    }
     const CONFIG_PATH = "Projects/Кухня/nalog-config.json";
 
     const HOST = "irkkt-mobile.nalog.ru:8888";
@@ -15,7 +11,6 @@ module.exports = async function foodReceiptApi(tp) {
 
     let config = await readConfig();
 
-    // Генерируем уникальный Device-Id при первом запуске
     if (!config.deviceId) {
         config.deviceId = crypto.randomUUID();
         await saveConfig();
@@ -41,7 +36,6 @@ module.exports = async function foodReceiptApi(tp) {
             const content = await app.vault.read(file);
             return JSON.parse(content);
         } catch (e) {
-            log("readConfig error", e.message);
             return {};
         }
     }
@@ -55,14 +49,13 @@ module.exports = async function foodReceiptApi(tp) {
             } else {
                 await app.vault.create(CONFIG_PATH, content);
             }
-            log("saveConfig", "OK");
         } catch (e) {
             log("saveConfig error", e.message);
         }
     }
 
-    function makeHeaders(extra = {}, isPost = false) {
-        const h = {
+    function makeHeaders(extra = {}) {
+        return {
             Accept: "*/*",
             "Device-OS": DEVICE_OS,
             "Device-Id": DEVICE_ID,
@@ -71,115 +64,103 @@ module.exports = async function foodReceiptApi(tp) {
             "User-Agent": USER_AGENT,
             ...extra
         };
-        if (isPost) {
-            h["Content-Type"] = "application/json";
-        }
-        return h;
     }
 
     async function safeRequest(name, url, method, payload) {
         log(`${name} request`, { url, method });
-        
+
         const options = {
             url: url,
             method: method,
-            headers: makeHeaders(method === "POST" ? {} : {}, method === "POST")
+            headers: makeHeaders(),
+            throw: false
         };
+        
         if (payload) {
+            options.contentType = "application/json";
             options.body = JSON.stringify(payload);
         }
-        
-        log(`${name} options`, JSON.stringify(options, null, 2));
-        
-        // Retry loop for rate limiting
+
+        log(`${name} options`, JSON.stringify({ ...options, body: options.body?.slice(0, 200) }));
+
         const maxRetries = 3;
         for (let attempt = 0; attempt < maxRetries; attempt++) {
             try {
                 const resp = await requestUrl(options);
                 
                 log(`${name} status`, resp.status);
-                log(`${name} response keys`, Object.keys(resp));
                 
-                if (resp.status && (resp.status < 200 || resp.status >= 300)) {
-                    if (resp.status === 429) {
-                        const waitSec = (attempt + 1) * 10;
-                        log(`${name} rate limited`, `waiting ${waitSec}s before retry ${attempt + 1}/${maxRetries}`);
-                        notice(`Слишком много запросов. Ждем ${waitSec} сек...`);
-                        await delay(waitSec * 1000);
-                        continue;
-                    }
-                    log(`${name} error body`, resp.text || "(empty)");
-                    throw new Error(`HTTP ${resp.status}: ${resp.text || "empty body"}`);
+                if (resp.status === 429) {
+                    const waitSec = (attempt + 1) * 10;
+                    notice(`Слишком много запросов. Ждем ${waitSec} сек...`);
+                    await delay(waitSec * 1000);
+                    continue;
                 }
+
+                if (resp.status >= 200 && resp.status < 300) {
+                    log(`${name} success`, JSON.stringify(resp.json).slice(0, 200));
+                    return resp.json || {};
+                }
+
+                // Non-2xx but not rate limited
+                const errText = resp.text || `HTTP ${resp.status}`;
+                log(`${name} error response`, errText.slice(0, 300));
+                throw new Error(`HTTP ${resp.status}: ${errText.slice(0, 200)}`);
                 
-                if (resp.json !== undefined) {
-                    log(`${name} json response`, JSON.stringify(resp.json).slice(0, 200));
-                    return resp.json;
-                } else if (resp.text !== undefined) {
-                    log(`${name} text response`, resp.text.slice(0, 200));
-                    try {
-                        return JSON.parse(resp.text);
-                    } catch (e) {
-                        return { rawText: resp.text };
-                    }
-                } else {
-                    return {};
-                }
             } catch (e) {
                 const msg = e.message || String(e);
                 log(`${name} error`, msg);
                 
-                if (msg.includes("429") || msg.includes("rate") || msg.includes("Too Many Requests")) {
-                    if (attempt < maxRetries - 1) {
-                        const waitSec = (attempt + 1) * 10;
-                        notice(`Слишком много запросов (${attempt + 1}/${maxRetries}). Ждем ${waitSec} сек...`);
-                        await delay(waitSec * 1000);
-                        continue;
-                    }
+                if (msg.includes("429") && attempt < maxRetries - 1) {
+                    const waitSec = (attempt + 1) * 10;
+                    await delay(waitSec * 1000);
+                    continue;
+                }
+                
+                if (msg.includes("ERR_INVALID_ARGUMENT")) {
+                    throw new Error(
+                        "API ФНС недоступен напрямую из Obsidian на этой платформе (net::ERR_INVALID_ARGUMENT). " +
+                        "Используйте Python-скрипт nalog_python.py отдельно, а потом вставьте результат в заметку."
+                    );
                 }
                 
                 throw e;
             }
         }
         
-        throw new Error("Превышено количество попыток после rate limiting (429). Подождите минуту и попробуйте снова.");
+        throw new Error("Превышено количество попыток. Подождите минуту.");
     }
 
-    async function apiPost(path, payload, extraHeaders = {}) {
+    async function apiPost(path, payload) {
         const url = `https://${HOST}${path}`;
         return await safeRequest("POST", url, "POST", payload);
     }
 
-    async function apiGet(path, extraHeaders = {}) {
+    async function apiGet(path) {
         const url = `https://${HOST}${path}`;
         return await safeRequest("GET", url, "GET", null);
     }
 
     async function requestPhoneAuth(phone) {
-        const payload = {
+        return await apiPost("/v2/auth/phone/request", {
             phone: phone,
             client_secret: CLIENT_SECRET,
             os: OS
-        };
-        log("requestPhoneAuth", phone);
-        return await apiPost("/v2/auth/phone/request", payload);
+        });
     }
 
     async function verifyPhoneAuth(phone, code) {
-        const payload = {
+        const data = await apiPost("/v2/auth/phone/verify", {
             phone: phone,
             client_secret: CLIENT_SECRET,
             code: code,
             os: OS
-        };
-        log("verifyPhoneAuth", { phone, code: "***" });
-        const data = await apiPost("/v2/auth/phone/verify", payload);
+        });
         if (data.sessionId) {
             config.sessionId = data.sessionId;
             config.refreshToken = data.refresh_token;
             config.phone = phone;
             await saveConfig();
-            log("verifyPhoneAuth saved", "OK");
         }
         return data;
     }
@@ -187,37 +168,31 @@ module.exports = async function foodReceiptApi(tp) {
     async function doRefreshToken() {
         if (!config.refreshToken) return null;
         try {
-            log("doRefreshToken", "attempting...");
-            const payload = {
+            const data = await apiPost("/v2/mobile/users/refresh", {
                 refresh_token: config.refreshToken,
                 client_secret: CLIENT_SECRET
-            };
-            const data = await apiPost("/v2/mobile/users/refresh", payload);
+            });
             if (data.sessionId) {
                 config.sessionId = data.sessionId;
                 config.refreshToken = data.refresh_token;
                 await saveConfig();
-                log("doRefreshToken", "success");
                 return data;
             }
         } catch (e) {
-            log("doRefreshToken error", e.message || String(e));
+            log("refresh error", e.message || String(e));
         }
         return null;
     }
 
     async function getTicketId(qr) {
-        const payload = { qr: qr };
-        log("getTicketId", { qr: qr.slice(0, 30) + "..." });
-        const data = await apiPost("/v2/ticket", payload);
+        const data = await apiPost("/v2/ticket", { qr: qr });
         if (!data.id) {
-            throw new Error(`Нет ticketId в ответе: ${JSON.stringify(data)}`);
+            throw new Error(`Нет ticketId: ${JSON.stringify(data)}`);
         }
         return data.id;
     }
 
     async function getTicketById(ticketId) {
-        log("getTicketById", ticketId);
         return await apiGet(`/v2/tickets/${ticketId}`);
     }
 
@@ -227,14 +202,13 @@ module.exports = async function foodReceiptApi(tp) {
             ticketId = await getTicketId(qr);
         } catch (e) {
             const msg = e.message || String(e);
-            log("getTicketId error", msg);
-            if (msg.includes("401") || msg.includes("403") || msg.includes("session")) {
+            if (msg.includes("401") || msg.includes("403")) {
                 if (config.refreshToken) {
                     const refreshed = await doRefreshToken();
                     if (refreshed) {
                         ticketId = await getTicketId(qr);
                     } else {
-                        throw new Error("Сессия истекла. Авторизуйтесь заново.");
+                        throw new Error("Сессия истекла.");
                     }
                 } else {
                     throw new Error("Требуется авторизация.");
@@ -253,13 +227,11 @@ module.exports = async function foodReceiptApi(tp) {
         );
         if (!phoneInput) return null;
         const phone = phoneInput.trim();
-        log("interactiveAuth", { phone });
 
         try {
             await requestPhoneAuth(phone);
             notice(`Код отправлен на ${phone}`);
         } catch (e) {
-            log("requestPhoneAuth error", e.message || String(e));
             notice(`Ошибка отправки SMS: ${e.message || String(e)}`);
             return false;
         }
@@ -274,18 +246,16 @@ module.exports = async function foodReceiptApi(tp) {
                 notice("Авторизация успешна.");
                 return true;
             } else {
-                notice(`Ошибка авторизации: ${JSON.stringify(data).slice(0, 200)}`);
+                notice(`Ошибка: ${JSON.stringify(data).slice(0, 200)}`);
                 return false;
             }
         } catch (e) {
-            log("verifyPhoneAuth error", e.message || String(e));
             notice(`Ошибка проверки кода: ${e.message || String(e)}`);
             return false;
         }
     }
 
     async function ensureAuth() {
-        log("ensureAuth", { hasSession: !!config.sessionId, hasRefresh: !!config.refreshToken });
         if (config.sessionId) return true;
         if (config.refreshToken) {
             const refreshed = await doRefreshToken();
