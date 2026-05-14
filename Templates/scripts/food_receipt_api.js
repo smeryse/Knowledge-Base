@@ -1,6 +1,6 @@
 module.exports = async function foodReceiptApi(tp) {
     if (typeof requestUrl !== "function") {
-        new Notice("Ошибка: requestUrl недоступен. Проверьте, что Templater запущен внутри Obsidian, а не в Node.js.");
+        new Notice("Ошибка: requestUrl недоступен. Этот скрипт работает только внутри Obsidian.");
         throw new Error("requestUrl is not available");
     }
     const CONFIG_PATH = "Projects/Кухня/nalog-config.json";
@@ -25,9 +25,9 @@ module.exports = async function foodReceiptApi(tp) {
     }
 
     async function readConfig() {
-        const file = app.vault.getAbstractFileByPath(CONFIG_PATH);
-        if (!file) return {};
         try {
+            const file = app.vault.getAbstractFileByPath(CONFIG_PATH);
+            if (!file) return {};
             const content = await app.vault.read(file);
             return JSON.parse(content);
         } catch (e) {
@@ -37,9 +37,9 @@ module.exports = async function foodReceiptApi(tp) {
     }
 
     async function saveConfig() {
-        const file = app.vault.getAbstractFileByPath(CONFIG_PATH);
-        const content = JSON.stringify(config, null, 2);
         try {
+            const content = JSON.stringify(config, null, 2);
+            const file = app.vault.getAbstractFileByPath(CONFIG_PATH);
             if (file) {
                 await app.vault.modify(file, content);
             } else {
@@ -48,13 +48,11 @@ module.exports = async function foodReceiptApi(tp) {
             log("saveConfig", "OK");
         } catch (e) {
             log("saveConfig error", e.message);
-            notice("Ошибка сохранения конфига: " + e.message);
         }
     }
 
     function makeHeaders(extra = {}, isPost = false) {
         const h = {
-            Host: HOST,
             Accept: "*/*",
             "Device-OS": DEVICE_OS,
             "Device-Id": DEVICE_ID,
@@ -69,47 +67,59 @@ module.exports = async function foodReceiptApi(tp) {
         return h;
     }
 
-    async function apiPost(path, payload, extraHeaders = {}) {
-        const url = `https://${HOST}${path}`;
-        log("apiPost URL", url);
+    async function safeRequest(name, url, method, payload) {
+        log(`${name} request`, { url, method, hasPayload: !!payload });
         try {
-            const resp = await requestUrl({
-                url,
-                method: "POST",
-                headers: makeHeaders(extraHeaders, true),
-                body: JSON.stringify(payload)
-            });
-            log("apiPost status", resp.status);
-            if (resp.status < 200 || resp.status >= 300) {
-                log("apiPost body", resp.text || "(empty)");
+            const options = {
+                url: url,
+                method: method,
+                headers: makeHeaders(method === "POST" ? {} : {}, method === "POST")
+            };
+            if (payload) {
+                options.body = JSON.stringify(payload);
+            }
+            
+            log(`${name} options`, JSON.stringify(options, null, 2));
+            
+            const resp = await requestUrl(options);
+            
+            log(`${name} response keys`, Object.keys(resp));
+            log(`${name} status`, resp.status);
+            
+            if (resp.status && (resp.status < 200 || resp.status >= 300)) {
+                log(`${name} error body`, resp.text || "(empty)");
                 throw new Error(`HTTP ${resp.status}: ${resp.text || "empty body"}`);
             }
-            return resp.json;
+            
+            // Проверяем что в ответе есть json
+            if (resp.json !== undefined) {
+                log(`${name} json response`, JSON.stringify(resp.json).slice(0, 200));
+                return resp.json;
+            } else if (resp.text !== undefined) {
+                log(`${name} text response`, resp.text.slice(0, 200));
+                try {
+                    return JSON.parse(resp.text);
+                } catch (e) {
+                    return { rawText: resp.text };
+                }
+            } else {
+                log(`${name} empty response`, resp);
+                return {};
+            }
         } catch (e) {
-            log("apiPost error", e.message || String(e));
+            log(`${name} error`, e.message || String(e));
             throw e;
         }
     }
 
+    async function apiPost(path, payload, extraHeaders = {}) {
+        const url = `https://${HOST}${path}`;
+        return await safeRequest("POST", url, "POST", payload);
+    }
+
     async function apiGet(path, extraHeaders = {}) {
         const url = `https://${HOST}${path}`;
-        log("apiGet URL", url);
-        try {
-            const resp = await requestUrl({
-                url,
-                method: "GET",
-                headers: makeHeaders(extraHeaders)
-            });
-            log("apiGet status", resp.status);
-            if (resp.status < 200 || resp.status >= 300) {
-                log("apiGet body", resp.text || "(empty)");
-                throw new Error(`HTTP ${resp.status}: ${resp.text || "empty body"}`);
-            }
-            return resp.json;
-        } catch (e) {
-            log("apiGet error", e.message || String(e));
-            throw e;
-        }
+        return await safeRequest("GET", url, "GET", null);
     }
 
     async function requestPhoneAuth(phone) {
@@ -118,6 +128,7 @@ module.exports = async function foodReceiptApi(tp) {
             client_secret: CLIENT_SECRET,
             os: OS
         };
+        log("requestPhoneAuth payload", payload);
         return await apiPost("/v2/auth/phone/request", payload);
     }
 
@@ -128,41 +139,52 @@ module.exports = async function foodReceiptApi(tp) {
             code: code,
             os: OS
         };
+        log("verifyPhoneAuth payload", { phone, code: "***" });
         const data = await apiPost("/v2/auth/phone/verify", payload);
+        log("verifyPhoneAuth response", JSON.stringify(data).slice(0, 300));
         if (data.sessionId) {
             config.sessionId = data.sessionId;
             config.refreshToken = data.refresh_token;
             config.phone = phone;
             await saveConfig();
+            log("verifyPhoneAuth saved", { sessionId: data.sessionId.slice(0, 10) + "..." });
         }
         return data;
     }
 
     async function doRefreshToken() {
-        if (!config.refreshToken) return null;
+        if (!config.refreshToken) {
+            log("doRefreshToken", "no refresh token");
+            return null;
+        }
         const payload = {
             refresh_token: config.refreshToken,
             client_secret: CLIENT_SECRET
         };
         try {
+            log("doRefreshToken", "attempting...");
             const data = await apiPost("/v2/mobile/users/refresh", payload);
             if (data.sessionId) {
                 config.sessionId = data.sessionId;
                 config.refreshToken = data.refresh_token;
                 await saveConfig();
+                log("doRefreshToken", "success");
                 return data;
             }
+            log("doRefreshToken", "no sessionId in response");
+            return null;
         } catch (e) {
-            log("refreshToken error", e.message || String(e));
+            log("doRefreshToken error", e.message || String(e));
             notice("Не удалось обновить токен. Нужна повторная авторизация.");
+            return null;
         }
-        return null;
     }
 
     async function getTicketId(qr) {
         const payload = { qr: qr };
-        const extra = config.sessionId ? { sessionId: config.sessionId } : {};
-        const data = await apiPost("/v2/ticket", payload, extra);
+        log("getTicketId", { qr: qr.slice(0, 30) + "..." });
+        const data = await apiPost("/v2/ticket", payload);
+        log("getTicketId response", JSON.stringify(data).slice(0, 300));
         if (!data.id) {
             throw new Error(`Нет ticketId в ответе: ${JSON.stringify(data)}`);
         }
@@ -170,8 +192,8 @@ module.exports = async function foodReceiptApi(tp) {
     }
 
     async function getTicketById(ticketId) {
-        const extra = config.sessionId ? { sessionId: config.sessionId } : {};
-        return await apiGet(`/v2/tickets/${ticketId}`, extra);
+        log("getTicketById", ticketId);
+        return await apiGet(`/v2/tickets/${ticketId}`);
     }
 
     async function getTicket(qr) {
@@ -181,7 +203,7 @@ module.exports = async function foodReceiptApi(tp) {
         } catch (e) {
             const msg = e.message || String(e);
             log("getTicketId error", msg);
-            if (msg.includes("401") || msg.includes("403") || msg.includes("Unauthorized")) {
+            if (msg.includes("401") || msg.includes("403") || msg.includes("session")) {
                 if (config.refreshToken) {
                     const refreshed = await doRefreshToken();
                     if (refreshed) {
@@ -190,7 +212,7 @@ module.exports = async function foodReceiptApi(tp) {
                         throw new Error("Сессия истекла. Авторизуйтесь заново.");
                     }
                 } else {
-                    throw new Error("Требуется авторизация (401).");
+                    throw new Error("Требуется авторизация.");
                 }
             } else {
                 throw e;
@@ -204,35 +226,58 @@ module.exports = async function foodReceiptApi(tp) {
             "Введите телефон для авторизации в ФНС (+70000000000)",
             config.phone || ""
         );
-        if (!phoneInput) return null;
+        if (!phoneInput) {
+            log("interactiveAuth", "cancelled at phone");
+            return null;
+        }
         const phone = phoneInput.trim();
+        log("interactiveAuth", { phone });
 
-        log("requestPhoneAuth", phone);
-        await requestPhoneAuth(phone);
-        notice(`Код отправлен на ${phone}`);
+        try {
+            const reqData = await requestPhoneAuth(phone);
+            log("requestPhoneAuth response", JSON.stringify(reqData).slice(0, 200));
+            notice(`Код отправлен на ${phone}`);
+        } catch (e) {
+            log("requestPhoneAuth error", e.message || String(e));
+            notice(`Ошибка отправки SMS: ${e.message || String(e)}`);
+            return false;
+        }
 
         const codeInput = await tp.system.prompt("Введите код из SMS");
-        if (!codeInput) return null;
+        if (!codeInput) {
+            log("interactiveAuth", "cancelled at code");
+            return null;
+        }
         const code = codeInput.trim();
 
-        log("verifyPhoneAuth", code);
-        const data = await verifyPhoneAuth(phone, code);
-        if (data.sessionId) {
-            notice("Авторизация успешна.");
-            return true;
-        } else {
-            notice(`Ошибка авторизации: ${JSON.stringify(data)}`);
+        try {
+            const data = await verifyPhoneAuth(phone, code);
+            if (data.sessionId) {
+                notice("Авторизация успешна.");
+                return true;
+            } else {
+                notice(`Ошибка авторизации: ${JSON.stringify(data).slice(0, 200)}`);
+                return false;
+            }
+        } catch (e) {
+            log("verifyPhoneAuth error", e.message || String(e));
+            notice(`Ошибка проверки кода: ${e.message || String(e)}`);
             return false;
         }
     }
 
     async function ensureAuth() {
         log("ensureAuth", { hasSession: !!config.sessionId, hasRefresh: !!config.refreshToken });
-        if (config.sessionId) return true;
+        if (config.sessionId) {
+            log("ensureAuth", "using existing session");
+            return true;
+        }
         if (config.refreshToken) {
+            log("ensureAuth", "trying refresh...");
             const refreshed = await doRefreshToken();
             if (refreshed) return true;
         }
+        log("ensureAuth", "need interactive auth");
         return await interactiveAuth();
     }
 
