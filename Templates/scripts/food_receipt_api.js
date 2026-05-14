@@ -1,4 +1,8 @@
 module.exports = async function foodReceiptApi(tp) {
+    if (typeof requestUrl !== "function") {
+        new Notice("Ошибка: requestUrl недоступен. Проверьте, что Templater запущен внутри Obsidian, а не в Node.js.");
+        throw new Error("requestUrl is not available");
+    }
     const CONFIG_PATH = "Projects/Кухня/nalog-config.json";
 
     const HOST = "irkkt-mobile.nalog.ru:8888";
@@ -12,8 +16,12 @@ module.exports = async function foodReceiptApi(tp) {
 
     let config = await readConfig();
 
-    function notice(message, timeout = 5000) {
+    function notice(message, timeout = 8000) {
         new Notice(message, timeout);
+    }
+
+    function log(stage, detail) {
+        console.log(`[foodReceiptApi] ${stage}:`, detail);
     }
 
     async function readConfig() {
@@ -23,6 +31,7 @@ module.exports = async function foodReceiptApi(tp) {
             const content = await app.vault.read(file);
             return JSON.parse(content);
         } catch (e) {
+            log("readConfig error", e.message);
             return {};
         }
     }
@@ -30,15 +39,21 @@ module.exports = async function foodReceiptApi(tp) {
     async function saveConfig() {
         const file = app.vault.getAbstractFileByPath(CONFIG_PATH);
         const content = JSON.stringify(config, null, 2);
-        if (file) {
-            await app.vault.modify(file, content);
-        } else {
-            await app.vault.create(CONFIG_PATH, content);
+        try {
+            if (file) {
+                await app.vault.modify(file, content);
+            } else {
+                await app.vault.create(CONFIG_PATH, content);
+            }
+            log("saveConfig", "OK");
+        } catch (e) {
+            log("saveConfig error", e.message);
+            notice("Ошибка сохранения конфига: " + e.message);
         }
     }
 
-    function makeHeaders(extra = {}) {
-        return {
+    function makeHeaders(extra = {}, isPost = false) {
+        const h = {
             Host: HOST,
             Accept: "*/*",
             "Device-OS": DEVICE_OS,
@@ -48,27 +63,53 @@ module.exports = async function foodReceiptApi(tp) {
             "User-Agent": USER_AGENT,
             ...extra
         };
+        if (isPost) {
+            h["Content-Type"] = "application/json";
+        }
+        return h;
     }
 
     async function apiPost(path, payload, extraHeaders = {}) {
         const url = `https://${HOST}${path}`;
-        const resp = await requestUrl({
-            url,
-            method: "POST",
-            headers: makeHeaders(extraHeaders),
-            body: JSON.stringify(payload)
-        });
-        return resp.json;
+        log("apiPost URL", url);
+        try {
+            const resp = await requestUrl({
+                url,
+                method: "POST",
+                headers: makeHeaders(extraHeaders, true),
+                body: JSON.stringify(payload)
+            });
+            log("apiPost status", resp.status);
+            if (resp.status < 200 || resp.status >= 300) {
+                log("apiPost body", resp.text || "(empty)");
+                throw new Error(`HTTP ${resp.status}: ${resp.text || "empty body"}`);
+            }
+            return resp.json;
+        } catch (e) {
+            log("apiPost error", e.message || String(e));
+            throw e;
+        }
     }
 
     async function apiGet(path, extraHeaders = {}) {
         const url = `https://${HOST}${path}`;
-        const resp = await requestUrl({
-            url,
-            method: "GET",
-            headers: makeHeaders(extraHeaders)
-        });
-        return resp.json;
+        log("apiGet URL", url);
+        try {
+            const resp = await requestUrl({
+                url,
+                method: "GET",
+                headers: makeHeaders(extraHeaders)
+            });
+            log("apiGet status", resp.status);
+            if (resp.status < 200 || resp.status >= 300) {
+                log("apiGet body", resp.text || "(empty)");
+                throw new Error(`HTTP ${resp.status}: ${resp.text || "empty body"}`);
+            }
+            return resp.json;
+        } catch (e) {
+            log("apiGet error", e.message || String(e));
+            throw e;
+        }
     }
 
     async function requestPhoneAuth(phone) {
@@ -112,6 +153,7 @@ module.exports = async function foodReceiptApi(tp) {
                 return data;
             }
         } catch (e) {
+            log("refreshToken error", e.message || String(e));
             notice("Не удалось обновить токен. Нужна повторная авторизация.");
         }
         return null;
@@ -122,7 +164,7 @@ module.exports = async function foodReceiptApi(tp) {
         const extra = config.sessionId ? { sessionId: config.sessionId } : {};
         const data = await apiPost("/v2/ticket", payload, extra);
         if (!data.id) {
-            throw new Error(`Не удалось получить ticketId: ${JSON.stringify(data)}`);
+            throw new Error(`Нет ticketId в ответе: ${JSON.stringify(data)}`);
         }
         return data.id;
     }
@@ -137,12 +179,18 @@ module.exports = async function foodReceiptApi(tp) {
         try {
             ticketId = await getTicketId(qr);
         } catch (e) {
-            if (config.refreshToken) {
-                const refreshed = await doRefreshToken();
-                if (refreshed) {
-                    ticketId = await getTicketId(qr);
+            const msg = e.message || String(e);
+            log("getTicketId error", msg);
+            if (msg.includes("401") || msg.includes("403") || msg.includes("Unauthorized")) {
+                if (config.refreshToken) {
+                    const refreshed = await doRefreshToken();
+                    if (refreshed) {
+                        ticketId = await getTicketId(qr);
+                    } else {
+                        throw new Error("Сессия истекла. Авторизуйтесь заново.");
+                    }
                 } else {
-                    throw new Error("Сессия истекла. Авторизуйтесь заново.");
+                    throw new Error("Требуется авторизация (401).");
                 }
             } else {
                 throw e;
@@ -159,6 +207,7 @@ module.exports = async function foodReceiptApi(tp) {
         if (!phoneInput) return null;
         const phone = phoneInput.trim();
 
+        log("requestPhoneAuth", phone);
         await requestPhoneAuth(phone);
         notice(`Код отправлен на ${phone}`);
 
@@ -166,6 +215,7 @@ module.exports = async function foodReceiptApi(tp) {
         if (!codeInput) return null;
         const code = codeInput.trim();
 
+        log("verifyPhoneAuth", code);
         const data = await verifyPhoneAuth(phone, code);
         if (data.sessionId) {
             notice("Авторизация успешна.");
@@ -177,6 +227,7 @@ module.exports = async function foodReceiptApi(tp) {
     }
 
     async function ensureAuth() {
+        log("ensureAuth", { hasSession: !!config.sessionId, hasRefresh: !!config.refreshToken });
         if (config.sessionId) return true;
         if (config.refreshToken) {
             const refreshed = await doRefreshToken();

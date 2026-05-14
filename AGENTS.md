@@ -13,6 +13,7 @@
   - `Projects/Кухня/Templates/Новый чек.md` -> `tp.user.food_db(tp)`
   - `Projects/Кухня/Templates/Проверка LLM.md` -> `tp.user.food_llm_check(tp)`
   - `Projects/Кухня/Templates/OCR чек.md` -> `tp.user.food_receipt_ocr(tp)`
+  - `Templates/Food/QR чек ФНС.md` -> `tp.user.food_receipt_api(tp)`
 
 ## Verification
 - There is no repo-wide automated test suite. For Templater JS changes, the reliable fast check is syntax only:
@@ -20,6 +21,7 @@
   - `node --check "Templates/scripts/food_db.js"`
   - `node --check "Templates/scripts/food_llm_check.js"`
   - `node --check "Templates/scripts/food_receipt_ocr.js"`
+  - `node --check "Templates/scripts/food_receipt_api.js"`
 - After changing the food schema or prompts, also verify the paired Markdown templates/docs stay aligned. The important files are:
   - `Projects/Кухня/Templates/*.md`
   - `Projects/Кухня/Docs/Schema.md`
