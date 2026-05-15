@@ -313,14 +313,20 @@ module.exports = async function foodReceiptApi(tp) {
             retailPlace: payload.retailPlace || payload.user || payload.retailPlaceAddress || "",
             userInn: payload.userInn || "",
             totalSum: Number(payload.totalSum || 0),
-            items: (payload.items || []).map(item => ({
-                name: item.name || item.nomenclature || "",
-                price: Number(item.price || 0),
-                quantity: Number(item.quantity || item.qty || 1),
-                sum: Number(item.sum || 0),
-                barcode: item.barcode || "",
-                unit: item.measurementUnit || item.unit || "шт"
-            }))
+            items: (payload.items || []).map(item => {
+                const barcode = item.barcode
+                    || item.productCodeNew?.gs1m?.gtin
+                    || item.productCodeNew?.rawProductCode
+                    || "";
+                return {
+                    name: item.name || item.nomenclature || "",
+                    price: Number(item.price || 0),
+                    quantity: Number(item.quantity || item.qty || 1),
+                    sum: Number(item.sum || 0),
+                    barcode: barcode,
+                    unit: item.measurementUnit || item.unit || "шт"
+                };
+            })
         };
     }
 
