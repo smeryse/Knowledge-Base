@@ -264,6 +264,66 @@ module.exports = async function foodReceiptApi(tp) {
         return await interactiveAuth();
     }
 
+    async function fetchProverkaCheka(qrRaw) {
+        const token = "39472.ko9FFxXlLqgXlUZXk";
+        const url = "https://proverkacheka.com/api/v1/check/get";
+        const body = `qrraw=${encodeURIComponent(qrRaw)}&token=${encodeURIComponent(token)}`;
+
+        const options = {
+            url: url,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+                "Accept": "application/json"
+            },
+            body: body,
+            throw: false
+        };
+
+        log("fetchProverkaCheka request", { url });
+        const resp = await requestUrl(options);
+        log("fetchProverkaCheka status", resp.status);
+
+        if (resp.status >= 200 && resp.status < 300) {
+            return resp.json || {};
+        }
+
+        const errText = resp.text || `HTTP ${resp.status}`;
+        throw new Error(`HTTP ${resp.status}: ${errText.slice(0, 200)}`);
+    }
+
+    function parseProverkaResponse(raw) {
+        if (!raw) return null;
+
+        let payload = raw;
+        if (raw.data && raw.data.json) {
+            payload = raw.data.json;
+        } else if (raw.data && !raw.data.json && typeof raw.data === "object" && Array.isArray(raw.data.items)) {
+            payload = raw.data;
+        } else if (raw.json && typeof raw.json === "object") {
+            payload = raw.json;
+        }
+
+        if (!payload || !Array.isArray(payload.items)) {
+            return null;
+        }
+
+        return {
+            dateTime: payload.dateTime || payload.date || "",
+            retailPlace: payload.retailPlace || payload.user || payload.retailPlaceAddress || "",
+            userInn: payload.userInn || "",
+            totalSum: Number(payload.totalSum || 0),
+            items: (payload.items || []).map(item => ({
+                name: item.name || item.nomenclature || "",
+                price: Number(item.price || 0),
+                quantity: Number(item.quantity || item.qty || 1),
+                sum: Number(item.sum || 0),
+                barcode: item.barcode || "",
+                unit: item.measurementUnit || item.unit || "шт"
+            }))
+        };
+    }
+
     return {
         ensureAuth,
         interactiveAuth,
@@ -274,6 +334,8 @@ module.exports = async function foodReceiptApi(tp) {
         doRefreshToken,
         readConfig,
         saveConfig,
-        config
+        config,
+        fetchProverkaCheka,
+        parseProverkaResponse
     };
 };
