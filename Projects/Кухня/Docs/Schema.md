@@ -34,7 +34,6 @@ Canvas-версия: [[Schema.canvas]]
 | `Recipes/`       | `recipes`        | один рецепт            |
 | `Stores/`        | `stores`         | один магазин           |
 | `Receipts/`      | `receipts`       | один чек               |
-| `Receipt Items/` | `receipt_items`  | одна позиция чека      |
 | `Pantry/`        | `pantry_items`   | один домашний запас    |
 | `Cooking Log/`   | `cooking_log`    | одно событие готовки   |
 | `Meal Plans/`    | `meal_plans`     | один месячный план     |
@@ -110,26 +109,14 @@ erDiagram
         string store_id FK
         number total_amount
         string receipt_image
-        date created_at
-    }
-
-    RECEIPT_ITEMS {
-        string receipt_item_id PK
-        string receipt_id FK
-        string product_id FK
-        number qty
-        number pack_size
-        string pack_unit
-        number price_total
-        number price_per_base_unit
-        boolean add_to_pantry
+        list items
         date created_at
     }
 
     PANTRY_ITEMS {
         string pantry_item_id PK
         string product_id FK
-        string source_receipt_item_id FK
+        string source_receipt_id FK
         number qty_current
         string unit
         date manufactured_on
@@ -186,10 +173,8 @@ erDiagram
     STORES ||--o{ RECEIPTS : source_of
     PRODUCTS ||--o{ RECIPE_INGREDIENTS : used_in
     RECIPES ||--|{ RECIPE_INGREDIENTS : has
-    RECEIPTS ||--|{ RECEIPT_ITEMS : contains
-    PRODUCTS ||--o{ RECEIPT_ITEMS : bought_as
     PRODUCTS ||--o{ PANTRY_ITEMS : stored_as
-    RECEIPT_ITEMS o|--o| PANTRY_ITEMS : creates
+    RECEIPTS ||--o{ PANTRY_ITEMS : creates
     MEAL_PLANS ||--|{ MEAL_PLAN_SLOTS : has
     RECIPES ||--o{ MEAL_PLAN_SLOTS : scheduled_as
     RECIPES ||--o{ COOKING_LOG : cooked_as
@@ -280,28 +265,10 @@ erDiagram
 | `receipt_id`    | string | нет  | PK                | идентификатор чека         |
 | `receipt_date`  | date   | нет  |                   | дата чека                  |
 | `store_id`      | string | нет  | FK -> `stores.store_id` | магазин                    |
-| `total_amount`  | number | да   |                   | сумма чека                 |
-| `receipt_image` | string | да   |                   | фото чека                  |
-| `created_at`    | date   | нет  |                   | дата создания              |
-
-Ограничение: чек без позиций невалиден. Каждый `receipts.receipt_id` должен иметь минимум одну запись в `receipt_items`.
-
-### `receipt_items`
-
-Позиции чеков.
-
-| Поле                  | Тип     | Null | Ключ                | Смысл                   |
-| --------------------- | ------- | ---- | ------------------- | ----------------------- |
-| `receipt_item_id`     | string  | нет  | PK                  | идентификатор позиции   |
-| `receipt_id`          | string  | нет  | FK -> `receipts.receipt_id` | чек                     |
-| `product_id`          | string  | нет  | FK -> `products.product_id` | товар                   |
-| `qty`                 | number  | нет  |                     | количество              |
-| `pack_size`           | number  | да   |                     | размер упаковки         |
-| `pack_unit`           | string  | да   |                     | единица упаковки        |
-| `price_total`         | number  | нет  |                     | полная цена позиции     |
-| `price_per_base_unit` | number  | да   |                     | цена за базовую единицу |
-| `add_to_pantry`       | boolean | нет  |                     | переносить ли в запас   |
-| `created_at`          | date    | нет  |                     | дата создания           |
+| `total_amount`  | number   | да   |                   | сумма чека                 |
+| `receipt_image` | string   | да   |                   | фото чека                  |
+| `items`         | list     | нет  |                   | позиции чека (вложенный массив: product, qty, price, unit) |
+| `created_at`    | date     | нет  |                   | дата создания              |
 
 ### `pantry_items`
 
@@ -311,7 +278,7 @@ erDiagram
 | ------------------------ | ------ | ---- | ------------------------ | -------------------- |
 | `pantry_item_id`         | string | нет  | PK                       | идентификатор запаса |
 | `product_id`             | string | нет  | FK -> `products.product_id`      | товар                |
-| `source_receipt_item_id` | string | да   | FK -> `receipt_items.receipt_item_id` | источник из чека     |
+| `source_receipt_id`      | string | да   | FK -> `receipts.receipt_id` | источник из чека     |
 | `qty_current`            | number | нет  |                          | текущий остаток      |
 | `unit`                   | string | нет  |                          | единица остатка      |
 | `manufactured_on`        | date   | да   |                          | дата изготовления    |
@@ -396,7 +363,7 @@ erDiagram
 ### Чек
 
 ```text
-receipts -> receipt_items -> pantry_items
+receipts -> pantry_items
 ```
 
 ### Рецепт
@@ -429,7 +396,7 @@ meal_plan_slots + recipe_ingredients + pantry_items -> shopping_items
 
 ## Business Rules
 
-1. `receipts` без `receipt_items` невалиден.
+1. `receipts` без `items` невалиден.
 2. Прямых many-to-many связей в схеме нет.
 3. Состав рецепта хранится через `recipe_ingredients`.
 4. Любой рецепт по определению хранится на 1 порцию; отдельное поле базового числа порций в `recipes` не нужно.
@@ -438,7 +405,7 @@ meal_plan_slots + recipe_ingredients + pantry_items -> shopping_items
 7. Списание запасов хранится через `cooking_consumptions`.
 8. `pantry_items` может хранить уже пересчитанный расходуемый остаток, а не только целую упаковку.
 9. Срок годности лучше вычислять из `manufactured_on + products.default_shelf_life_days`, а не хранить как отдельное поле.
-10. История фактических цен живет в `receipt_items`.
+10. История фактических цен живет в `receipts.items`.
 
 ---
 
@@ -450,7 +417,6 @@ meal_plan_slots + recipe_ingredients + pantry_items -> shopping_items
 | `recipes` | `Projects/Кухня/Recipes/` |
 | `stores` | `Projects/Кухня/Stores/` |
 | `receipts` | `Projects/Кухня/Receipts/` |
-| `receipt_items` | `Projects/Кухня/Receipt Items/` |
 | `pantry_items` | `Projects/Кухня/Pantry/` |
 | `meal_plans` | `Projects/Кухня/Meal Plans/` |
 | `cooking_log` | `Projects/Кухня/Cooking Log/` |
