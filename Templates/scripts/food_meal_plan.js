@@ -1,5 +1,5 @@
 module.exports = async function foodMealPlan(tp) {
-    const ROOT = "Projects/Кухня";
+    const ROOT = "LifeOS/Кухня";
     const DIRS = {
         recipes: `${ROOT}/Recipes`,
         mealPlans: `${ROOT}/Meal Plans`

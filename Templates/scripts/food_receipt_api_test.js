@@ -1,5 +1,14 @@
 module.exports = async function foodReceiptApiTest(tp) {
-    const token = "39472.ko9FFxXlLqgXlUZXk";
+    const SECRETS_PATH = "System/secrets.json";
+    async function loadSecrets() {
+        try {
+            const file = app.vault.getAbstractFileByPath(SECRETS_PATH);
+            if (!file) return {};
+            return JSON.parse(await app.vault.read(file));
+        } catch (e) { return {}; }
+    }
+    const secrets = await loadSecrets();
+    const token = secrets.proverkacheka_token || "";
     const url = "https://proverkacheka.com/api/v1/check/get";
 
     const qr = await tp.system.prompt("Вставь QR-строку чека (t=...&s=...&fn=...)");

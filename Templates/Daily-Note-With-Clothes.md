@@ -30,7 +30,7 @@ if (scheduleFile) {
 }
 
 // === ОБРАЗ ДНЯ (автоматический) ===
-const outfitsFile = app.vault.getAbstractFileByPath("Projects/Одежда/Образы.md");
+const outfitsFile = app.vault.getAbstractFileByPath("LifeOS/Одежда/Образы.md");
 if (outfitsFile) {
     const content = await app.vault.read(outfitsFile);
     const lines = content.split('\n');

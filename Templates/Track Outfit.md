@@ -1,6 +1,6 @@
 <%*
 // Track Outfit: обновляет счётчики вещей и отмечает чекбокс
-const ITEMS_DIR = 'Projects/Одежда/items';
+const ITEMS_DIR = 'LifeOS/Одежда/items';
 
 const file = app.workspace.getActiveFile();
 if (!file) {

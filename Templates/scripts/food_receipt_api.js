@@ -1,13 +1,24 @@
 module.exports = async function foodReceiptApi(tp) {
-    const CONFIG_PATH = "Projects/Кухня/System/nalog-config.json";
+    const CONFIG_PATH = "LifeOS/Кухня/System/nalog-config.json";
+    const SECRETS_PATH = "System/secrets.json";
 
     const HOST = "irkkt-mobile.nalog.ru:8888";
     const DEVICE_OS = "iOS";
     const CLIENT_VERSION = "2.9.0";
-    const CLIENT_SECRET = "IyvrAbKt9h/8p6a7QPh8gpkXYQ4=";
     const OS = "Android";
     const USER_AGENT = "billchecker/2.9.0 (iPhone; iOS 13.6; Scale/2.00)";
     const ACCEPT_LANGUAGE = "ru-RU;q=1, en-US;q=0.9";
+
+    async function loadSecrets() {
+        try {
+            const file = app.vault.getAbstractFileByPath(SECRETS_PATH);
+            if (!file) return {};
+            return JSON.parse(await app.vault.read(file));
+        } catch (e) { return {}; }
+    }
+
+    const secrets = await loadSecrets();
+    const CLIENT_SECRET = secrets.nalog_client_secret || "";
 
     let config = await readConfig();
 
@@ -265,7 +276,7 @@ module.exports = async function foodReceiptApi(tp) {
     }
 
     async function fetchProverkaCheka(qrRaw) {
-        const token = "39472.ko9FFxXlLqgXlUZXk";
+        const token = secrets.proverkacheka_token || "";
         const url = "https://proverkacheka.com/api/v1/check/get";
         const body = `qrraw=${encodeURIComponent(qrRaw)}&token=${encodeURIComponent(token)}`;
 

@@ -1,10 +1,11 @@
 module.exports = async function foodDb(tp) {
-    const ROOT = "Projects/Кухня";
+    const ROOT = "LifeOS/Кухня";
     const DIRS = {
         products: `${ROOT}/Products`,
         stores: `${ROOT}/Stores`,
         categories: `${ROOT}/Categories`,
         receipts: `${ROOT}/Receipts`,
+        receiptItems: `${ROOT}/Receipt Items`,
         pantry: `${ROOT}/Pantry`
     };
     const today = tp.date.now("YYYY-MM-DD");
@@ -626,12 +627,43 @@ module.exports = async function foodDb(tp) {
         return matches[labels.indexOf(selected) - 1];
     }
 
+    function buildReceiptItemContent(item) {
+        return [
+            "---",
+            "type: receipt-item",
+            `date: ${item.date}`,
+            `receipt: ${wikilink(item.receiptPath, item.receiptTitle)}`,
+            `store: ${wikilink(item.storePath, item.storeTitle)}`,
+            `product: ${wikilink(item.productPath, item.productTitle)}`,
+            `qty: ${item.qty}`,
+            `pack_size: ${item.packSize || ""}`,
+            `pack_unit: ${item.packUnit || ""}`,
+            `price_total: ${item.priceTotal}`,
+            `price_per_base_unit: ${item.pricePerBaseUnit ?? ""}`,
+            `discount: ${Boolean(item.discount)}`,
+            `rating: ${item.rating || ""}`,
+            `review: ${quoteYaml(item.review || "")}`,
+            `add_to_pantry: ${Boolean(item.addToPantry)}`,
+            `created: ${today}`,
+            "tags:",
+            "  - еда",
+            "  - receipt-item",
+            "---",
+            "",
+            `# ${item.productTitle} - ${item.date}`,
+            "",
+            "## Заметки",
+            "",
+            ">"
+        ].join("\n");
+    }
+
     function buildPantryContent(entry) {
         return [
             "---",
             "type: pantry-item",
             `product: ${wikilink(entry.productPath, entry.productTitle)}`,
-            `source_receipt: ${wikilink(entry.receiptPath, entry.receiptTitle)}`,
+            `source_receipt_item: ${wikilink(entry.receiptItemPath, entry.receiptItemTitle)}`,
             `qty_current: ${entry.qtyCurrent}`,
             `unit: ${entry.unit}`,
             `manufactured_on: ${entry.manufacturedOn || ""}`,
@@ -652,7 +684,7 @@ module.exports = async function foodDb(tp) {
     const activeFile = app.workspace.getActiveFile();
     if (!activeFile) {
         notice("Нет активной заметки для создания чека");
-        return "# Чек не создан\n\nОткрой или создай заметку в `Projects/Кухня/Receipts/`.";
+        return "# Чек не создан\n\nОткрой или создай заметку в `LifeOS/Кухня/Receipts/`.";
     }
 
     const receiptDate = (await tp.system.prompt("Дата чека", today))?.trim() || today;
@@ -690,8 +722,29 @@ module.exports = async function foodDb(tp) {
         const packSize = packSizeInput === "" ? "" : Number(packSizeInput);
         const normalizedPack = convertToBaseUnit(packSize, packUnit, product.base_unit || packUnit);
         const totalBaseUnits = normalizedPack ? normalizedPack * qty : null;
+        const pricePerBaseUnit = totalBaseUnits ? Number((priceTotal / totalBaseUnits).toFixed(4)) : null;
 
-        let pantryFile = null;
+        const itemTitle = `${receiptDate} ${store.title} ${product.title}`;
+        const receiptItemFile = await createNote(DIRS.receiptItems, itemTitle, buildReceiptItemContent({
+            date: receiptDate,
+            receiptTitle,
+            receiptPath,
+            storeTitle: store.title,
+            storePath: store.file.path,
+            productTitle: product.title,
+            productPath: product.file.path,
+            qty,
+            packSize,
+            packUnit,
+            priceTotal,
+            pricePerBaseUnit,
+            discount,
+            rating: ratingInput,
+            review,
+            addToPantry
+        }));
+
+        const receiptItemTitle = receiptItemFile.basename;
         let manufacturedOn = "";
 
         if (addToPantry) {
@@ -708,11 +761,11 @@ module.exports = async function foodDb(tp) {
                 }
             }
 
-            pantryFile = await createNote(DIRS.pantry, `${receiptDate} ${product.title}`, buildPantryContent({
+            await createNote(DIRS.pantry, `${receiptDate} ${product.title}`, buildPantryContent({
                 productTitle: product.title,
                 productPath: product.file.path,
-                receiptTitle,
-                receiptPath,
+                receiptItemTitle,
+                receiptItemPath: receiptItemFile.path,
                 qtyCurrent: totalBaseUnits ?? qty,
                 unit: product.base_unit || packUnit || "шт",
                 manufacturedOn
@@ -728,8 +781,7 @@ module.exports = async function foodDb(tp) {
             addToPantry
         });
 
-        const pantryCell = pantryFile ? wikilink(pantryFile.path, "Да") : "Нет";
-        tableRows.push(`| ${wikilink(product.file.path, product.title)} | ${qty} | ${packSize || "-"} ${packUnit || ""}`.trim() + ` | ${priceTotal} | ${pantryCell} |`);
+        tableRows.push(`| ${wikilink(product.file.path, product.title)} | ${qty} | ${packSize || "-"} ${packUnit || ""}`.trim() + ` | ${priceTotal} | ${addToPantry ? "Да" : "Нет"} |`);
     }
 
     if (createdItems.length === 0) {
@@ -745,7 +797,6 @@ module.exports = async function foodDb(tp) {
         `store: ${wikilink(store.file.path, store.title)}`,
         `total: ${totalInput}`,
         `receipt_image: ${receiptImage ? quoteYaml(receiptImage) : ""}`,
-        `qr_data: ""`,
         `created: ${today}`,
         "tags:",
         "  - еда",

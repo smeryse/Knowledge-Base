@@ -1,0 +1,18 @@
+views:
+  - type: cards
+    name: Одежда
+    filters:
+      and:
+        - file.path.contains("LifeOS/Одежда/items/")
+    groupBy:
+      property: file.folder
+      direction: ASC
+    order:
+      - file.name
+    sort:
+      - property: file.name
+        direction: ASC
+    cardSize: 180
+    image: note.image
+  - type: list
+    name: Грязное

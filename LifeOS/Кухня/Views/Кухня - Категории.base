@@ -1,0 +1,14 @@
+views:
+  - type: table
+    name: Карточки
+    filters:
+      and:
+        - type == "category"
+        - file.path.contains("LifeOS/Кухня/Categories/")
+    order:
+      - file.name
+    sort:
+      - property: file.name
+        direction: ASC
+    markers: number
+    indentProperties: false

@@ -1,0 +1,11 @@
+views:
+  - type: cards
+    name: Карточки
+    filters:
+      and:
+        - file.path.contains("LifeOS/Кухня/Recipes")
+        - type == "recipe"
+    sort:
+      - property: file.name
+        direction: ASC
+    image: note.image

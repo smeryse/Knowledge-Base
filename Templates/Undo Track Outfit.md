@@ -1,6 +1,6 @@
 <%*
 // Отмена трекинга: уменьшает счётчики вещей на 1
-const ITEMS_DIR = 'Projects/Одежда/items';
+const ITEMS_DIR = 'LifeOS/Одежда/items';
 
 const file = app.workspace.getActiveFile();
 if (!file) {

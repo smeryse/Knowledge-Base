@@ -1,0 +1,14 @@
+views:
+  - type: table
+    name: Активные
+    filters:
+      and:
+        - file.path.contains("LifeOS/Кухня/Shopping List")
+        - type == "shopping-item"
+        - status != "done"
+        - status != "cancelled"
+    sort:
+      - property: file.name
+        direction: ASC
+      - property: file.mtime
+        direction: DESC

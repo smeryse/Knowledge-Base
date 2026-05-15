@@ -1,5 +1,5 @@
 module.exports = async function foodScan(tp) {
-    const ROOT = "Projects/Кухня";
+    const ROOT = "LifeOS/Кухня";
     const DIRS = {
         products: `${ROOT}/Products`,
         stores: `${ROOT}/Stores`,
@@ -648,7 +648,7 @@ module.exports = async function foodScan(tp) {
             "---",
             "type: pantry-item",
             `product: ${quoteYaml(wikilink(data.productPath, data.productTitle))}`,
-            "source_receipt: ",
+            "source_receipt_item: ",
             `qty_current: ${data.qtyCurrent}`,
             `unit: ${data.unit}`,
             `manufactured_on: ${data.manufacturedOn || ""}`,

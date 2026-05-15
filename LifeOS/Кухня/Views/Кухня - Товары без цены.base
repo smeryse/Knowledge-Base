@@ -1,0 +1,10 @@
+views:
+  - type: list
+    name: Таблица
+    filters:
+      and:
+        - file.path.contains("LifeOS/Кухня/Products")
+        - price.isEmpty()
+    order:
+      - file.name
+      - barcode

@@ -1,4 +1,5 @@
 .obsidian
-session-*.md
-Templates/scripts/upload_server.py
-Templates/scripts/download_server_files.py
+System/secrets.json
+data/
+*.epub
+

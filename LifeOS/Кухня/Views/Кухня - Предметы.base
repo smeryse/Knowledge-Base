@@ -1,0 +1,42 @@
+views:
+  - type: table
+    name: Таблица
+    filters:
+      and:
+        - file.path.contains("LifeOS/Кухня/Products")
+        - type == "product"
+    order:
+      - file.name
+      - barcode
+      - aliases
+      - category
+      - brand
+      - typical_pack_size
+      - typical_pack_unit
+      - perishable
+      - default_shelf_life_days
+      - price
+      - image
+      - file.ctime
+    sort:
+      - property: file.name
+        direction: ASC
+      - property: brand
+        direction: ASC
+      - property: image
+        direction: DESC
+      - property: file.ctime
+        direction: ASC
+      - property: title
+        direction: DESC
+    image: note.image
+    columnSize:
+      file.name: 251
+      note.barcode: 140
+      note.aliases: 229
+      note.category: 113
+      note.typical_pack_size: 57
+      note.typical_pack_unit: 52
+      note.perishable: 48
+      note.default_shelf_life_days: 88
+      note.image: 144

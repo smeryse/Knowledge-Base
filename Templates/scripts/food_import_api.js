@@ -1,10 +1,11 @@
 module.exports = async function foodImportApi(tp) {
-    const ROOT = "Projects/Кухня";
+    const ROOT = "LifeOS/Кухня";
     const DIRS = {
         products: `${ROOT}/Products`,
         stores: `${ROOT}/Stores`,
         categories: `${ROOT}/Categories`,
         receipts: `${ROOT}/Receipts`,
+        receiptItems: `${ROOT}/Receipt Items`,
         pantry: `${ROOT}/Pantry`
     };
     const MAPPING_PATH = `${ROOT}/System/receipt-product-mapping.json`;
@@ -138,12 +139,31 @@ module.exports = async function foodImportApi(tp) {
         ].join("\n");
     }
 
+    function buildReceiptItemContent(item) {
+        return [
+            "---", "type: receipt-item", `date: ${item.date}`, `receipt: ${wikilink(item.receiptPath, item.receiptTitle)}`,
+            `product: ${wikilink(item.productPath, item.productTitle)}`,
+            `qty: ${item.qty}`, `pack_size: ${item.packSize || ""}`, `pack_unit: ${item.packUnit || ""}`,
+            `price_total: ${item.priceTotal}`, `price_per_base_unit: ${item.pricePerBaseUnit ?? ""}`,
+            `discount: ${Boolean(item.discount)}`, `rating: ${item.rating || ""}`, `review: ${quoteYaml(item.review || "")}`,
+            `add_to_pantry: ${Boolean(item.addToPantry)}`, `created: ${today}`, "tags:", "  - еда", "  - receipt-item", "---",
+            "", `# ${item.productTitle} - ${item.date}`, "", "## Заметки", "", ">"
+        ].join("\n");
+    }
+
+    function buildPantryContent(entry) {
+        return [
+            "---", "type: pantry-item", `product: ${wikilink(entry.productPath, entry.productTitle)}`,
+            `source_receipt_item: ${wikilink(entry.receiptItemPath, entry.receiptItemTitle)}`, `qty_current: ${entry.qtyCurrent}`,
+            `unit: ${entry.unit}`, `manufactured_on: ${entry.manufacturedOn || ""}`, `created: ${today}`,
+            "tags:", "  - еда", "  - pantry-item", "---", "", `# ${entry.productTitle} - запас`, "", "## Заметки", "", ">"
+        ].join("\n");
+    }
+
     function buildReceiptContent(data, tableRows) {
         return [
             "---", "type: receipt", `date: ${data.date}`, `store: ${wikilink(data.storePath, data.storeTitle)}`,
-            `total: ${data.total}`, `receipt_image: ${data.receiptImage ? quoteYaml(data.receiptImage) : ""}`,
-            `qr_data: ${data.qrData ? quoteYaml(data.qrData) : '""'}`,
-            `created: ${today}`,
+            `total: ${data.total}`, `receipt_image: ${data.receiptImage ? quoteYaml(data.receiptImage) : ""}`, `created: ${today}`,
             "tags:", "  - еда", "  - receipt", "---", "", `# Чек ${data.date} - ${data.storeTitle}`, "", "## Позиции", "",
             "| Товар | Кол-во | Фасовка | Цена | В запас |", "| ----- | ------ | ------- | ---- | ------- |", ...tableRows,
             "", "## Заметки", "", ">", "", "## Быстрые ссылки", "", "- [[Обзор]]", "- [[Покупки]]", "- [[Запасы]]"
@@ -239,16 +259,24 @@ module.exports = async function foodImportApi(tp) {
 
             const qty = Number(item.quantity || 1);
             const priceTotal = (Number(item.sum || 0) / 100).toFixed(2);
+            const packSize = "";
             const packUnit = item.unit || "шт";
 
-            tableRows.push(`| ${wikilink(product.file.path, product.title)} | ${qty} | - ${packUnit || ""} | ${priceTotal} | Нет |`);
+            const itemTitle = `${date} ${store.title} ${product.title}`;
+            const receiptItemFile = await createNote(DIRS.receiptItems, itemTitle, buildReceiptItemContent({
+                date, receiptTitle, receiptPath, storeTitle: store.title, storePath: store.file.path,
+                productTitle: product.title, productPath: product.file.path, qty, packSize, packUnit, priceTotal,
+                pricePerBaseUnit: "", discount: false, rating: "", review: "", addToPantry: false
+            }));
+
+            tableRows.push(`| ${wikilink(product.file.path, product.title)} | ${qty} | ${packSize || "-"} ${packUnit || ""} | ${priceTotal} | Нет |`);
         }
 
         await saveMapping(mapping);
 
         const receiptContent = buildReceiptContent({
             date, storeTitle: store.title, storePath: store.file.path,
-            total: totalRub, receiptImage: "", qrData: ""
+            total: totalRub, receiptImage: ""
         }, tableRows);
 
         await app.vault.create(receiptPath, receiptContent);

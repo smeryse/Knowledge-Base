@@ -1,0 +1,11 @@
+views:
+  - type: table
+    name: Таблица
+    filters:
+      and:
+        - file.path.contains("LifeOS/Кухня/Receipts")
+        - type == "receipt"
+    sort:
+      - property: date
+        direction: DESC
+    limit: 50
