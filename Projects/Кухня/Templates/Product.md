@@ -15,14 +15,5 @@ price:
 image:
 created:
 tags:
-  - еда
   - product
 ---
-
-# <% tp.frontmatter.title || tp.file.title %>
-
-Штрихкод: `<% tp.frontmatter.barcode || "" %>`
-
-## Заметки
-
->

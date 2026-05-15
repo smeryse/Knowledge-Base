@@ -135,7 +135,7 @@ module.exports = async function foodImportApi(tp) {
             `brand: ${quoteYaml(data.brand || "")}`, `base_unit: ${data.base_unit || "шт"}`,
             `typical_pack_size: ${data.typical_pack_size || ""}`, `typical_pack_unit: ${data.typical_pack_unit || ""}`,
             `perishable: ${Boolean(data.perishable)}`, `default_shelf_life_days: ${data.default_shelf_life_days || ""}`, `price: ${data.price || ""}`,
-            `created: ${today}`, "tags:", "  - еда", "  - product", "---", "", `# ${data.title}`, "", "## Заметки", "", ">"
+            `created: ${today}`, "tags:", "  - product", "---"
         ].join("\n");
     }
 
@@ -200,7 +200,7 @@ module.exports = async function foodImportApi(tp) {
         return await readFrontmatter(file);
     }
 
-    async function findOrCreateProduct(rawName, mapping) {
+    async function findOrCreateProduct(rawName, barcode, mapping) {
         const rawKey = lower(rawName);
         if (mapping[rawKey]) {
             const file = app.vault.getAbstractFileByPath(mapping[rawKey]);
@@ -224,7 +224,7 @@ module.exports = async function foodImportApi(tp) {
 
         const categoryObj = await getOrCreateCategory("прочее");
         const file = await createNote(DIRS.products, title, buildProductContent({
-            title, barcode: "", categoryPath: categoryObj.file.path, categoryTitle: categoryObj.title,
+            title, barcode: barcode || "", categoryPath: categoryObj.file.path, categoryTitle: categoryObj.title,
             brand: "", base_unit: "шт", typical_pack_size: "", typical_pack_unit: "",
             perishable: false, default_shelf_life_days: "", price: ""
         }));
@@ -254,7 +254,7 @@ module.exports = async function foodImportApi(tp) {
 
         for (const item of ticket.items) {
             notice(`Обработка: ${item.name}`);
-            const product = await findOrCreateProduct(item.name, mapping);
+            const product = await findOrCreateProduct(item.name, item.barcode, mapping);
             if (!product) continue;
 
             const qty = Number(item.quantity || 1);
