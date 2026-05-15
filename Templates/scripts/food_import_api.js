@@ -3,10 +3,12 @@ module.exports = async function foodImportApi(tp) {
     const DIRS = {
         products: `${ROOT}/Products`,
         stores: `${ROOT}/Stores`,
+        categories: `${ROOT}/Categories`,
         receipts: `${ROOT}/Receipts`,
         receiptItems: `${ROOT}/Receipt Items`,
         pantry: `${ROOT}/Pantry`
     };
+    const MAPPING_PATH = `${ROOT}/receipt-product-mapping.json`;
 
     const today = tp.date.now("YYYY-MM-DD");
 
@@ -16,25 +18,6 @@ module.exports = async function foodImportApi(tp) {
 
     function lower(value) {
         return String(value || "").trim().toLowerCase();
-    }
-
-    function normalizeCategory(value) {
-        const category = lower(value);
-        const allowed = new Set([
-            "молочка", "яйца", "сладости", "напитки", "крупы",
-            "мясо", "заморозка", "соусы", "овощи", "фрукты",
-            "хлеб", "чай", "кофе", "уход", "быт", "прочее"
-        ]);
-        return allowed.has(category) ? category : "прочее";
-    }
-
-    function normalizeProductTitle(title) {
-        const raw = String(title || "").trim();
-        if (!raw) return "";
-        let value = raw.replace(/\s+/g, " ").replace(/\bКУР\.\b/gi, "куриное").replace(/\bШТ\.?\b/gi, "шт").trim();
-        if (value === value.toUpperCase()) value = value.toLowerCase();
-        value = value.charAt(0).toUpperCase() + value.slice(1);
-        return value;
     }
 
     function slugify(value) {
@@ -116,6 +99,21 @@ module.exports = async function foodImportApi(tp) {
         return cleanAlias ? `[[${cleanPath}|${cleanAlias}]]` : `[[${cleanPath}]]`;
     }
 
+    async function loadMapping() {
+        try {
+            const file = app.vault.getAbstractFileByPath(MAPPING_PATH);
+            if (!file) return {};
+            return JSON.parse(await app.vault.read(file));
+        } catch (e) { return {}; }
+    }
+
+    async function saveMapping(mapping) {
+        const content = JSON.stringify(mapping, null, 2);
+        const file = app.vault.getAbstractFileByPath(MAPPING_PATH);
+        if (file) await app.vault.modify(file, content);
+        else await app.vault.create(MAPPING_PATH, content);
+    }
+
     function buildStoreContent(data) {
         return [
             "---", "type: store", `title: ${quoteYaml(data.title)}`, "aliases:", `  - ${quoteYaml(data.title)}`,
@@ -123,11 +121,19 @@ module.exports = async function foodImportApi(tp) {
         ].join("\n");
     }
 
+    function buildCategoryContent(title) {
+        return [
+            "---", "type: category", `title: ${quoteYaml(title)}`, "aliases:", `  - ${quoteYaml(title)}`,
+            `created: ${today}`, "tags:", "  - еда", "  - category", "---", "", `# ${title}`, "", "## Заметки", "", ">"
+        ].join("\n");
+    }
+
     function buildProductContent(data) {
         return [
             "---", "type: product", `title: ${quoteYaml(data.title)}`, `barcode: ${quoteYaml(data.barcode || "")}`, "aliases:", `  - ${quoteYaml(data.title)}`,
-            `category: ${quoteYaml(data.category || "прочее")}`, `brand: ${quoteYaml(data.brand || "")}`,
-            `base_unit: ${data.base_unit || "шт"}`, `typical_pack_size: ${data.typical_pack_size || ""}`, `typical_pack_unit: ${data.typical_pack_unit || ""}`,
+            `category: ${data.categoryPath ? wikilink(data.categoryPath, data.categoryTitle || "") : ""}`,
+            `brand: ${quoteYaml(data.brand || "")}`, `base_unit: ${data.base_unit || "шт"}`,
+            `typical_pack_size: ${data.typical_pack_size || ""}`, `typical_pack_unit: ${data.typical_pack_unit || ""}`,
             `perishable: ${Boolean(data.perishable)}`, `default_shelf_life_days: ${data.default_shelf_life_days || ""}`, `price: ${data.price || ""}`,
             `created: ${today}`, "tags:", "  - еда", "  - product", "---", "", `# ${data.title}`, "", "## Заметки", "", ">"
         ].join("\n");
@@ -184,35 +190,46 @@ module.exports = async function foodImportApi(tp) {
         return await readFrontmatter(file);
     }
 
-    async function findOrCreateProduct(itemName, barcode) {
-        const products = await loadFolder(DIRS.products);
-        const name = normalizeProductTitle(itemName);
-        const matches = sortByRelevance(name, products);
-        const barcodeMatch = barcode ? products.find(p => String(p.barcode || "").trim() === String(barcode).trim()) : null;
+    async function getOrCreateCategory(categoryName) {
+        const name = lower(categoryName);
+        const categories = await loadFolder(DIRS.categories);
+        const existing = categories.find(c => lower(c.title) === name);
+        if (existing) return existing;
+        const file = await createNote(DIRS.categories, categoryName, buildCategoryContent(categoryName));
+        notice(`Создана категория: ${categoryName}`);
+        return await readFrontmatter(file);
+    }
 
-        let labels = matches.map(p => `${p.title}${p.category ? ` [${p.category}]` : ""}${p.barcode ? ` {${p.barcode}}` : ""}`);
-        labels.unshift(`+ Создать новый товар: ${name}`);
-        if (barcodeMatch) labels.unshift(`Найден по штрихкоду: ${barcodeMatch.title}`);
-
-        const selected = await tp.system.suggester(labels, labels, false, `Товар: ${name}`);
-        if (!selected) return null;
-
-        if (selected.startsWith("Найден по штрихкоду:")) return barcodeMatch;
-
-        if (!selected.startsWith("+ Создать новый товар:")) {
-            const idx = labels.indexOf(selected);
-            const matchIdx = barcodeMatch ? idx - 2 : idx - 1;
-            return matches[matchIdx];
+    async function findOrCreateProduct(rawName, mapping) {
+        const rawKey = lower(rawName);
+        if (mapping[rawKey]) {
+            const file = app.vault.getAbstractFileByPath(mapping[rawKey]);
+            if (file) {
+                notice(`Продукт из маппинга: ${rawName}`);
+                return await readFrontmatter(file);
+            }
         }
 
-        const finalTitle = (await tp.system.prompt("Название товара", name))?.trim() || name;
-        const category = (await tp.system.prompt("Категория", "прочее"))?.trim() || "прочее";
-        const baseUnit = (await tp.system.prompt("Базовая единица", "шт"))?.trim() || "шт";
-        const file = await createNote(DIRS.products, finalTitle, buildProductContent({
-            title: finalTitle, barcode: barcode || "", category, brand: "", base_unit: baseUnit,
-            typical_pack_size: "", typical_pack_unit: "", perishable: false, default_shelf_life_days: "", price: ""
+        const products = await loadFolder(DIRS.products);
+        const matches = sortByRelevance(rawName, products);
+        if (matches.length > 0 && sortByRelevance(rawName, [matches[0]])[0]) {
+            const top = matches[0];
+            notice(`Найден похожий продукт: ${top.title}`);
+            mapping[rawKey] = top.file.path;
+            return top;
+        }
+
+        const title = String(rawName || "").trim();
+        if (!title) return null;
+
+        const categoryObj = await getOrCreateCategory("прочее");
+        const file = await createNote(DIRS.products, title, buildProductContent({
+            title, barcode: "", categoryPath: categoryObj.file.path, categoryTitle: categoryObj.title,
+            brand: "", base_unit: "шт", typical_pack_size: "", typical_pack_unit: "",
+            perishable: false, default_shelf_life_days: "", price: ""
         }));
-        notice(`Создан товар: ${finalTitle}`);
+        notice(`Создан продукт: ${title}`);
+        mapping[rawKey] = file.path;
         return await readFrontmatter(file);
     }
 
@@ -233,11 +250,11 @@ module.exports = async function foodImportApi(tp) {
         const receiptTitle = receiptPath.split("/").pop().replace(/\.md$/, "");
 
         const tableRows = [];
-        const createdItems = [];
+        const mapping = await loadMapping();
 
         for (const item of ticket.items) {
             notice(`Обработка: ${item.name}`);
-            const product = await findOrCreateProduct(item.name, item.barcode);
+            const product = await findOrCreateProduct(item.name, mapping);
             if (!product) continue;
 
             const qty = Number(item.quantity || 1);
@@ -252,33 +269,10 @@ module.exports = async function foodImportApi(tp) {
                 pricePerBaseUnit: "", discount: false, rating: "", review: "", addToPantry: false
             }));
 
-            const addToPantryAnswer = lower(await tp.system.prompt(`Добавить '${product.title}' в домашний запас? (д/н)`, "н"));
-            const addToPantry = addToPantryAnswer === "д" || addToPantryAnswer === "да" || addToPantryAnswer === "y" || addToPantryAnswer === "yes";
-
-            let manufacturedOn = "";
-            if (addToPantry) {
-                if (product.perishable) {
-                    manufacturedOn = (await tp.system.prompt(
-                        `Дата изготовления для '${product.title}' (YYYY-MM-DD, можно оставить пустым)`,
-                        date
-                    ))?.trim() || "";
-                }
-                await createNote(DIRS.pantry, `${date} ${product.title}`, buildPantryContent({
-                    productTitle: product.title, productPath: product.file.path,
-                    receiptItemTitle: receiptItemFile.basename, receiptItemPath: receiptItemFile.path,
-                    qtyCurrent: qty, unit: product.base_unit || packUnit || "шт", manufacturedOn
-                }));
-            }
-
-            if (addToPantry) {
-                const oldContent = await app.vault.read(receiptItemFile);
-                const newContent = oldContent.replace(/^add_to_pantry:.*$/m, "add_to_pantry: true");
-                await app.vault.modify(receiptItemFile, newContent);
-            }
-
-            tableRows.push(`| ${wikilink(product.file.path, product.title)} | ${qty} | ${packSize || "-"} ${packUnit || ""} | ${priceTotal} | ${addToPantry ? "Да" : "Нет"} |`);
-            createdItems.push({ productTitle: product.title, qty, packSize, packUnit, priceTotal, addToPantry });
+            tableRows.push(`| ${wikilink(product.file.path, product.title)} | ${qty} | ${packSize || "-"} ${packUnit || ""} | ${priceTotal} | Нет |`);
         }
+
+        await saveMapping(mapping);
 
         const receiptContent = buildReceiptContent({
             date, storeTitle: store.title, storePath: store.file.path,

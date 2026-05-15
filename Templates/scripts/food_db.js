@@ -3,12 +3,11 @@ module.exports = async function foodDb(tp) {
     const DIRS = {
         products: `${ROOT}/Products`,
         stores: `${ROOT}/Stores`,
+        categories: `${ROOT}/Categories`,
         receipts: `${ROOT}/Receipts`,
         receiptItems: `${ROOT}/Receipt Items`,
         pantry: `${ROOT}/Pantry`
     };
-    const RESOLVER_CONFIG_PATH = `${ROOT}/resolver-config.json`;
-
     const today = tp.date.now("YYYY-MM-DD");
 
     function notice(message, timeout = 5000) {
@@ -17,47 +16,6 @@ module.exports = async function foodDb(tp) {
 
     function lower(value) {
         return String(value || "").trim().toLowerCase();
-    }
-
-    function normalizeCategory(value) {
-        const category = lower(value);
-        const allowed = new Set([
-            "молочка",
-            "яйца",
-            "сладости",
-            "напитки",
-            "крупы",
-            "мясо",
-            "заморозка",
-            "соусы",
-            "овощи",
-            "фрукты",
-            "хлеб",
-            "чай",
-            "кофе",
-            "уход",
-            "быт",
-            "прочее"
-        ]);
-        return allowed.has(category) ? category : "прочее";
-    }
-
-    function normalizeProductTitle(title) {
-        const raw = String(title || "").trim();
-        if (!raw) return "";
-
-        let value = raw
-            .replace(/\s+/g, " ")
-            .replace(/\bКУР\.\b/gi, "куриное")
-            .replace(/\bШТ\.?\b/gi, "шт")
-            .trim();
-
-        if (value === value.toUpperCase()) {
-            value = value.toLowerCase();
-        }
-
-        value = value.charAt(0).toUpperCase() + value.slice(1);
-        return value;
     }
 
     function cleanBarcode(value) {
@@ -98,25 +56,6 @@ module.exports = async function foodDb(tp) {
         const file = app.vault.getAbstractFileByPath(relativePath);
         if (!file) return null;
         return await app.vault.read(file);
-    }
-
-    async function loadResolverConfig() {
-        const defaults = {
-            enabled: true,
-            provider: "lmstudio",
-            endpoint: "http://127.0.0.1:1234/v1",
-            model: "qwen2.5-3b-instruct",
-            temperature: 0.1,
-            timeout_ms: 20000
-        };
-
-        try {
-            const raw = await readProjectFile(RESOLVER_CONFIG_PATH);
-            if (!raw) return defaults;
-            return { ...defaults, ...JSON.parse(raw) };
-        } catch (error) {
-            return defaults;
-        }
     }
 
     async function httpGetText(url) {
@@ -336,101 +275,7 @@ module.exports = async function foodDb(tp) {
 
             if (candidates.length === 0) return null;
 
-            const config = await loadResolverConfig();
-            const normalized = await normalizeWithLocalModel(cleanBarcode(barcode), candidates, config);
-            return normalized || candidates[0];
-        } catch (error) {
-            return null;
-        }
-    }
-
-    async function normalizeWithLocalModel(barcode, candidates, config) {
-        if (!config.enabled || !config.endpoint || !config.model || candidates.length === 0) {
-            return null;
-        }
-
-        const prompt = [
-            "You normalize product lookup results into strict JSON for a personal inventory database.",
-            "Return only one JSON object and no markdown.",
-            "Schema:",
-            '{"title":"","barcode":"","brand":"","category":"","base_unit":"шт|г|кг|мл|л","typical_pack_size":"","typical_pack_unit":"шт|г|кг|мл|л","perishable":false,"default_shelf_life_days":"","confidence":0}',
-            "Rules:",
-            "- Prefer Russian product title when possible.",
-            "- Do not invent facts absent from candidates.",
-            "- Keep barcode exact.",
-            "- category must be one of: молочка, яйца, сладости, напитки, крупы, мясо, заморозка, соусы, овощи, фрукты, хлеб, чай, кофе, уход, быт, прочее.",
-            "- brand should be filled when it is explicit in title, snippet, description or source fields; otherwise empty string.",
-            "- title should be human-friendly Russian, not all caps, and should keep meaningful distinctions like fat %, flavor, size, class or grade.",
-            "- do not include store names, prices, dates, promo text or review text in title.",
-            "- base_unit and typical_pack_unit must be one of: шт, г, кг, мл, л.",
-            "- if quantity is explicit like 400 г, 0.9 л or 10 шт, extract it.",
-            "- use category 'прочее' only when the product type is genuinely unclear.",
-            "- confidence is from 0 to 1.",
-            `Barcode: ${barcode}`,
-            `Candidates: ${JSON.stringify(candidates, null, 2)}`
-        ].join("\n");
-
-        try {
-            let raw = "";
-
-            if (config.provider === "ollama") {
-                const response = await fetch(`${String(config.endpoint).replace(/\/$/, "")}/api/generate`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        model: config.model,
-                        prompt,
-                        stream: false,
-                        format: "json",
-                        options: {
-                            temperature: Number(config.temperature || 0.1)
-                        }
-                    })
-                });
-                const data = await response.json();
-                raw = data.response || "";
-            } else if (config.provider === "lmstudio") {
-                const response = await fetch(`${String(config.endpoint).replace(/\/$/, "")}/chat/completions`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        model: config.model,
-                        temperature: Number(config.temperature || 0.1),
-                        response_format: { type: "text" },
-                        messages: [
-                            {
-                                role: "system",
-                                content: "You normalize barcode lookup candidates into strict JSON for a personal inventory database. Return only a JSON object."
-                            },
-                            {
-                                role: "user",
-                                content: prompt
-                            }
-                        ]
-                    })
-                });
-                const data = await response.json();
-                raw = data.choices?.[0]?.message?.content || "";
-            } else {
-                return null;
-            }
-
-            const parsed = extractJsonObject(raw);
-            if (!parsed || !parsed.title) return null;
-
-            return {
-                title: normalizeProductTitle(parsed.title),
-                barcode: cleanBarcode(parsed.barcode || barcode),
-                brand: String(parsed.brand || "").trim(),
-                category: normalizeCategory(parsed.category || "прочее"),
-                base_unit: normalizeUnit(parsed.base_unit || parsed.typical_pack_unit || "шт"),
-                typical_pack_size: parsed.typical_pack_size || "",
-                typical_pack_unit: normalizeUnit(parsed.typical_pack_unit || parsed.base_unit || "шт"),
-                perishable: Boolean(parsed.perishable),
-                default_shelf_life_days: parsed.default_shelf_life_days || "",
-                confidence: Number(parsed.confidence || 0),
-                source: "local-llm"
-            };
+            return candidates[0];
         } catch (error) {
             return null;
         }
@@ -542,7 +387,7 @@ module.exports = async function foodDb(tp) {
             `barcode: ${quoteYaml(data.barcode || "")}`,
             "aliases:",
             `  - ${quoteYaml(data.title)}`,
-            `category: ${quoteYaml(data.category || "прочее")}`,
+            `category: ${data.categoryPath ? wikilink(data.categoryPath, data.categoryTitle || "") : ""}`,
             `brand: ${quoteYaml(data.brand || "")}`,
             `store: ${data.storePath ? wikilink(data.storePath, data.storeTitle || "") : ""}`,
             `base_unit: ${data.base_unit || "шт"}`,
@@ -633,6 +478,51 @@ module.exports = async function foodDb(tp) {
         return null;
     }
 
+    async function loadCategories() {
+        return await loadFolder(DIRS.categories);
+    }
+
+    function buildCategoryContent(title) {
+        return [
+            "---",
+            "type: category",
+            `title: ${quoteYaml(title)}`,
+            "aliases:",
+            `  - ${quoteYaml(title)}`,
+            `created: ${today}`,
+            "tags:",
+            "  - еда",
+            "  - category",
+            "---",
+            "",
+            `# ${title}`,
+            "",
+            "## Заметки",
+            "",
+            ">"
+        ].join("\n");
+    }
+
+    async function pickCategory() {
+        const categories = await loadCategories();
+        const labels = categories.map(c => c.title);
+        labels.unshift("+ Новая категория");
+
+        const selected = await tp.system.suggester(labels, labels, false, "Выбери категорию");
+        if (!selected) return null;
+
+        if (selected !== "+ Новая категория") {
+            return categories.find(c => c.title === selected);
+        }
+
+        const title = (await tp.system.prompt("Название новой категории"))?.trim();
+        if (!title) return null;
+
+        const file = await createNote(DIRS.categories, title, buildCategoryContent(title));
+        notice(`Создана категория: ${title}`);
+        return await readFrontmatter(file);
+    }
+
     async function pickStore() {
         const stores = await loadFolder(DIRS.stores);
         const labels = stores.map(store => store.title);
@@ -660,7 +550,8 @@ module.exports = async function foodDb(tp) {
         const finalTitle = (await tp.system.prompt("Название нового товара", suggestedTitle))?.trim();
         if (!finalTitle) return null;
         const barcode = cleanBarcode((await tp.system.prompt(`Штрихкод для '${finalTitle}'`, suggestedBarcode))?.trim() || suggestedBarcode);
-        const category = (await tp.system.prompt(`Категория для '${finalTitle}'`, seed.category || "прочее"))?.trim() || "прочее";
+        const categoryObj = await pickCategory();
+        if (!categoryObj) return null;
         const brand = (await tp.system.prompt(`Бренд для '${finalTitle}'`, seed.brand || ""))?.trim() || "";
         const store = await pickStore();
         const baseUnit = normalizeUnit((await tp.system.prompt(`Базовая единица для '${finalTitle}'`, seed.base_unit || "шт"))?.trim() || "шт");
@@ -678,7 +569,8 @@ module.exports = async function foodDb(tp) {
         const file = await createNote(DIRS.products, finalTitle, buildProductContent({
             title: finalTitle,
             barcode,
-            category,
+            categoryPath: categoryObj.file.path,
+            categoryTitle: categoryObj.title,
             brand,
             storePath: store?.file?.path || "",
             storeTitle: store?.title || "",

@@ -1,10 +1,13 @@
 # Backlog
 
 ## In Progress
-- [ ] [[Ticket-001]] — Автоматический импорт чека по QR (proverkacheka)
+- [ ] 
 
 ## Ready (следующий тикет)
 - [ ] 
+
+## Done
+- [x] [[Ticket-001]] — Автоматический импорт чека по QR (proverkacheka)
 
 ## Icebox (идеи)
 - [ ] 
