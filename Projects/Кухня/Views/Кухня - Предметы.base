@@ -1,6 +1,6 @@
 views:
   - type: table
-    name: Таблица
+    name: Product
     filters:
       and:
         - file.path.contains("Projects/Кухня/Products")
@@ -19,6 +19,10 @@ views:
       - image
       - file.ctime
     sort:
+      - property: aliases
+        direction: DESC
+      - property: barcode
+        direction: DESC
       - property: file.name
         direction: DESC
       - property: brand
