@@ -1,0 +1,19 @@
+---
+type: pantry-item
+product: '[[Projects/Кухня/Products/мюсли-запеченные-с-орехом-500-г-bigbio|Мюсли запеченные
+  с орехом 500 г -- BIGBIO]]'
+source_receipt_item: '[[Projects/Кухня/Receipt Items/2026-05-14-hat4-ч23140-краснодар-димитрова-202-мюсли-запеченные-с-орехом-500-г-bigbio-4|Мюсли
+  запеченные с орехом 500 г -- BIGBIO - покупка]]'
+qty_current: 1.0
+unit: шт
+manufactured_on: ''
+created: '2026-05-15'
+tags:
+- pantry-item
+---
+
+# Мюсли запеченные с орехом 500 г -- BIGBIO - запас
+
+## Заметки
+
+>
