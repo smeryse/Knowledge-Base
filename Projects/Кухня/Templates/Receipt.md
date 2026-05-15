@@ -4,6 +4,7 @@ date:
 store:
 total:
 receipt_image:
+qr_data:
 created:
 tags:
   - еда
