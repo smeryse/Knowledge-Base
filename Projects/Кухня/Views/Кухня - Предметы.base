@@ -20,7 +20,7 @@ views:
       - file.ctime
     sort:
       - property: file.name
-        direction: ASC
+        direction: DESC
       - property: brand
         direction: ASC
       - property: image

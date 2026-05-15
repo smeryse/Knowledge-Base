@@ -139,13 +139,10 @@ module.exports = async function foodImportApi(tp) {
     }
 
     function buildReceiptContent(data, tableRows) {
-        const itemsYaml = data.items && data.items.length > 0
-            ? data.items.map(i => `  - product: ${i.product}\n    qty: ${i.qty}\n    price: ${i.price}\n    unit: ${i.unit}`).join("\n")
-            : "";
         return [
             "---", "type: receipt", `date: ${data.date}`, `store: ${wikilink(data.storePath, data.storeTitle)}`,
             `total: ${data.total}`, `receipt_image: ${data.receiptImage ? quoteYaml(data.receiptImage) : ""}`,
-            "items:", itemsYaml,
+            `qr_data: ${data.qrData ? quoteYaml(data.qrData) : '""'}`,
             `created: ${today}`,
             "tags:", "  - еда", "  - receipt", "---", "", `# Чек ${data.date} - ${data.storeTitle}`, "", "## Позиции", "",
             "| Товар | Кол-во | Фасовка | Цена | В запас |", "| ----- | ------ | ------- | ---- | ------- |", ...tableRows,
@@ -233,7 +230,6 @@ module.exports = async function foodImportApi(tp) {
         const receiptTitle = receiptPath.split("/").pop().replace(/\.md$/, "");
 
         const tableRows = [];
-        const receiptItems = [];
         const mapping = await loadMapping();
 
         for (const item of ticket.items) {
@@ -245,13 +241,6 @@ module.exports = async function foodImportApi(tp) {
             const priceTotal = (Number(item.sum || 0) / 100).toFixed(2);
             const packUnit = item.unit || "шт";
 
-            receiptItems.push({
-                product: wikilink(product.file.path, product.title),
-                qty: qty,
-                price: priceTotal,
-                unit: packUnit
-            });
-
             tableRows.push(`| ${wikilink(product.file.path, product.title)} | ${qty} | - ${packUnit || ""} | ${priceTotal} | Нет |`);
         }
 
@@ -259,7 +248,7 @@ module.exports = async function foodImportApi(tp) {
 
         const receiptContent = buildReceiptContent({
             date, storeTitle: store.title, storePath: store.file.path,
-            total: totalRub, receiptImage: "", items: receiptItems
+            total: totalRub, receiptImage: "", qrData: ""
         }, tableRows);
 
         await app.vault.create(receiptPath, receiptContent);
