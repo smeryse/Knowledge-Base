@@ -671,7 +671,6 @@ module.exports = async function foodDb(tp) {
 
     const createdItems = [];
     const tableRows = [];
-    const receiptItems = [];
 
     while (true) {
         const product = await pickProduct();
@@ -692,17 +691,7 @@ module.exports = async function foodDb(tp) {
         const normalizedPack = convertToBaseUnit(packSize, packUnit, product.base_unit || packUnit);
         const totalBaseUnits = normalizedPack ? normalizedPack * qty : null;
 
-        receiptItems.push({
-            product: wikilink(product.file.path, product.title),
-            qty: qty,
-            price: priceTotal,
-            unit: packUnit || "шт",
-            discount: Boolean(discount),
-            rating: ratingInput || "",
-            review: review || "",
-            add_to_pantry: Boolean(addToPantry)
-        });
-
+        let pantryFile = null;
         let manufacturedOn = "";
 
         if (addToPantry) {
@@ -719,7 +708,7 @@ module.exports = async function foodDb(tp) {
                 }
             }
 
-            await createNote(DIRS.pantry, `${receiptDate} ${product.title}`, buildPantryContent({
+            pantryFile = await createNote(DIRS.pantry, `${receiptDate} ${product.title}`, buildPantryContent({
                 productTitle: product.title,
                 productPath: product.file.path,
                 receiptTitle,
@@ -739,7 +728,8 @@ module.exports = async function foodDb(tp) {
             addToPantry
         });
 
-        tableRows.push(`| ${wikilink(product.file.path, product.title)} | ${qty} | ${packSize || "-"} ${packUnit || ""}`.trim() + ` | ${priceTotal} | ${addToPantry ? "Да" : "Нет"} |`);
+        const pantryCell = pantryFile ? wikilink(pantryFile.path, "Да") : "Нет";
+        tableRows.push(`| ${wikilink(product.file.path, product.title)} | ${qty} | ${packSize || "-"} ${packUnit || ""}`.trim() + ` | ${priceTotal} | ${pantryCell} |`);
     }
 
     if (createdItems.length === 0) {
@@ -748,10 +738,6 @@ module.exports = async function foodDb(tp) {
         notice(`Чек сохранён. Позиции: ${createdItems.length}`);
     }
 
-    const itemsYaml = receiptItems.length > 0
-        ? receiptItems.map(i => `  - product: ${i.product}\n    qty: ${i.qty}\n    price: ${i.price}\n    unit: ${i.unit}`).join("\n")
-        : "";
-
     const lines = [
         "---",
         "type: receipt",
@@ -759,8 +745,7 @@ module.exports = async function foodDb(tp) {
         `store: ${wikilink(store.file.path, store.title)}`,
         `total: ${totalInput}`,
         `receipt_image: ${receiptImage ? quoteYaml(receiptImage) : ""}`,
-        "items:",
-        itemsYaml,
+        `qr_data: ""`,
         `created: ${today}`,
         "tags:",
         "  - еда",
