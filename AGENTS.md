@@ -7,7 +7,6 @@
 
 ## Obsidian / Templater Wiring
 - Templater is configured with `Templates` as the templates folder and `Templates/scripts` as the user scripts folder: see `.obsidian/plugins/templater-obsidian/data.json`.
-- `enable_system_commands` is `false`, so Templater flows must use Obsidian APIs / Node built-ins, not shell commands from inside templates.
 - Current entrypoints are thin wrappers:
   - `Projects/Кухня/Templates/Скан товара.md` -> `tp.user.food_scan(tp)`
   - `Projects/Кухня/Templates/Новый чек.md` -> `tp.user.food_db(tp)`
