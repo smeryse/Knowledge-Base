@@ -1,0 +1,10 @@
+views:
+  - type: cards
+    name: Карточки
+    filters:
+      and:
+        - file.path.contains("Projects/Кухня/Stores")
+        - type = "store"
+    sort:
+      - property: file.name
+        direction: ASC

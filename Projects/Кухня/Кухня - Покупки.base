@@ -1,0 +1,12 @@
+views:
+  - type: table
+    name: Активные
+    filters:
+      and:
+        - file.path.contains("Projects/Кухня/Shopping List")
+        - type = "shopping-item"
+        - status != "done"
+        - status != "cancelled"
+    sort:
+      - property: file.mtime
+        direction: DESC
