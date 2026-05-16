@@ -6,7 +6,7 @@ module.exports = async function foodScan(tp) {
         pantry: `${ROOT}/Pantry`,
         shopping: `${ROOT}/Shopping List`
     };
-    const RESOLVER_CONFIG_PATH = `${ROOT}/resolver-config.json`;
+    const RESOLVER_CONFIG_PATH = `${ROOT}/System/resolver-config.json`;
 
     const today = tp.date.now("YYYY-MM-DD");
 

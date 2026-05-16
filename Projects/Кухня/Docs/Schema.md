@@ -27,17 +27,18 @@ Canvas-версия: [[Schema.canvas]]
 
 ### Физические таблицы
 
-| Папка | Таблица | Одна заметка = |
-| --- | --- | --- |
-| `Products/` | `products` | один товар |
-| `Recipes/` | `recipes` | один рецепт |
-| `Stores/` | `stores` | один магазин |
-| `Receipts/` | `receipts` | один чек |
-| `Receipt Items/` | `receipt_items` | одна позиция чека |
-| `Pantry/` | `pantry_items` | один домашний запас |
-| `Cooking Log/` | `cooking_log` | одно событие готовки |
-| `Meal Plans/` | `meal_plans` | один месячный план |
-| `Shopping List/` | `shopping_items` | один пункт покупки |
+| Папка            | Таблица          | Одна заметка =         |
+| ---------------- | ---------------- | ---------------------- |
+| `Products/`      | `products`       | один товар             |
+| `Categories/`    | `categories`     | одна категория товаров |
+| `Recipes/`       | `recipes`        | один рецепт            |
+| `Stores/`        | `stores`         | один магазин           |
+| `Receipts/`      | `receipts`       | один чек               |
+| `Receipt Items/` | `receipt_items`  | одна позиция чека      |
+| `Pantry/`        | `pantry_items`   | один домашний запас    |
+| `Cooking Log/`   | `cooking_log`    | одно событие готовки   |
+| `Meal Plans/`    | `meal_plans`     | один месячный план     |
+| `Shopping List/` | `shopping_items` | один пункт покупки     |
 
 ### Логические связующие таблицы
 

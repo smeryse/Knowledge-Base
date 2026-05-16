@@ -1,5 +1,5 @@
 module.exports = async function foodReceiptApi(tp) {
-    const CONFIG_PATH = "Projects/Кухня/nalog-config.json";
+    const CONFIG_PATH = "Projects/Кухня/System/nalog-config.json";
 
     const HOST = "irkkt-mobile.nalog.ru:8888";
     const DEVICE_OS = "iOS";

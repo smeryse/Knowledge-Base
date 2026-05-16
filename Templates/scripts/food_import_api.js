@@ -8,7 +8,7 @@ module.exports = async function foodImportApi(tp) {
         receiptItems: `${ROOT}/Receipt Items`,
         pantry: `${ROOT}/Pantry`
     };
-    const MAPPING_PATH = `${ROOT}/receipt-product-mapping.json`;
+    const MAPPING_PATH = `${ROOT}/System/receipt-product-mapping.json`;
 
     const today = tp.date.now("YYYY-MM-DD");
 

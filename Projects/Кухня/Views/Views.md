@@ -63,4 +63,4 @@ aliases:
 
 ## Задачи
 
-[[Food-Tasks]]
+[[Views/Food-Tasks|Food-Tasks]]

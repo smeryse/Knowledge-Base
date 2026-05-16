@@ -179,7 +179,7 @@ Projects/Кухня/
 
 ### Локальная модель для нормализации
 
-1. Настройки лежат в `Projects/Кухня/resolver-config.json`.
+1. Настройки лежат в `Projects/Кухня/System/resolver-config.json`.
 2. По умолчанию ожидается `LM Studio` OpenAI-compatible endpoint `http://127.0.0.1:1234/v1`.
 3. Модель по умолчанию: `qwen2.5-3b-instruct`.
 4. Resolver собирает сырые кандидаты из интернета и просит локальную модель привести их к строгому JSON под твою схему товара.
