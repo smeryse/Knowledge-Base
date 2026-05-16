@@ -18,9 +18,3 @@ tags:
   - еда
   - receipt-item
 ---
-
-# Позиция чека <% tp.file.title %>
-
-## Заметки
-
->

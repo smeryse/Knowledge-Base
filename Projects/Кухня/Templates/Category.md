@@ -7,9 +7,3 @@ tags:
   - еда
   - category
 ---
-
-# <% tp.frontmatter.title || tp.file.title %>
-
-## Заметки
-
->

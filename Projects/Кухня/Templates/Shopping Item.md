@@ -12,9 +12,3 @@ tags:
   - еда
   - shopping-item
 ---
-
-# Покупка <% tp.file.title %>
-
-## Заметки
-
->

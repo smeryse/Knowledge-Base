@@ -11,9 +11,3 @@ tags:
   - еда
   - pantry-item
 ---
-
-# Запас <% tp.file.title %>
-
-## Заметки
-
->

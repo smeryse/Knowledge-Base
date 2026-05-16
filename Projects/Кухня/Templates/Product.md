@@ -5,8 +5,7 @@ barcode:
 aliases: []
 category:
 brand:
-store:
-base_unit:
+base_unit: шт
 typical_pack_size:
 typical_pack_unit:
 perishable: false
