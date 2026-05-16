@@ -1,13 +1,32 @@
 views:
-  - type: cards
+  - type: table
     name: Таблица
     filters:
       and:
         - file.path.contains("Projects/Кухня/Products")
         - type == "product"
     order:
+      - file.name
+      - barcode
       - aliases
+      - category
+      - brand
+      - base_unit
+      - typical_pack_size
+      - typical_pack_unit
+      - perishable
+      - default_shelf_life_days
+      - price
+      - image
+      - file.ctime
+      - created
     sort:
+      - property: file.ctime
+        direction: ASC
+      - property: title
+        direction: DESC
       - property: file.name
         direction: ASC
     image: note.image
+    columnSize:
+      note.barcode: 131
