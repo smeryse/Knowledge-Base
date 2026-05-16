@@ -142,7 +142,7 @@ module.exports = async function foodImportApi(tp) {
     function buildReceiptItemContent(item) {
         return [
             "---", "type: receipt-item", `date: ${item.date}`, `receipt: ${wikilink(item.receiptPath, item.receiptTitle)}`,
-            `store: ${wikilink(item.storePath, item.storeTitle)}`, `product: ${wikilink(item.productPath, item.productTitle)}`,
+            `product: ${wikilink(item.productPath, item.productTitle)}`,
             `qty: ${item.qty}`, `pack_size: ${item.packSize || ""}`, `pack_unit: ${item.packUnit || ""}`,
             `price_total: ${item.priceTotal}`, `price_per_base_unit: ${item.pricePerBaseUnit ?? ""}`,
             `discount: ${Boolean(item.discount)}`, `rating: ${item.rating || ""}`, `review: ${quoteYaml(item.review || "")}`,
