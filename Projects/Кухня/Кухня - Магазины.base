@@ -4,7 +4,7 @@ views:
     filters:
       and:
         - file.path.contains("Projects/Кухня/Stores")
-        - type = "store"
+        - type == "store"
     sort:
       - property: file.name
         direction: ASC
