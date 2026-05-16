@@ -6,7 +6,7 @@ aliases: []
 category:
 brand:
 store:
-base_unit: pcs
+base_unit:
 typical_pack_size:
 typical_pack_unit:
 perishable: false
