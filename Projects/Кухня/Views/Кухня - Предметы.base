@@ -11,7 +11,6 @@ views:
       - aliases
       - category
       - brand
-      - base_unit
       - typical_pack_size
       - typical_pack_unit
       - perishable
@@ -19,14 +18,25 @@ views:
       - price
       - image
       - file.ctime
-      - created
     sort:
+      - property: brand
+        direction: ASC
+      - property: file.name
+        direction: ASC
+      - property: image
+        direction: DESC
       - property: file.ctime
         direction: ASC
       - property: title
         direction: DESC
-      - property: file.name
-        direction: ASC
     image: note.image
     columnSize:
-      note.barcode: 131
+      file.name: 251
+      note.barcode: 140
+      note.aliases: 229
+      note.category: 113
+      note.typical_pack_size: 57
+      note.typical_pack_unit: 52
+      note.perishable: 48
+      note.default_shelf_life_days: 88
+      note.image: 381
