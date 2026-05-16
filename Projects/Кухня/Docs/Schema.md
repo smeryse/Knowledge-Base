@@ -73,6 +73,12 @@ erDiagram
         date created_at
     }
 
+    CATEGORIES {
+        string category_id PK
+        string title UK
+        date created_at
+    }
+
     STORES {
         string store_id PK
         string title UK
@@ -175,6 +181,7 @@ erDiagram
         date created_at
     }
 
+    CATEGORIES ||--o{ PRODUCTS : categorizes
     STORES ||--o{ PRODUCTS : default_for
     STORES ||--o{ RECEIPTS : source_of
     PRODUCTS ||--o{ RECIPE_INGREDIENTS : used_in
@@ -226,6 +233,16 @@ erDiagram
 | `store_id`   | string | нет  | PK   | идентификатор магазина |
 | `title`      | string | нет  | UK   | название магазина      |
 | `created_at` | date   | нет  |      | дата создания          |
+
+### `categories`
+
+Справочник категорий товаров.
+
+| Поле           | Тип    | Null | Ключ | Смысл                    |
+| -------------- | ------ | ---- | ---- | ------------------------ |
+| `category_id`  | string | нет  | PK   | идентификатор категории  |
+| `title`        | string | нет  | UK   | название категории       |
+| `created_at`   | date   | нет  |      | дата создания            |
 
 ### `recipes`
 
