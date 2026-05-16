@@ -19,9 +19,9 @@ views:
       - image
       - file.ctime
     sort:
-      - property: brand
-        direction: ASC
       - property: file.name
+        direction: ASC
+      - property: brand
         direction: ASC
       - property: image
         direction: DESC
@@ -39,4 +39,4 @@ views:
       note.typical_pack_unit: 52
       note.perishable: 48
       note.default_shelf_life_days: 88
-      note.image: 381
+      note.image: 144
