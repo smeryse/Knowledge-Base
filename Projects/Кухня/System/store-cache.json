@@ -14,5 +14,9 @@
   "Ozon Fresh": {
     "name": "Ozon Fresh",
     "method": "exact"
+  },
+  "ozon.ru": {
+    "name": "ozon.ru",
+    "method": "exact"
   }
 }
