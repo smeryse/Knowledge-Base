@@ -10,5 +10,9 @@
   "фикспрайс": {
     "name": "фикспрайс",
     "method": "exact"
+  },
+  "Ozon Fresh": {
+    "name": "Ozon Fresh",
+    "method": "exact"
   }
 }
