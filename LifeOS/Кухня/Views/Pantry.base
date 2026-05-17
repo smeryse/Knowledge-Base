@@ -1,0 +1,19 @@
+filters:
+  and:
+    - type == "pantry-item"
+views:
+  - type: table
+    name: Таблица
+    order:
+      - file.name
+      - product
+      - qty_current
+      - expires_on
+      - manufactured_on
+      - location
+      - file.links
+    sort:
+      - property: file.ctime
+        direction: DESC
+    columnSize:
+      note.product: 296

@@ -1,0 +1,20 @@
+views:
+  - type: table
+    name: Все чеки
+    filters:
+      and:
+        - type == "receipt"
+    groupBy:
+      property: date
+      direction: DESC
+    order:
+      - file.name
+      - date
+      - store
+      - created
+      - total
+  - type: table
+    name: Последние 10
+    filters:
+      and:
+        - type == "receipt"

@@ -1,6 +1,6 @@
 ---
 type: pantry-item
-product: [[Заменитель сахара Novasweet]]
+product: "[[Заменитель сахара Novasweet]]
 source_receipt_item: 
 qty_current: 1
 unit: pcs
