@@ -6,6 +6,8 @@ views:
         - file.path.contains("LifeOS/Кухня/Receipts")
         - type == "receipt"
     sort:
+      - property: file.name
+        direction: DESC
       - property: date
         direction: DESC
     limit: 50
