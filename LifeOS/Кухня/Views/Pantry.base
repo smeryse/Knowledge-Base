@@ -11,9 +11,11 @@ views:
       - expires_on
       - manufactured_on
       - location
-      - file.links
+      - file.backlinks
     sort:
       - property: file.ctime
         direction: DESC
     columnSize:
       note.product: 296
+      note.expires_on: 11
+      note.manufactured_on: 61
