@@ -1,6 +1,6 @@
 ---
 type: pantry-item
-product: [[Соус соевый soydon 1л]]
+product: [[LifeOS/Кухня/Products/соус-соевыи-soydon-1л|Соус соевый soydon 1л]]
 source_receipt_item: 
 qty_current: 1
 unit: pcs

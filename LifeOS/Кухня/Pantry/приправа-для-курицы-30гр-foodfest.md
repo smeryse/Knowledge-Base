@@ -1,6 +1,6 @@
 ---
 type: pantry-item
-product: [[Приправа для курицы 30гр foodfest]]
+product: [[LifeOS/Кухня/Products/приправа-для-курицы-30гр-foodfest|Приправа для курицы 30гр foodfest]]
 source_receipt_item: 
 qty_current: 30
 unit: g

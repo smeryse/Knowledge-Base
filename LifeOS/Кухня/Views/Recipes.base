@@ -9,3 +9,153 @@ views:
       - property: file.name
         direction: ASC
     image: note.image
+  - type: table
+    name: Таблица
+    filters:
+      and:
+        - file.path.contains("LifeOS/Кухня/Recipes")
+        - type == "recipe"
+    order:
+      - file.name
+      - title
+      - dish_type
+      - servings
+      - total_time_min
+      - source
+      - recipe_status
+      - products
+      - created
+    sort:
+      - property: file.name
+        direction: ASC
+    image: note.image
+    columnSize:
+      file.name: 200
+      note.title: 200
+      note.dish_type: 100
+      note.servings: 70
+      note.total_time_min: 80
+      note.source: 80
+      note.recipe_status: 100
+  - type: table
+    name: По типу блюда
+    filters:
+      and:
+        - file.path.contains("LifeOS/Кухня/Recipes")
+        - type == "recipe"
+    order:
+      - file.name
+      - title
+      - dish_type
+      - servings
+      - total_time_min
+      - source
+      - recipe_status
+      - products
+      - created
+    sort:
+      - property: dish_type
+        direction: ASC
+      - property: file.name
+        direction: ASC
+    group:
+      target: dish_type
+    image: note.image
+    columnSize:
+      file.name: 200
+      note.title: 200
+      note.dish_type: 100
+      note.servings: 70
+      note.total_time_min: 80
+      note.source: 80
+      note.recipe_status: 100
+  - type: table
+    name: По времени
+    filters:
+      and:
+        - file.path.contains("LifeOS/Кухня/Recipes")
+        - type == "recipe"
+    order:
+      - file.name
+      - title
+      - dish_type
+      - servings
+      - total_time_min
+      - source
+      - recipe_status
+      - products
+      - created
+    sort:
+      - property: total_time_min
+        direction: ASC
+    image: note.image
+    columnSize:
+      file.name: 200
+      note.title: 200
+      note.dish_type: 100
+      note.servings: 70
+      note.total_time_min: 80
+      note.source: 80
+      note.recipe_status: 100
+  - type: table
+    name: Без изображения
+    filters:
+      and:
+        - file.path.contains("LifeOS/Кухня/Recipes")
+        - type == "recipe"
+        - or:
+            - image == ""
+            - image = null
+    order:
+      - file.name
+      - title
+      - dish_type
+      - servings
+      - total_time_min
+      - source
+      - recipe_status
+      - products
+      - created
+    sort:
+      - property: file.name
+        direction: ASC
+    image: note.image
+    columnSize:
+      file.name: 200
+      note.title: 200
+      note.dish_type: 100
+      note.servings: 70
+      note.total_time_min: 80
+      note.source: 80
+      note.recipe_status: 100
+  - type: table
+    name: Неактивные
+    filters:
+      and:
+        - file.path.contains("LifeOS/Кухня/Recipes")
+        - type == "recipe"
+        - recipe_status != "active"
+    order:
+      - file.name
+      - title
+      - dish_type
+      - servings
+      - total_time_min
+      - source
+      - recipe_status
+      - products
+      - created
+    sort:
+      - property: recipe_status
+        direction: ASC
+      - property: file.name
+        direction: ASC
+    image: note.image
+    columnSize:
+      file.name: 200
+      note.title: 200
+      note.dish_type: 100
+      note.servings: 70
+      note.total_time_min: 80
+      note.source: 80
+      note.recipe_status: 100

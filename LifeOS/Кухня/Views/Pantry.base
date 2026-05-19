@@ -17,5 +17,128 @@ views:
         direction: DESC
     columnSize:
       note.product: 296
-      note.expires_on: 11
-      note.manufactured_on: 61
+      note.expires_on: 107
+      note.manufactured_on: 121
+  - type: table
+    name: Не привязан к чеку
+    filters:
+      and:
+        - type == "pantry-item"
+        - file.backlinks = null
+    order:
+      - file.name
+      - product
+      - qty_current
+      - expires_on
+      - manufactured_on
+      - location
+      - file.backlinks
+    sort:
+      - property: file.backlinks
+        direction: ASC
+      - property: file.name
+        direction: ASC
+    columnSize:
+      note.product: 296
+      note.qty_current: 90
+      note.expires_on: 107
+      note.manufactured_on: 121
+      note.location: 120
+  - type: table
+    name: Без даты производства
+    filters:
+      and:
+        - type == "pantry-item"
+        - or:
+            - manufactured_on = ""
+            - manufactured_on = null
+    order:
+      - file.name
+      - product
+      - qty_current
+      - expires_on
+      - manufactured_on
+      - location
+      - file.backlinks
+    sort:
+      - property: file.name
+        direction: ASC
+    columnSize:
+      note.product: 296
+      note.qty_current: 90
+      note.expires_on: 107
+      note.manufactured_on: 121
+      note.location: 120
+  - type: table
+    name: Без срока годности
+    filters:
+      and:
+        - type == "pantry-item"
+        - or:
+            - expires_on = ""
+            - expires_on = null
+    order:
+      - file.name
+      - product
+      - qty_current
+      - expires_on
+      - manufactured_on
+      - location
+      - file.backlinks
+    sort:
+      - property: file.name
+        direction: ASC
+    columnSize:
+      note.product: 296
+      note.qty_current: 90
+      note.expires_on: 107
+      note.manufactured_on: 121
+      note.location: 120
+  - type: table
+    name: Просрочка
+    filters:
+      and:
+        - expires_on != null
+        - expires_on != ""
+        - expires_on < date(today)
+    order:
+      - file.name
+      - product
+      - qty_current
+      - expires_on
+      - manufactured_on
+      - location
+      - file.backlinks
+    sort:
+      - property: expires_on
+        direction: ASC
+    columnSize:
+      note.product: 296
+      note.qty_current: 90
+      note.expires_on: 107
+      note.manufactured_on: 121
+      note.location: 120
+  - type: table
+    name: По категориям
+    order:
+      - file.name
+      - product
+      - qty_current
+      - expires_on
+      - manufactured_on
+      - location
+      - file.backlinks
+      - category_id
+    sort:
+      - property: product.category
+        direction: ASC
+      - property: file.name
+        direction: ASC
+    group:
+      target: product.category
+    columnSize:
+      note.product: 296
+      note.qty_current: 90
+      note.expires_on: 107
+      note.manufactured_on: 121
+      note.location: 120

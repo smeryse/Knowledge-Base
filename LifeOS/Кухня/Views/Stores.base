@@ -8,3 +8,22 @@ views:
     sort:
       - property: file.name
         direction: ASC
+  - type: table
+    name: Таблица
+    filters:
+      and:
+        - file.path.contains("LifeOS/Кухня/Stores")
+        - type == "store"
+    order:
+      - file.name
+      - title
+      - aliases
+      - created
+    sort:
+      - property: file.name
+        direction: ASC
+    columnSize:
+      file.name: 200
+      note.title: 200
+      note.aliases: 200
+      note.created: 100

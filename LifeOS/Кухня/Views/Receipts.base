@@ -13,8 +13,116 @@ views:
       - store
       - created
       - total
+    columnSize:
+      file.name: 200
+      note.date: 100
+      note.store: 150
+      note.total: 80
+      note.created: 100
   - type: table
     name: Последние 10
     filters:
       and:
         - type == "receipt"
+    order:
+      - file.name
+      - date
+      - store
+      - total
+    sort:
+      - property: date
+        direction: DESC
+      - property: file.ctime
+        direction: DESC
+    columnSize:
+      file.name: 200
+      note.date: 100
+      note.store: 150
+      note.total: 80
+  - type: table
+    name: По магазинам
+    filters:
+      and:
+        - type == "receipt"
+    order:
+      - file.name
+      - date
+      - store
+      - total
+      - created
+    sort:
+      - property: store
+        direction: ASC
+      - property: date
+        direction: DESC
+    group:
+      target: store
+    columnSize:
+      file.name: 200
+      note.date: 100
+      note.store: 150
+      note.total: 80
+      note.created: 100
+  - type: table
+    name: Без фото
+    filters:
+      and:
+        - type == "receipt"
+        - or:
+            - receipt_image == ""
+            - receipt_image = null
+    order:
+      - file.name
+      - date
+      - store
+      - total
+      - receipt_image
+    sort:
+      - property: date
+        direction: DESC
+    columnSize:
+      file.name: 200
+      note.date: 100
+      note.store: 150
+      note.total: 80
+  - type: table
+    name: Без QR
+    filters:
+      and:
+        - type == "receipt"
+        - or:
+            - qr_data == ""
+            - qr_data = null
+    order:
+      - file.name
+      - date
+      - store
+      - total
+      - qr_data
+    sort:
+      - property: date
+        direction: DESC
+    columnSize:
+      file.name: 200
+      note.date: 100
+      note.store: 150
+      note.total: 80
+  - type: table
+    name: По сумме
+    filters:
+      and:
+        - type == "receipt"
+    order:
+      - file.name
+      - date
+      - store
+      - total
+    sort:
+      - property: total
+        direction: DESC
+    columnSize:
+      file.name: 200
+      note.date: 100
+      note.store: 150
+      note.total: 80
+      note.created: 100

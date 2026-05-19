@@ -1,6 +1,6 @@
 ---
 type: pantry-item
-product: [[Итальянские травы 15г Foodfest]]
+product: [[LifeOS/Кухня/Products/итальянские-травы-15г-foodfest|Итальянские травы 15г Foodfest]]
 source_receipt_item: 
 qty_current: 15
 unit: g

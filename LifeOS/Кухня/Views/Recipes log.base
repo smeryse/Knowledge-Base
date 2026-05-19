@@ -1,3 +1,74 @@
+filters:
+  and:
+    - type == "recipe-log"
 views:
   - type: table
     name: Таблица
+    order:
+      - file.name
+      - recipe
+      - cooked_on
+      - servings
+      - rating
+      - notes
+    sort:
+      - property: cooked_on
+        direction: DESC
+    columnSize:
+      file.name: 200
+      note.recipe: 200
+      note.cooked_on: 100
+      note.servings: 70
+      note.rating: 60
+      note.notes: 300
+  - type: table
+    name: По рецепту
+    filters:
+      and:
+        - type == "recipe-log"
+    group:
+      target: recipe
+    order:
+      - file.name
+      - recipe
+      - cooked_on
+      - servings
+      - rating
+      - notes
+    sort:
+      - property: recipe
+        direction: ASC
+      - property: cooked_on
+        direction: DESC
+    columnSize:
+      file.name: 200
+      note.recipe: 200
+      note.cooked_on: 100
+      note.servings: 70
+      note.rating: 60
+      note.notes: 300
+  - type: table
+    name: Без оценки
+    filters:
+      and:
+        - type == "recipe-log"
+        - or:
+          - rating == ""
+          - rating = null
+    order:
+      - file.name
+      - recipe
+      - cooked_on
+      - servings
+      - rating
+      - notes
+    sort:
+      - property: cooked_on
+        direction: DESC
+    columnSize:
+      file.name: 200
+      note.recipe: 200
+      note.cooked_on: 100
+      note.servings: 70
+      note.rating: 60
+      note.notes: 300

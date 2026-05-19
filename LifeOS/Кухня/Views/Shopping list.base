@@ -7,8 +7,78 @@ views:
         - type == "shopping-item"
         - status != "done"
         - status != "cancelled"
+    order:
+      - file.name
+      - title
+      - status
+      - qty
+      - unit
+      - category
+      - created
     sort:
       - property: file.name
         direction: ASC
       - property: file.mtime
         direction: DESC
+    columnSize:
+      file.name: 200
+      note.title: 200
+      note.status: 80
+      note.qty: 60
+      note.unit: 60
+      note.category: 120
+  - type: table
+    name: Завершённые
+    filters:
+      and:
+        - file.path.contains("LifeOS/Кухня/Shopping List")
+        - type == "shopping-item"
+        - or:
+          - status == "done"
+          - status == "cancelled"
+    order:
+      - file.name
+      - title
+      - status
+      - qty
+      - unit
+      - category
+      - created
+    sort:
+      - property: file.mtime
+        direction: DESC
+    columnSize:
+      file.name: 200
+      note.title: 200
+      note.status: 80
+      note.qty: 60
+      note.unit: 60
+      note.category: 120
+  - type: table
+    name: Все
+    filters:
+      and:
+        - file.path.contains("LifeOS/Кухня/Shopping List")
+        - type == "shopping-item"
+    group:
+      target: status
+    order:
+      - file.name
+      - title
+      - status
+      - qty
+      - unit
+      - category
+      - created
+    sort:
+      - property: status
+        direction: ASC
+      - property: file.mtime
+        direction: DESC
+    columnSize:
+      file.name: 200
+      note.title: 200
+      note.status: 80
+      note.qty: 60
+      note.unit: 60
+      note.category: 120

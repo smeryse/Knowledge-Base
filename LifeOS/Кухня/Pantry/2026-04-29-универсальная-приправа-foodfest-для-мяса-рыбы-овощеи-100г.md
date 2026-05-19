@@ -1,6 +1,6 @@
 ---
 type: pantry-item
-product: [[Универсальная приправа FOODFEST для мяса, рыбы, овощей 100г]]
+product: [[LifeOS/Кухня/Products/универсальная-приправа-foodfest-для-мяса-рыбы-овощеи-100г|Универсальная приправа FOODFEST для мяса, рыбы, овощей 100г]]
 source_receipt_item: 
 qty_current: 100
 unit: g

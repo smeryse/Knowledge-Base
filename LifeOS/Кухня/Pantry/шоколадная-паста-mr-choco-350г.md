@@ -1,6 +1,6 @@
 ---
 type: pantry-item
-product: [[Шоколадная паста Mr. Choco 350г]]
+product: [[LifeOS/Кухня/Products/шоколадная-паста-mr-choco-350г|Шоколадная паста Mr. Choco 350г]]
 source_receipt_item: 
 qty_current: 1
 unit: pcs

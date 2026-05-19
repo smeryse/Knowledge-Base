@@ -1,5 +1,5 @@
 views:
-  - type: table
+  - type: cards
     name: Карточки
     filters:
       and:
@@ -12,3 +12,39 @@ views:
         direction: ASC
     markers: number
     indentProperties: false
+  - type: table
+    name: Таблица
+    filters:
+      and:
+        - type == "category"
+        - file.path.contains("LifeOS/Кухня/Categories/")
+    order:
+      - file.name
+      - title
+      - aliases
+      - created
+    sort:
+      - property: file.name
+        direction: ASC
+    columnSize:
+      file.name: 200
+      note.title: 200
+      note.aliases: 200
+      note.created: 100
+  - type: table
+    name: Без товаров
+    filters:
+      and:
+        - type == "category"
+        - file.path.contains("LifeOS/Кухня/Categories/")
+    order:
+      - file.name
+      - title
+      - aliases
+    sort:
+      - property: file.name
+        direction: ASC
+    columnSize:
+      file.name: 200
+      note.title: 200
+      note.aliases: 200
