@@ -8,9 +8,8 @@ aliases:
   - История чеков
   - Покупки по чекам
 ---
-# Чеки
 
-← [[Кухня]] | [[Views/Обзор|Обзор]] | [[Views/Рецепты|Рецепты]] | [[Views/Запасы|Запасы]] | [[Views/Покупки|Покупки]] | [[Views/Готовка|Готовка]] | [[Views/План питания|План питания]] | [[Views/Views|Views]]
+← [[Кухня]] | [[Review|Review]] | [[Recipes|Recipes]] | [[Pantry|Pantry]] | [[Shopping list|Shopping list]] | [[Recipes log|Recipes log]] | [[LifeOS/Кухня/Views/Meal plan|Meal plan]] | [[Views/Views|Views]]
 
 ---
 

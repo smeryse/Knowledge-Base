@@ -8,7 +8,7 @@ aliases:
 
 # План питания
 
-← [[Кухня]] | [[Views/Обзор|Обзор]] | [[Views/Рецепты|Рецепты]] | [[Views/Запасы|Запасы]] | [[Views/Покупки|Покупки]] | [[Views/Готовка|Готовка]] | [[Views/Чеки|Чеки]] | [[Views/Views|Views]]
+← [[Кухня]] | [[Review|Review]] | [[Recipes|Recipes]] | [[Pantry|Pantry]] | [[Shopping list|Shopping list]] | [[Recipes log|Recipes log]] | [[Receipts|Чеки]] | [[Views/Views|Views]]
 
 ## Месячные планы
 

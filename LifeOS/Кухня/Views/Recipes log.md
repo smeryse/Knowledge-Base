@@ -8,7 +8,7 @@ aliases:
 
 # Готовка
 
-← [[Кухня]] | [[Views/Обзор|Обзор]] | [[Views/Рецепты|Рецепты]] | [[Views/Запасы|Запасы]] | [[Views/Покупки|Покупки]] | [[Views/План питания|План питания]] | [[Views/Чеки|Чеки]] | [[Views/Views|Views]]
+← [[Кухня]] | [[Review|Review]] | [[Recipes|Recipes]] | [[Pantry|Pantry]] | [[Shopping list|Shopping list]] | [[LifeOS/Кухня/Views/Meal plan|Meal plan]] | [[Receipts|Чеки]] | [[Views/Views|Views]]
 
 ## Последние приготовления
 

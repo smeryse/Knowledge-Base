@@ -8,7 +8,7 @@ aliases:
 
 # Рецепты
 
-← [[Кухня]] | [[Views/Обзор|Обзор]] | [[Views/Запасы|Запасы]] | [[Views/Покупки|Покупки]] | [[Views/Готовка|Готовка]] | [[Views/План питания|План питания]] | [[Views/Чеки|Чеки]] | [[Views/Views|Views]]
+← [[Кухня]] | [[Review|Review]] | [[Pantry|Pantry]] | [[Shopping list|Shopping list]] | [[Recipes log|Recipes log]] | [[LifeOS/Кухня/Views/Meal plan|Meal plan]] | [[Receipts|Чеки]] | [[Views/Views|Views]]
 
 ## Активные рецепты
 

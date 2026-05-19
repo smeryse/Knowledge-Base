@@ -15,13 +15,13 @@ aliases:
 
 Центральная точка для всех табличных представлений (DB Folder).
 
-← [[Кухня]] | [[Views/Обзор|Обзор]] | [[Views/Рецепты|Рецепты]] | [[Views/Запасы|Запасы]] | [[Views/Покупки|Покупки]] | [[Views/Готовка|Готовка]] | [[Views/План питания|План питания]] | [[Views/Чеки|Чеки]]
+← [[Кухня]] | [[Review|Review]] | [[Recipes|Recipes]] | [[Pantry|Pantry]] | [[Shopping list|Shopping list]] | [[Recipes log|Recipes log]] | [[LifeOS/Кухня/Views/Meal plan|Meal plan]] | [[Receipts|Чеки]]
 
 ---
 
 ## Все товары
 
-![[Views/Кухня - Предметы.base]]
+![[Products.base]]
 
 ---
 
@@ -33,31 +33,31 @@ aliases:
 
 ## Рецепты
 
-![[Views/Кухня - Рецепты.base]]
+![[Recipes.base]]
 
 ---
 
 ## Чеки
 
-![[Views/Кухня - Чеки.base]]
+![[Receipts.base]]
 
 ---
 
 ## Магазины
 
-![[Views/Кухня - Магазины.base]]
+![[Stores.base]]
 
 ---
 
 ## Категории
 
-![[Views/Кухня - Категории.base]]
+![[Category.base]]
 
 ---
 
 ## Покупки (активные)
 
-![[Views/Кухня - Покупки.base]]
+![[Shopping list.base]]
 
 ---
 

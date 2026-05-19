@@ -9,7 +9,7 @@ aliases:
 
 # Запасы
 
-← [[Кухня]] | [[Views/Обзор|Обзор]] | [[Views/Рецепты|Рецепты]] | [[Views/Покупки|Покупки]] | [[Views/Готовка|Готовка]] | [[Views/План питания|План питания]] | [[Views/Чеки|Чеки]] | [[Views/Views|Views]]
+← [[Кухня]] | [[Review|Review]] | [[Recipes|Recipes]] | [[Shopping list|Shopping list]] | [[Recipes log|Recipes log]] | [[LifeOS/Кухня/Views/Meal plan|Meal plan]] | [[Receipts|Чеки]] | [[Views/Views|Views]]
 
 ## Активные запасы
 

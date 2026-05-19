@@ -9,7 +9,7 @@ aliases:
 
 # Обзор
 
-← [[Кухня]] | [[Views/Рецепты|Рецепты]] | [[Views/Запасы|Запасы]] | [[Views/Покупки|Покупки]] | [[Views/Готовка|Готовка]] | [[Views/План питания|План питания]] | [[Views/Чеки|Чеки]] | [[Views/Views|Views]] | [[Views/Food-Tasks|Food-Tasks]]
+← [[Кухня]] | [[Recipes|Recipes]] | [[Pantry|Pantry]] | [[Shopping list|Shopping list]] | [[Recipes log|Recipes log]] | [[LifeOS/Кухня/Views/Meal plan|Meal plan]] | [[Receipts|Чеки]] | [[Views/Views|Views]] | [[Views/Food-Tasks|Food-Tasks]]
 
 ## Сводка
 
