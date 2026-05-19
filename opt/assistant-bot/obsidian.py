@@ -369,11 +369,6 @@ class KitchenManager:
         alias = alias.strip()
         return f"[[{clean}|{alias}]]" if alias else f"[[{clean}]]"
     
-    def _wikilink_table(self, rel_path, alias=""):
-        clean = rel_path.replace('.md', '').strip()
-        alias = alias.strip()
-        return f"[[{clean}\\|{alias}]]" if alias else f"[[{clean}]]"
-    
     def _load_mapping(self):
         if os.path.exists(self.mapping_path):
             with open(self.mapping_path, 'r', encoding='utf-8') as f:
@@ -647,12 +642,12 @@ class KitchenManager:
         title = f"{date_str} {store_name}"
         path = self._unique_path(self.receipts_path, title)
         
-        rel_store = self._make_relative(store_path).replace('.md', '')
+        store_slug = os.path.splitext(os.path.basename(store_path))[0]
         
         fm = {
             'type': 'receipt',
             'date': date_str,
-            'store': self._wikilink(rel_store, store_name),
+            'store': self._wikilink(store_slug, store_name),
             'total': total_sum / 100,
             'receipt_image': '',
             'qr_data': qr_data,
@@ -668,15 +663,15 @@ class KitchenManager:
         short = self._short_name(product_name)
         path = self._unique_path(self.pantry_path, short)
         
-        rel_product = self._make_relative(product_path).replace('.md', '')
+        product_slug = os.path.splitext(os.path.basename(product_path))[0]
         receipt_link = ''
         if receipt_path:
-            receipt_rel = self._make_relative(receipt_path).replace('.md', '')
-            receipt_link = self._wikilink(receipt_rel, f"{product_name} - покупка")
+            receipt_slug = os.path.splitext(os.path.basename(receipt_path))[0]
+            receipt_link = self._wikilink(receipt_slug, f"{product_name} - покупка")
         
         fm = {
             'type': 'pantry-item',
-            'product': self._wikilink(rel_product, product_name),
+            'product': self._wikilink(product_slug, product_name),
             'source_receipt': receipt_link,
             'qty_current': qty,
             'unit': unit,
@@ -684,23 +679,22 @@ class KitchenManager:
             'created': datetime.now().strftime('%Y-%m-%d'),
             'tags': ['pantry-item']
         }
-        body = f"# {product_name} - запас\n\n## Заметки\n\n>"
-        self._write_note(path, fm, body)
+        self._write_note(path, fm, "")
         return path
     
     def update_receipt_table(self, receipt_path, product_path, product_name, qty, price_total, pantry_path=None):
         with open(receipt_path, 'r', encoding='utf-8') as f:
             content = f.read()
         
-        rel_product = self._make_relative(product_path).replace('.md', '')
+        product_slug = os.path.splitext(os.path.basename(product_path))[0]
         
         if pantry_path and os.path.exists(pantry_path):
-            rel_pantry = self._make_relative(pantry_path).replace('.md', '')
-            pantry_cell = self._wikilink_table(rel_pantry, "Да")
+            pantry_slug = os.path.splitext(os.path.basename(pantry_path))[0]
+            pantry_cell = self._wikilink(pantry_slug, "Да")
         else:
             pantry_cell = "Нет"
         
-        row = f"| {self._wikilink_table(rel_product, product_name)} | {qty} | - шт | {price_total/100:.2f} | {pantry_cell} |"
+        row = f"| {self._wikilink(product_slug, product_name)} | {qty} | - шт | {price_total/100:.2f} | {pantry_cell} |"
         
         if "## Заметки" in content:
             content = content.replace("## Заметки", f"{row}\n## Заметки")

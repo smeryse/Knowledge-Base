@@ -1,9 +1,9 @@
+filters:
+  and:
+    - type == "receipt"
 views:
   - type: table
     name: Все чеки
-    filters:
-      and:
-        - type == "receipt"
     groupBy:
       property: date
       direction: DESC
@@ -21,9 +21,6 @@ views:
       note.created: 100
   - type: table
     name: Последние 10
-    filters:
-      and:
-        - type == "receipt"
     order:
       - file.name
       - date
@@ -41,9 +38,8 @@ views:
       note.total: 80
   - type: table
     name: По магазинам
-    filters:
-      and:
-        - type == "receipt"
+    group:
+      target: store
     order:
       - file.name
       - date
@@ -55,8 +51,6 @@ views:
         direction: ASC
       - property: date
         direction: DESC
-    group:
-      target: store
     columnSize:
       file.name: 200
       note.date: 100
@@ -67,7 +61,6 @@ views:
     name: Без фото
     filters:
       and:
-        - type == "receipt"
         - or:
             - receipt_image == ""
             - receipt_image = null
@@ -89,7 +82,6 @@ views:
     name: Без QR
     filters:
       and:
-        - type == "receipt"
         - or:
             - qr_data == ""
             - qr_data = null
@@ -109,9 +101,6 @@ views:
       note.total: 80
   - type: table
     name: По сумме
-    filters:
-      and:
-        - type == "receipt"
     order:
       - file.name
       - date

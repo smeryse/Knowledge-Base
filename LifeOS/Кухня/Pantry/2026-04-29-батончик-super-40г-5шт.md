@@ -1,6 +1,6 @@
 ---
 type: pantry-item
-product: [[LifeOS/Кухня/Products/батончик-super-40г-5шт|Батончик Super 40г 5шт]]
+product: [[батончик-super-40г-5шт|Батончик Super 40г 5шт]]
 source_receipt_item: 
 qty_current: 20
 unit: pcs
@@ -11,9 +11,3 @@ tags:
   - еда
   - pantry-item
 ---
-
-# Батончик Super 40г 5шт - запас
-
-## Заметки
-
->

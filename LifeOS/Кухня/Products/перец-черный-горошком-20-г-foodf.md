@@ -7,7 +7,7 @@ aliases:
 - Перец FOODF
 - Перец черный горошком 20 г -- FOODF
 - FOODF.Перец черный горошком 20г
-category: '[[LifeOS/Кухня/Categories/специи|Специи]]'
+category: '[[специи|Специи]]'
 brand: FOODF
 base_unit: г
 typical_pack_size: 20.0

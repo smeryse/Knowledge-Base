@@ -7,7 +7,7 @@ aliases:
 - Мюсли BIGBIO
 - Мюсли запеченные с орехом 500 г -- BIGBIO
 - BIGBIO Мюсли зап.с орехом 500г
-category: '[[LifeOS/Кухня/Categories/бакалея|Бакалея]]'
+category: '[[бакалея|Бакалея]]'
 brand: BIGBIO
 base_unit: г
 typical_pack_size: 500.0

@@ -1,10 +1,9 @@
+filters:
+  and:
+    - type == "category"
 views:
   - type: cards
     name: Карточки
-    filters:
-      and:
-        - type == "category"
-        - file.path.contains("LifeOS/Кухня/Categories/")
     order:
       - file.name
     sort:
@@ -14,10 +13,6 @@ views:
     indentProperties: false
   - type: table
     name: Таблица
-    filters:
-      and:
-        - type == "category"
-        - file.path.contains("LifeOS/Кухня/Categories/")
     order:
       - file.name
       - title
@@ -33,10 +28,6 @@ views:
       note.created: 100
   - type: table
     name: Без товаров
-    filters:
-      and:
-        - type == "category"
-        - file.path.contains("LifeOS/Кухня/Categories/")
     order:
       - file.name
       - title

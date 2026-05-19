@@ -8,7 +8,7 @@ aliases:
 - Спагетти BAR
 - Изделия макаронные SPAGHETTI высший сорт 1000 г -- BAR
 - BAR.Изд.мак.SPAGHETTI в/с 1000г
-category: '[[LifeOS/Кухня/Categories/бакалея|Бакалея]]'
+category: '[[бакалея|Бакалея]]'
 brand: BAR
 base_unit: г
 typical_pack_size: 1000.0

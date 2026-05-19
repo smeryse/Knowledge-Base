@@ -7,7 +7,7 @@ aliases:
 - Чипсы NOR
 - Чипсы нори из обжаренных морских водорослей 5 г -- NOR
 - NOR.Чипсы нори из об.мор.вод.5г
-category: '[[LifeOS/Кухня/Categories/снеки|Снеки]]'
+category: '[[снеки|Снеки]]'
 brand: NOR
 base_unit: г
 typical_pack_size: 5.0

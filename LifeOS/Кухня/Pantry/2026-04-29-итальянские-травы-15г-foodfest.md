@@ -1,6 +1,6 @@
 ---
 type: pantry-item
-product: [[LifeOS/Кухня/Products/итальянские-травы-15г-foodfest|Итальянские травы 15г Foodfest]]
+product: [[итальянские-травы-15г-foodfest|Итальянские травы 15г Foodfest]]
 source_receipt_item: 
 qty_current: 15
 unit: g
@@ -11,9 +11,3 @@ tags:
   - еда
   - pantry-item
 ---
-
-# Итальянские травы 15г Foodfest - запас
-
-## Заметки
-
->

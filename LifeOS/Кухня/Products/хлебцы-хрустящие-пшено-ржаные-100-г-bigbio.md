@@ -7,7 +7,7 @@ aliases:
 - Хлебцы BIGBIO
 - Хлебцы хрустящие пшено-ржаные 100 г -- BIGBIO
 - BIGBIO Хлебцы хр.пшен-рж.100г
-category: '[[LifeOS/Кухня/Categories/бакалея|Бакалея]]'
+category: '[[бакалея|Бакалея]]'
 brand: BIGBIO
 base_unit: г
 typical_pack_size: 100.0

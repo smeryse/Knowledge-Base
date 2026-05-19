@@ -7,7 +7,7 @@ aliases:
 - Паприка FOODF
 - Паприка красная сладкая молотая 30 г -- FOODF
 - FOODF.Паприка красн.сл.мол.30г
-category: '[[LifeOS/Кухня/Categories/специи|Специи]]'
+category: '[[специи|Специи]]'
 brand: FOODF
 base_unit: г
 typical_pack_size: 30.0

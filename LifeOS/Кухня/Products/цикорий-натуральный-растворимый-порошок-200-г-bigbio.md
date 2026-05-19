@@ -7,7 +7,7 @@ aliases:
 - Цикорий BIGBIO
 - Цикорий натуральный растворимый порошок 200 г -- BIGBIO
 - BIGBIO Цикорий нат.раст.п.200г
-category: '[[LifeOS/Кухня/Categories/бакалея|Бакалея]]'
+category: '[[бакалея|Бакалея]]'
 brand: BIGBIO
 base_unit: г
 typical_pack_size: 200.0

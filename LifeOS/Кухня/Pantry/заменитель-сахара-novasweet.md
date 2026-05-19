@@ -1,6 +1,6 @@
 ---
 type: pantry-item
-product: [[LifeOS/Кухня/Products/заменитель-сахара-novasweet|Заменитель сахара Novasweet]]
+product: [[заменитель-сахара-novasweet|Заменитель сахара Novasweet]]
 source_receipt_item: 
 qty_current: 1
 unit: pcs
@@ -11,9 +11,3 @@ tags:
   - еда
   - pantry-item
 ---
-
-# Заменитель сахара Novasweet - запас
-
-## Заметки
-
->

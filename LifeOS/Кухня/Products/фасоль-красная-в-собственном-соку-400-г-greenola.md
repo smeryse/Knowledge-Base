@@ -7,7 +7,7 @@ aliases:
 - Фасоль GREENOLA
 - Фасоль красная в собственном соку 400 г -- GREENOLA
 - GREENOLA Фасоль кр.в с/с 400г
-category: '[[LifeOS/Кухня/Categories/консервы|Консервы]]'
+category: '[[консервы|Консервы]]'
 brand: GREENOLA
 base_unit: г
 typical_pack_size: 400.0

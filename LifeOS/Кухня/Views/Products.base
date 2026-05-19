@@ -92,7 +92,6 @@ views:
     name: Без цены
     filters:
       and:
-        - type == "product"
         - or:
             - price == ""
             - price == null
@@ -128,7 +127,6 @@ views:
     name: Без штрихкода
     filters:
       and:
-        - type == "product"
         - or:
             - barcode == ""
             - barcode == null
@@ -164,7 +162,6 @@ views:
     name: Без категории
     filters:
       and:
-        - type == "product"
         - or:
             - category == ""
             - category == null
@@ -200,7 +197,6 @@ views:
     name: Без изображения
     filters:
       and:
-        - type == "product"
         - or:
             - image == ""
             - image == null
@@ -234,6 +230,8 @@ views:
       note.image: 144
   - type: table
     name: По категориям
+    group:
+      target: category
     order:
       - file.name
       - barcode
@@ -253,8 +251,6 @@ views:
         direction: ASC
       - property: file.name
         direction: ASC
-    group:
-      target: category
     image: note.image
     columnSize:
       file.name: 251
@@ -270,7 +266,6 @@ views:
     name: Ссылки из Pantry
     filters:
       and:
-        - type == "product"
         - file.inlinks
     order:
       - file.name

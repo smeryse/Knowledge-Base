@@ -1,20 +1,15 @@
+filters:
+  and:
+    - type == "recipe"
 views:
   - type: cards
     name: Карточки
-    filters:
-      and:
-        - file.path.contains("LifeOS/Кухня/Recipes")
-        - type == "recipe"
     sort:
       - property: file.name
         direction: ASC
     image: note.image
   - type: table
     name: Таблица
-    filters:
-      and:
-        - file.path.contains("LifeOS/Кухня/Recipes")
-        - type == "recipe"
     order:
       - file.name
       - title
@@ -39,10 +34,8 @@ views:
       note.recipe_status: 100
   - type: table
     name: По типу блюда
-    filters:
-      and:
-        - file.path.contains("LifeOS/Кухня/Recipes")
-        - type == "recipe"
+    group:
+      target: dish_type
     order:
       - file.name
       - title
@@ -58,8 +51,6 @@ views:
         direction: ASC
       - property: file.name
         direction: ASC
-    group:
-      target: dish_type
     image: note.image
     columnSize:
       file.name: 200
@@ -71,10 +62,6 @@ views:
       note.recipe_status: 100
   - type: table
     name: По времени
-    filters:
-      and:
-        - file.path.contains("LifeOS/Кухня/Recipes")
-        - type == "recipe"
     order:
       - file.name
       - title
@@ -101,8 +88,6 @@ views:
     name: Без изображения
     filters:
       and:
-        - file.path.contains("LifeOS/Кухня/Recipes")
-        - type == "recipe"
         - or:
             - image == ""
             - image = null
@@ -132,8 +117,6 @@ views:
     name: Неактивные
     filters:
       and:
-        - file.path.contains("LifeOS/Кухня/Recipes")
-        - type == "recipe"
         - recipe_status != "active"
     order:
       - file.name
