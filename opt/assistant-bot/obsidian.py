@@ -369,6 +369,11 @@ class KitchenManager:
         alias = alias.strip()
         return f"[[{clean}|{alias}]]" if alias else f"[[{clean}]]"
     
+    def _wikilink_table(self, rel_path, alias=""):
+        clean = rel_path.replace('.md', '').strip()
+        alias = alias.strip()
+        return f"[[{clean}\\|{alias}]]" if alias else f"[[{clean}]]"
+    
     def _load_mapping(self):
         if os.path.exists(self.mapping_path):
             with open(self.mapping_path, 'r', encoding='utf-8') as f:
@@ -691,11 +696,11 @@ class KitchenManager:
         
         if pantry_path and os.path.exists(pantry_path):
             rel_pantry = self._make_relative(pantry_path).replace('.md', '')
-            pantry_cell = self._wikilink(rel_pantry, "Да")
+            pantry_cell = self._wikilink_table(rel_pantry, "Да")
         else:
             pantry_cell = "Нет"
         
-        row = f"| {self._wikilink(rel_product, product_name)} | {qty} | - шт | {price_total/100:.2f} | {pantry_cell} |"
+        row = f"| {self._wikilink_table(rel_product, product_name)} | {qty} | - шт | {price_total/100:.2f} | {pantry_cell} |"
         
         if "## Заметки" in content:
             content = content.replace("## Заметки", f"{row}\n## Заметки")
