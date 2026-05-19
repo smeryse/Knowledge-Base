@@ -659,7 +659,7 @@ class KitchenManager:
             'created': datetime.now().strftime('%Y-%m-%d'),
             'tags': ['receipt']
         }
-        body = f"# Чек {title}\n\n## Позиции\n\n| Товар | Кол-во | Фасовка | Цена | В запас |\n| ----- | ------ | ------- | ---- | ------- |\n"
+        body = f"# Чек {title}\n\n## Позиции\n\n| Товар | Кол-во | Фасовка | Цена | В запас |\n| ----- | ------ | ------- | ---- | ------- |"
         self._write_note(path, fm, body)
         return path
     

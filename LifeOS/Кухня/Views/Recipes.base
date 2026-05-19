@@ -34,8 +34,6 @@ views:
       note.recipe_status: 100
   - type: table
     name: По типу блюда
-    group:
-      target: dish_type
     order:
       - file.name
       - title
@@ -51,6 +49,8 @@ views:
         direction: ASC
       - property: file.name
         direction: ASC
+    group:
+      target: dish_type
     image: note.image
     columnSize:
       file.name: 200
