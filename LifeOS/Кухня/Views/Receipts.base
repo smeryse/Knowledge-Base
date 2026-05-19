@@ -38,8 +38,6 @@ views:
       note.total: 80
   - type: table
     name: По магазинам
-    group:
-      target: store
     order:
       - file.name
       - date
@@ -51,6 +49,8 @@ views:
         direction: ASC
       - property: date
         direction: DESC
+    group:
+      target: store
     columnSize:
       file.name: 200
       note.date: 100

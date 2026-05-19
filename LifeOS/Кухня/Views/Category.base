@@ -19,6 +19,8 @@ views:
       - aliases
       - created
     sort:
+      - property: aliases
+        direction: DESC
       - property: file.name
         direction: ASC
     columnSize:
