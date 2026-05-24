@@ -461,7 +461,7 @@ class KitchenManager:
     def _create_products_from_llm(self, llm_results, price_map=None):
         created = {}
         for data in llm_results:
-            raw_name = data.get('raw_name')
+            raw_name = data.get('raw_name', '').strip()
             if not raw_name:
                 raise RuntimeError(f"LLM result missing 'raw_name': {json.dumps(data, ensure_ascii=False)[:200]}")
             norm = data['normalized_name']
@@ -641,6 +641,43 @@ class KitchenManager:
         self._git_commit(f"Изменён магазин: {store_name}")
         return store_path, store_name
     
+    # ==================== Duplicate detection ====================
+    
+    def find_receipt_by_qr(self, qr_data):
+        """Find existing receipt by QR string. Returns path or None."""
+        if not qr_data:
+            return None
+        if not os.path.isdir(self.receipts_path):
+            return None
+        for fname in os.listdir(self.receipts_path):
+            if not fname.endswith('.md'):
+                continue
+            path = os.path.join(self.receipts_path, fname)
+            fm = self._parse_yaml_file(path)
+            if fm and isinstance(fm, dict) and fm.get('qr_data') == qr_data:
+                return path
+        return None
+    
+    def find_receipt_by_fingerprint(self, date_str, store_name, total):
+        """Find existing receipt by date+store+total. Returns path or None."""
+        if not date_str or not store_name:
+            return None
+        if not os.path.isdir(self.receipts_path):
+            return None
+        total_float = total / 100.0
+        for fname in os.listdir(self.receipts_path):
+            if not fname.endswith('.md'):
+                continue
+            path = os.path.join(self.receipts_path, fname)
+            fm = self._parse_yaml_file(path)
+            if not fm:
+                continue
+            if fm.get('date') == date_str and fm.get('total') == total_float:
+                store_link = fm.get('store', '')
+                if store_name in store_link:
+                    return path
+        return None
+    
     # ==================== Receipt flow ====================
     
     def create_receipt(self, date_str, store_path, store_name, total_sum, qr_data=''):
@@ -732,10 +769,10 @@ class KitchenManager:
         
         if unknown:
             llm_results = ai_norm.normalize_unknown_batch(unknown)
-            price_map = {item['raw_name']: item.get('price', 0) for item in unknown}
+            price_map = {item['raw_name'].strip(): item.get('price', 0) for item in unknown}
             new_products = self._create_products_from_llm(llm_results, price_map)
             for item in unknown:
-                raw = item.get('raw_name', '')
+                raw = item.get('raw_name', '').strip()
                 prod = new_products.get(raw)
                 if prod:
                     resolved.append({'item': item, 'product': prod, 'name': prod['fm'].get('title', raw), 'is_new': True})
@@ -761,6 +798,30 @@ class KitchenManager:
         api_raw = receipt_meta.get("store", "")
         if api_raw and store_hint and api_raw.strip() != store_name.strip():
             self.save_store_mapping(api_raw, store_name)
+        
+        # --- Duplicate check ---
+        existing_path = None
+        if qr_data:
+            existing_path = self.find_receipt_by_qr(qr_data)
+        if not existing_path and date_str and store_name and total:
+            existing_path = self.find_receipt_by_fingerprint(date_str, store_name, total)
+        
+        if existing_path:
+            return {
+                'receipt_path': existing_path,
+                'is_duplicate': True,
+                'store_name': store_name,
+                'store_method': store_method,
+                'date_str': date_str,
+                'total': total,
+                'items_count': len(prepared_items),
+                'all_items': [],
+                'new_count': 0,
+                'known_count': 0,
+                'pantry_count': 0,
+                'pantry_names': [],
+                'pantry_paths': [],
+            }
         
         if not store_path:
             store_path, store_name = self.find_or_create_store(store_name)
@@ -795,6 +856,7 @@ class KitchenManager:
         
         return {
             'receipt_path': receipt_path,
+            'is_duplicate': False,
             'pantry_paths': pantry_paths,
             'store_name': store_name,
             'store_method': store_method,

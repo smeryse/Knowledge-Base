@@ -100,6 +100,15 @@ async def process_receipt_qr(message: types.Message, qr_text: str):
     try:
         prepared = kitchen.prepare_items(items, ai_norm)
         
+        # Early duplicate check by QR data
+        existing = kitchen.find_receipt_by_qr(qr_text)
+        if existing:
+            await processing_msg.edit_text(
+                f"⚠️ Этот чек уже был сохранён ранее!\n\n"
+                f"📂 {os.path.basename(existing)}"
+            )
+            return
+        
         for entry in prepared:
             entry['add_to_pantry'] = True
         
@@ -863,7 +872,21 @@ async def _commit_qr_receipt(call, pending: dict, store_hint=None):
         result = kitchen.commit_receipt(pending['meta'], pending['items'], store_hint=store_hint)
         del pending_receipt_data[user_id]
         
-        lines = ["✅ Чек сохранён!" + "\n"]
+        if result.get('is_duplicate'):
+            text = (
+                f"⚠️ Этот чек уже был сохранён ранее!\n\n"
+                f"🏪 {result['store_name']}\n"
+                f"📅 {result['date_str']}\n"
+                f"💰 {result['total']/100:.2f}₽\n"
+                f"📂 {os.path.basename(result['receipt_path'])}"
+            )
+            try:
+                await call.message.edit_text(text)
+            except Exception:
+                await call.message.answer(text)
+            return
+        
+        lines = ["✅ Чек сохранён!\n"]
         lines.append(f"🏪 {result['store_name']}")
         lines.append(f"📅 {result['date_str']}")
         lines.append(f"💰 {result['total']/100:.2f}₽\n")
@@ -1155,6 +1178,23 @@ async def handle_ean_finish(call: types.CallbackQuery):
         if not store_path:
             store_path, store_name = kitchen.find_or_create_store(session['store'])
         total_kopeks = int(sum((item.get("price") or 0) for item in session["items"]) * 100)
+        
+        # Duplicate check for EAN receipts (fingerprint: date+store+total)
+        existing = kitchen.find_receipt_by_fingerprint(date_str, store_name, total_kopeks)
+        if existing:
+            text = (
+                f"⚠️ Чек на эту дату/сумму уже существует!\n\n"
+                f"🏪 {store_name}\n"
+                f"📅 {date_str}\n"
+                f"💰 {total_kopeks/100:.2f}₽\n"
+                f"📂 {os.path.basename(existing)}"
+            )
+            try:
+                await call.message.edit_text(text)
+            except Exception:
+                await call.message.answer(text)
+            await call.answer()
+            return
         
         receipt_path = kitchen.create_receipt(date_str, store_path, store_name, total_kopeks, qr_data='')
         
