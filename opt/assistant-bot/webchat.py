@@ -1,5 +1,6 @@
 import os
 import json
+import re
 import requests
 from flask import Flask, request, jsonify, render_template_string, session, redirect, url_for
 
@@ -16,6 +17,46 @@ if os.path.exists(dotenv_path):
                 OPENROUTER_KEY = line.split('=', 1)[1].strip().strip("'\"")
 
 CHAT_PASSWORD = os.environ.get('CHAT_PASSWORD', 'test2026')
+
+# --- Knowledge base ---
+KB_PATH = '/opt/assistant-bot/kb_test_os.md'
+kb_questions = []  # list of {'q': '...', 'a': '...', 'tokens': [...]}
+
+if os.path.exists(KB_PATH):
+    with open(KB_PATH, 'r', encoding='utf-8') as f:
+        raw = f.read()
+    # Split by Вопрос N.
+    chunks = re.split(r'(?=Вопрос \d+[\.:])', raw)
+    for c in chunks:
+        lines = c.strip().split('\n')
+        if not lines:
+            continue
+        q = lines[0]
+        answers = [l.strip().lstrip('-* ') for l in lines[1:] if l.strip() and not l.strip().startswith('---') and 'Пожалуйста' not in l and 'Источник' not in l and 'Модуль' not in l and 'Тест:' not in l and 'Вопросы' not in l and 'Правильные ответы' not in l]
+        if answers:
+            tokens = set(re.sub(r'[^\w\s]', '', q.lower()).split())
+            for a in answers:
+                tokens.update(re.sub(r'[^\w\s]', '', a.lower()).split())
+            kb_questions.append({'q': q, 'a': '\n'.join(answers), 'tokens': tokens})
+    print(f"KB: loaded {len(kb_questions)} questions from {KB_PATH}")
+
+def find_context(query, top_n=3):
+    if not kb_questions:
+        return ''
+    q_tokens = set(re.sub(r'[^\w\s]', '', query.lower()).split())
+    scored = []
+    for item in kb_questions:
+        overlap = len(q_tokens & item['tokens'])
+        if overlap > 0:
+            scored.append((overlap, item))
+    scored.sort(key=lambda x: -x[0])
+    matches = scored[:top_n]
+    if not matches:
+        return ''
+    parts = []
+    for _, item in matches:
+        parts.append(f"{item['q']}\nВарианты: {item['a']}")
+    return '\n\n'.join(parts)
 
 HTML = r"""<!DOCTYPE html>
 <html lang="ru">
@@ -397,6 +438,10 @@ def chat():
     messages = [
         {'role': 'system', 'content': 'Ты — ассистент по учебе. Отвечай кратко, по делу, без лишних слов. Максимум 2-3 предложения. Не перечисляй длинные списки. Если вопрос по коду — дай только команду или пример без объяснений.'}
     ]
+
+    context = find_context(message or '')
+    if context:
+        messages[0]['content'] += f'\n\nИспользуй эти материалы для ответа (приоритетнее общего знания):\n{context}'
 
     user_content = []
     if image:
