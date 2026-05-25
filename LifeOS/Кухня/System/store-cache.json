@@ -22,5 +22,13 @@
   "ozon.ru": {
     "name": "Озон Фреш",
     "method": "user"
+  },
+  "FixPrice": {
+    "name": "FixPrice",
+    "method": "exact"
+  },
+  "Магазин №8937": {
+    "name": "FixPrice",
+    "method": "user"
   }
 }
