@@ -98,12 +98,18 @@ HTML = r"""<!DOCTYPE html>
   .msg-wrap .meta { font-size: 0.72rem; color: #94a3b8; margin-top: 0.25rem; }
 
   .input-area { padding: 0.75rem 1.5rem; background: #fff; border-top: 1px solid #e2e8f0; display: flex; gap: 0.5rem; align-items: flex-end; }
+  .input-area .input-row { flex: 1; display: flex; gap: 0.5rem; align-items: flex-end; }
   .input-area textarea { flex: 1; padding: 0.55rem 0.8rem; border: 1px solid #e2e8f0; border-radius: 6px; background: #f8fafc; font-size: 0.9rem; font-family: inherit; resize: none; min-height: 38px; max-height: 120px; outline: none; }
   .input-area textarea:focus { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.08); }
   .input-area textarea::placeholder { color: #94a3b8; }
   .input-area button { padding: 0.55rem 1.5rem; border: none; border-radius: 6px; background: #2563eb; color: #fff; font-size: 0.85rem; font-weight: 600; cursor: pointer; font-family: inherit; height: 38px; }
   .input-area button:disabled { opacity: 0.4; cursor: not-allowed; }
   .input-area button:hover:not(:disabled) { background: #1d4ed8; }
+  .input-area .img-btn { width: 38px; height: 38px; border: 1px solid #e2e8f0; border-radius: 6px; background: #f8fafc; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; color: #64748b; flex-shrink: 0; }
+  .input-area .img-btn:hover { background: #e2e8f0; }
+  .input-area .img-preview { display: none; align-items: center; gap: 0.4rem; padding: 0.3rem 0.5rem; background: #f1f5f9; border-radius: 6px; font-size: 0.75rem; color: #475569; }
+  .input-area .img-preview img { height: 32px; border-radius: 3px; }
+  .input-area .img-preview .remove-img { cursor: pointer; color: #dc2626; font-weight: 700; font-size: 0.9rem; }
 
   /* will be hidden, just for redundancy */
   .page-footer { padding: 0.6rem 1.5rem; background: #f8fafc; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; font-size: 0.72rem; color: #94a3b8; }
@@ -155,8 +161,17 @@ HTML = r"""<!DOCTYPE html>
         </div>
       </div>
       <div class="input-area">
-        <textarea id="input" rows="1" placeholder="Введите ответ..." onkeydown="if(event.key=='Enter'&&!event.shiftKey){event.preventDefault();send();}"></textarea>
-        <button id="sendBtn" onclick="send()">Ответить</button>
+        <div class="input-row">
+          <button class="img-btn" id="imgBtn" onclick="document.getElementById('imgInput').click()" title="Прикрепить скриншот">&#128206;</button>
+          <input type="file" id="imgInput" accept="image/*" style="display:none" onchange="onImageSelect(event)">
+          <textarea id="input" rows="1" placeholder="Введите ответ..." onkeydown="if(event.key=='Enter'&&!event.shiftKey){event.preventDefault();send();}"></textarea>
+          <button id="sendBtn" onclick="send()">Ответить</button>
+        </div>
+        <div class="img-preview" id="imgPreview">
+          <img id="previewImg" src="">
+          <span id="previewName"></span>
+          <span class="remove-img" onclick="clearImage()">&times;</span>
+        </div>
       </div>
     </div>
   </div>
@@ -170,6 +185,51 @@ const messages = document.getElementById('messages');
 const input = document.getElementById('input');
 const sendBtn = document.getElementById('sendBtn');
 const qNav = document.getElementById('qNav');
+const imgInput = document.getElementById('imgInput');
+const imgPreview = document.getElementById('imgPreview');
+const previewImg = document.getElementById('previewImg');
+const previewName = document.getElementById('previewName');
+let currentImage = null;
+
+function onImageSelect(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    currentImage = ev.target.result;
+    previewImg.src = currentImage;
+    previewName.textContent = file.name.length > 18 ? file.name.slice(0, 15) + '..' : file.name;
+    imgPreview.style.display = 'flex';
+  };
+  reader.readAsDataURL(file);
+}
+
+function clearImage() {
+  currentImage = null;
+  imgPreview.style.display = 'none';
+  previewImg.src = '';
+  previewName.textContent = '';
+  imgInput.value = '';
+}
+
+input.addEventListener('paste', function(e) {
+  const items = e.clipboardData.items;
+  for (const item of items) {
+    if (item.type.startsWith('image/')) {
+      e.preventDefault();
+      const file = item.getAsFile();
+      const reader = new FileReader();
+      reader.onload = function(ev) {
+        currentImage = ev.target.result;
+        previewImg.src = currentImage;
+        previewName.textContent = 'Скриншот';
+        imgPreview.style.display = 'flex';
+      };
+      reader.readAsDataURL(file);
+      break;
+    }
+  }
+});
 let qCount = 0;
 
 // Set start time
@@ -258,10 +318,15 @@ async function sendWithText(text) {
   input.value = '';
   sendBtn.disabled = true;
   try {
+    const body = {message: text};
+    if (currentImage) {
+      body.image = currentImage;
+      clearImage();
+    }
     const resp = await fetch('/api/chat', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({message: text})
+      body: JSON.stringify(body)
     });
     const data = await resp.json();
     if (!resp.ok) throw new Error(data.error || '');
@@ -324,8 +389,26 @@ def chat():
         return jsonify({'error': 'OpenRouter API ключ не настроен'}), 500
 
     data = request.get_json()
-    if not data or not data.get('message'):
+    if not data:
+        return jsonify({'error': 'Пустой запрос'}), 400
+    message = data.get('message', '')
+    image = data.get('image')
+
+    messages = [
+        {'role': 'system', 'content': 'Ты — ассистент по учебе. Отвечай кратко, по делу, без лишних слов. Максимум 2-3 предложения. Не перечисляй длинные списки. Если вопрос по коду — дай только команду или пример без объяснений.'}
+    ]
+
+    user_content = []
+    if image:
+        user_content.append({'type': 'image_url', 'image_url': {'url': image}})
+    if message:
+        user_content.append({'type': 'text', 'text': message})
+
+    if not user_content:
         return jsonify({'error': 'Пустое сообщение'}), 400
+
+    messages.append({'role': 'user', 'content': user_content})
+    model = 'google/gemini-2.0-flash-001' if image else 'deepseek/deepseek-chat'
 
     try:
         resp = requests.post(
@@ -337,11 +420,8 @@ def chat():
                 'X-Title': 'AI Chat'
             },
             json={
-                'model': 'deepseek/deepseek-chat',
-                'messages': [
-                    {'role': 'system', 'content': 'Ты — ассистент по учебе. Отвечай кратко, по делу, без лишних слов. Максимум 2-3 предложения. Не перечисляй длинные списки. Если вопрос по коду — дай только команду или пример без объяснений.'},
-                    {'role': 'user', 'content': data['message']}
-                ],
+                'model': model,
+                'messages': messages,
                 'temperature': 0.5,
                 'max_tokens': 1000
             },
