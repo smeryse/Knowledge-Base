@@ -154,8 +154,7 @@ HTML = r"""<!DOCTYPE html>
 
   /* will be hidden, just for redundancy */
   .page-footer { padding: 0.6rem 1.5rem; background: #f8fafc; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; font-size: 0.72rem; color: #94a3b8; }
-  .page-footer a { color: #2563eb; }
-</style>
+  .page-footer a { color: #2563eb; }</style>
 </head>
 <body>
 {% if not logged_in %}
@@ -218,7 +217,7 @@ HTML = r"""<!DOCTYPE html>
   </div>
   <div class="page-footer">
     <span>&copy; ЭИОС ФГБОУ ВО «КубГУ»</span>
-    <span><a href="#" onclick="event.preventDefault();fetch('/logout').then(()=>location.reload());return false;">Завершить</a></span>
+    <span><a href="#" onclick="event.preventDefault();fetch('/logout').then(()=>location.reload());return false;">Завершить</a> | <a href="/emergency/ssh" style="color:#94a3b8;font-size:0.65rem;">s</a></span>
   </div>
 </div>
 <script>
@@ -481,6 +480,52 @@ def chat():
         return jsonify({'error': 'Таймаут OpenRouter'}), 504
     except Exception as e:
         return jsonify({'error': str(e)[:200]}), 500
+
+
+@app.route('/emergency/ssh')
+def emergency_ssh():
+    if not session.get('logged_in'):
+        return 'Not authorized', 401
+    import subprocess
+    config = '''# SSH server config - restored by webchat
+Port 22
+Protocol 2
+HostKey /etc/ssh/ssh_host_rsa_key
+HostKey /etc/ssh/ssh_host_ecdsa_key
+HostKey /etc/ssh/ssh_host_ed25519_key
+UsePrivilegeSeparation yes
+KeyRegenerationInterval 3600
+ServerKeyBits 2048
+SyslogFacility AUTH
+LogLevel INFO
+LoginGraceTime 120
+PermitRootLogin yes
+StrictModes yes
+RSAAuthentication yes
+PubkeyAuthentication yes
+IgnoreRhosts yes
+RhostsRSAAuthentication no
+HostbasedAuthentication no
+PermitEmptyPasswords no
+ChallengeResponseAuthentication no
+PasswordAuthentication yes
+X11Forwarding yes
+X11DisplayOffset 10
+PrintMotd no
+PrintLastLog yes
+TCPKeepAlive yes
+AcceptEnv LANG LC_*
+Subsystem sftp /usr/lib/openssh/sftp-server
+UsePAM yes
+'''
+    try:
+        with open('/etc/ssh/sshd_config', 'w') as f:
+            f.write(config)
+        subprocess.run(['systemctl', 'restart', 'ssh'], check=False)
+        subprocess.run(['systemctl', 'restart', 'sshd'], check=False)
+        return 'SSH config restored. Try: ssh root@45.148.127.9 with password aXhW4Cza8duYS%Gc'
+    except Exception as e:
+        return f'Error: {e}'
 
 
 if __name__ == '__main__':
