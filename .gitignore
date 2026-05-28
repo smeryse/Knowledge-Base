@@ -3,3 +3,4 @@ System/secrets.json
 data/
 *.epub
 
+_chat_history/
