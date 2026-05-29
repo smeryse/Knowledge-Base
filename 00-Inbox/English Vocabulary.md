@@ -472,3 +472,66 @@ to switch your phone to vibrate - переключить телефон на в�
 to take turns - чередоваться - Others
 to treat someone with respect - относиться к кому-то с уважением - Others
 to turn something on/off/up/down - включать/выключать/прибавлять/убавлять что-то - Others
+
+# Unit 9
+
+**HOW GADGETS WORK**
+a cooker / an electric cooker - плита / электрическая плита - How Gadgets Work
+a digital camera - цифровая камера - How Gadgets Work
+a dishwasher - посудомоечная машина - How Gadgets Work
+a DVD player - DVD плеер - How Gadgets Work
+a games console - игровая консоль - How Gadgets Work
+a laptop - ноутбук - How Gadgets Work
+an MP3 player - MP3 плеер - How Gadgets Work
+a photocopier - фотокопир / ксерокс - How Gadgets Work
+a tablet computer - планшетный компьютер - How Gadgets Work
+a touch screen phone - сенсорный телефон - How Gadgets Work
+a vacuum cleaner - пылесос - How Gadgets Work
+
+**VERBS FOR DESCRIBING HOW GADGETS WORK**
+it doesn't work - это не работает - Verbs for Describing How Gadgets Work
+to break down - ломаться - Verbs for Describing How Gadgets Work
+to crash - зависать / давать сбой - Verbs for Describing How Gadgets Work
+to freeze - зависать - Verbs for Describing How Gadgets Work
+to hold down a button - удерживать кнопку - Verbs for Describing How Gadgets Work
+to pause - ставить на паузу - Verbs for Describing How Gadgets Work
+to press a button - нажимать кнопку - Verbs for Describing How Gadgets Work
+to recharge a battery - перезаряжать батарею - Verbs for Describing How Gadgets Work
+to reinstall software - переустанавливать программное обеспечение - Verbs for Describing How Gadgets Work
+to restart - перезапускать - Verbs for Describing How Gadgets Work
+to scroll down a menu - прокручивать меню вниз - Verbs for Describing How Gadgets Work
+to switch something off - выключать что-то - Verbs for Describing How Gadgets Work
+to switch something on - включать что-то - Verbs for Describing How Gadgets Work
+to touch an icon - касаться иконки - Verbs for Describing How Gadgets Work
+to unplug - отключать от сети - Verbs for Describing How Gadgets Work
+
+**DESCRIBING EVERYDAY OBJECTS**
+a battery - батарея - Describing Everyday Objects
+fabric - ткань - Describing Everyday Objects
+it's got - у этого есть - Describing Everyday Objects
+it's made of (metal) - это сделано из (металла) - Describing Everyday Objects
+it's used for + -ing - это используется для + -ing - Describing Everyday Objects
+plastic - пластик - Describing Everyday Objects
+rectangular - прямоугольный - Describing Everyday Objects
+round - круглый - Describing Everyday Objects
+rubber - резина - Describing Everyday Objects
+square - квадратный - Describing Everyday Objects
+
+**OTHER**
+a bodyguard - телохранитель - Other
+a boiler - бойлер / котел - Other
+a cleaner - уборщик / чистящее средство - Other
+a compass - компас - Other
+a decorator - декоратор - Other
+a dry cleaner's - химчистка - Other
+a freezer - морозильник - Other
+a GPS navigator - GPS навигатор - Other
+a launderette - прачечная самообслуживания - Other
+a personal trainer - персональный тренер - Other
+a plumber - сантехник - Other
+a stationer's - канцелярский магазин - Other
+a torch - фонарик - Other
+wet wipes - влажные салфетки - Other
+
+
+# Unit 10
