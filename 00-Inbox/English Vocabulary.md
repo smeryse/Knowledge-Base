@@ -535,3 +535,178 @@ wet wipes - влажные салфетки - Other
 
 
 # Unit 10
+
+**SOCIETY AND CHANGE**
+average income - средний доход - Society and Change
+to decrease - уменьшаться - Society and Change
+to deteriorate - ухудшаться - Society and Change
+diet - диета / рацион - Society and Change
+to fall - падать - Society and Change
+to get better - становиться лучше - Society and Change
+to get worse - становиться хуже - Society and Change
+to go down - снижаться - Society and Change
+to go up - расти / повышаться - Society and Change
+to improve - улучшаться - Society and Change
+to increase - увеличиваться - Society and Change
+life expectancy - продолжительность жизни - Society and Change
+living standards - уровень жизни - Society and Change
+to rise - расти / подниматься - Society and Change
+to stay the same - оставаться прежним - Society and Change
+
+**SOCIETY AND SOCIAL ISSUES**
+to balance the budget - сбалансировать бюджет - Society and Social Issues
+corruption - коррупция - Society and Social Issues
+crime - преступность - Society and Social Issues
+defence - оборона - Society and Social Issues
+education - образование - Society and Social Issues
+health care - здравоохранение - Society and Social Issues
+homelessness - бездомность - Society and Social Issues
+to increase/reduce spending (on) - увеличивать/сокращать расходы (на) - Society and Social Issues
+pollution - загрязнение - Society and Social Issues
+poverty - бедность - Society and Social Issues
+a priority - приоритет - Society and Social Issues
+racism - расизм - Society and Social Issues
+to increase/reduce taxes - повышать/снижать налоги - Society and Social Issues
+transport - транспорт - Society and Social Issues
+unemployment - безработица - Society and Social Issues
+to waste money on something - тратить деньги впустую на что-то - Society and Social Issues
+
+**GROUPS IN SOCIETY**
+the government - правительство - Groups in Society
+the opposition (parties) - оппозиция (партии) - Groups in Society
+ordinary people - простые люди - Groups in Society
+the poor - бедные - Groups in Society
+taxpayers - налогоплательщики - Groups in Society
+the wealthy - богатые / состоятельные - Groups in Society
+
+**OTHER**
+to bully someone - травить кого-то / запугивать - Other
+a cure/to cure - лекарство / лечить - Other
+damage/to damage - ущерб / наносить ущерб - Other
+a disease - болезнь - Other
+to flirt with someone - флиртовать с кем-то - Other
+gravity - гравитация / серьезность - Other
+a human cell - человеческая клетка - Other
+to implant - имплантировать - Other
+industry - промышленность / индустрия - Other
+to play a trick on someone - подшутить над кем-то - Other
+to run someone over - сбить кого-то (машиной) - Other
+to scare someone - пугать кого-то - Other
+to take revenge on someone - мстить кому-то - Other
+
+# Unit 11
+
+**LINKING WORDS**
+also - также - Linking Words
+although - хотя - Linking Words
+as a result - в результате - Linking Words
+besides - кроме того - Linking Words
+despite this - несмотря на это - Linking Words
+for that reason - по этой причине - Linking Words
+however - однако - Linking Words
+therefore - поэтому - Linking Words
+what's more - более того - Linking Words
+
+**CRIME AND PUNISHMENT**
+to be arrested - быть арестованным - Crime and Punishment
+to be/get caught - быть пойманным - Crime and Punishment
+to be punished - быть наказанным - Crime and Punishment
+to be released - быть освобожденным - Crime and Punishment
+to be sent to prison - быть отправленным в тюрьму - Crime and Punishment
+to be sentenced - быть приговоренным - Crime and Punishment
+community service - общественные работы - Crime and Punishment
+the death penalty - смертная казнь - Crime and Punishment
+a defendant - подсудимый - Crime and Punishment
+to go to prison / a prisoner - идти в тюрьму / заключенный - Crime and Punishment
+hanging - повешение - Crime and Punishment
+a judge - судья - Crime and Punishment
+
+**CRIME AND PUNISHMENT (WORD FAMILIES)**
+to burgle / a burglary / a burglar - совершать кражу со взломом / кража со взломом / взломщик - Crime and Punishment (Word Families)
+to commit a crime / a criminal - совершать преступление / преступник - Crime and Punishment (Word Families)
+to kidnap / a kidnapping / a kidnapper - похищать людей / похищение / похититель - Crime and Punishment (Word Families)
+to mug / a mugging / a mugger - нападать с целью ограбления / уличное ограбление / уличный грабитель - Crime and Punishment (Word Families)
+to murder / a murder / a murderer - убивать / убийство / убийца - Crime and Punishment (Word Families)
+to rob / a robbery / a robber - грабить / ограбление / грабитель - Crime and Punishment (Word Families)
+to shoplift / shoplifting / a shoplifter - воровать в магазине / кража в магазине / магазинный вор - Crime and Punishment (Word Families)
+
+**OTHER**
+to be banned - быть под запретом - Other
+to be tough - быть жестким/суровым - Other
+to break the rules/law - нарушать правила/закон - Other
+a case - дело / случай - Other
+to cause damage - наносить ущерб - Other
+compulsory - обязательный - Other
+to destroy - уничтожать - Other
+a deterrent - сдерживающий фактор - Other
+fair - справедливый - Other
+to fight (in a battle) - сражаться (в битве) - Other
+to go to court - обращаться в суд - Other
+harsh - суровый / жестокий - Other
+to have the right to - иметь право на - Other
+illegal - незаконный - Other
+lenient - снисходительный - Other
+a life sentence - пожизненное заключение - Other
+a prison sentence - тюремный срок - Other
+to solve a crime - раскрыть преступление - Other
+to surrender - сдаваться - Other
+unfair - несправедливый - Other
+to vandalise - заниматься вандализмом - Other
+
+# Unit 12
+
+**PROBLEMS AND SOLUTIONS**
+to be sympathetic - сочувствовать - Problems and Solutions
+to go away - уходить / исчезать - Problems and Solutions
+to have a problem with - иметь проблему с - Problems and Solutions
+to have concerns - иметь опасения - Problems and Solutions
+to ignore a problem - игнорировать проблему - Problems and Solutions
+to lose sleep over something - не спать из-за чего-то / переживать из-за чего-то - Problems and Solutions
+to make a decision - принимать решение - Problems and Solutions
+to not have a care in the world - ни о чем не беспокоиться - Problems and Solutions
+to sort a problem out - решить проблему - Problems and Solutions
+to talk something over - обсудить что-то - Problems and Solutions
+to trust your instincts/intuition - доверять своим инстинктам/интуиции - Problems and Solutions
+
+**ROWING ACROSS THE ATLANTIC**
+to abandon the race - покинуть гонку / сойти с дистанции - Rowing Across the Atlantic
+a collision - столкновение - Rowing Across the Atlantic
+the crew (of a boat) - экипаж (лодки) - Rowing Across the Atlantic
+loneliness / to be lonely - одиночество / быть одиноким - Rowing Across the Atlantic
+a motivational speaker - мотивационный оратор - Rowing Across the Atlantic
+an oil tanker - нефтяной танкер - Rowing Across the Atlantic
+a phobia - фобия - Rowing Across the Atlantic
+a rescue boat - спасательная лодка - Rowing Across the Atlantic
+to row / a rower - грести / гребец - Rowing Across the Atlantic
+to shake with fear - дрожать от страха - Rowing Across the Atlantic
+to support someone - поддерживать кого-то - Rowing Across the Atlantic
+a violent storm - сильный шторм - Rowing Across the Atlantic
+
+**OTHER**
+to accept a situation - принимать ситуацию - Other
+to be confused - быть сбитым с толку - Other
+to be fatalistic - быть фаталистом - Other
+to be intuitive - быть интуитивным - Other
+to be logical - быть логичным - Other
+to be offered a job/contract - получать предложение о работе/контракте - Other
+to be rational - быть рациональным - Other
+to blame someone/yourself - винить кого-то/себя - Other
+to blow your top - взорваться (от злости) - Other
+a care home - дом престарелых / интернат - Other
+to carry on as normal - продолжать как обычно - Other
+to criticise someone - критиковать кого-то - Other
+a dilemma - дилемма - Other
+economical - экономный - Other
+fate - судьба - Other
+to feel nauseous - чувствовать тошноту - Other
+to give/explain your point of view - высказать/объяснить свою точку зрения - Other
+to give someone advice - давать кому-то совет - Other
+to make a list - составлять список - Other
+the pros and cons - плюсы и минусы - Other
+reliable - надежный - Other
+to roll/throw a dice - бросать кубик - Other
+to split up - расставаться / разделяться - Other
+to stay together - оставаться вместе - Other
+to take a chance - рискнуть - Other
+a trick - трюк / обман - Other
+to weigh something up - взвешивать что-то (обдумывать) - Other
