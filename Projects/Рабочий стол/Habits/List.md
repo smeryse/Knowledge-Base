@@ -14,10 +14,10 @@ aliases:
 
 ## Активные привычки
 
-- [ ] Выпить 4 стакана воды (+10)
-- [ ] No Fap (+25)
-- [ ] No Smoke (+5)
-- [ ] No Sugar (+15)
+- [ ] [water] Выпить 4 стакана воды (+10)
+- [ ] [nofap] No Fap (+25)
+- [ ] [nosmoke] No Smoke (+5)
+- [ ] [nosugar] No Sugar (+15)
 
 ---
 
