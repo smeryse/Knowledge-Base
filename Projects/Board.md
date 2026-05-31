@@ -4,15 +4,21 @@ kanban-plugin: board
 
 ---
 
+## Ideas
+
+
+
 ## Backlog
 
 - [ ] **Crew:** Допилить архитектуру Кошелька
 - [ ] **СтудПит:** Проработать рацион
 - [ ] **Рабочий стол:** Обновить правила баллов
 
+
 ## In Progress
 
 - [ ] **Crew:** Рефакторинг assistant-bot под новую архитектуру
+
 
 ## Review
 
@@ -27,6 +33,6 @@ kanban-plugin: board
 
 %% kanban:settings
 ```
-{"kanban-plugin":"board","list-collapse":[false,false,false,false]}
+{"kanban-plugin":"board","list-collapse":[false,false,false,false,false]}
 ```
 %%
