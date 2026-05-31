@@ -6,6 +6,7 @@ kanban-plugin: board
 
 ## Ideas
 
+- [ ] [[Сделать отдельный проект для Ai Assistant]]
 
 
 ## Backlog
