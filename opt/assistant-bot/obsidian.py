@@ -249,14 +249,14 @@ id: {tx_id}
                 return
             
             # Pull with rebase to avoid merge commits
-            r4 = subprocess.run(['git', 'pull', 'origin', 'HEAD', '--rebase'], cwd=vp, capture_output=True, text=True)
+            r4 = subprocess.run(['git', 'pull', 'origin', 'main', '--rebase'], cwd=vp, capture_output=True, text=True)
             if r4.returncode != 0:
                 print(f"[GIT] pull rebase failed: {r4.stderr}")
                 # Try abort and push anyway
                 subprocess.run(['git', 'rebase', '--abort'], cwd=vp, capture_output=True)
             
-            # Push
-            r5 = subprocess.run(['git', 'push', 'origin', 'HEAD'], cwd=vp, capture_output=True, text=True)
+            # Push explicitly to main (works from detached HEAD too)
+            r5 = subprocess.run(['git', 'push', 'origin', 'HEAD:main'], cwd=vp, capture_output=True, text=True)
             if r5.returncode != 0:
                 print(f"[GIT] push failed: {r5.stderr}")
             else:
@@ -919,14 +919,14 @@ class KitchenManager:
                 return
             
             # Pull with rebase to avoid merge commits
-            r4 = subprocess.run(['git', 'pull', 'origin', 'HEAD', '--rebase'], cwd=vp, capture_output=True, text=True)
+            r4 = subprocess.run(['git', 'pull', 'origin', 'main', '--rebase'], cwd=vp, capture_output=True, text=True)
             if r4.returncode != 0:
                 print(f"[GIT] pull rebase failed: {r4.stderr}")
                 # Try abort and push anyway
                 subprocess.run(['git', 'rebase', '--abort'], cwd=vp, capture_output=True)
             
-            # Push
-            r5 = subprocess.run(['git', 'push', 'origin', 'HEAD'], cwd=vp, capture_output=True, text=True)
+            # Push explicitly to main (works from detached HEAD too)
+            r5 = subprocess.run(['git', 'push', 'origin', 'HEAD:main'], cwd=vp, capture_output=True, text=True)
             if r5.returncode != 0:
                 print(f"[GIT] push failed: {r5.stderr}")
             else:
