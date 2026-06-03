@@ -1,3 +1,13 @@
+async function fetchWithRetry(url, options, retries = 3) {
+    for (let attempt = 1; attempt <= retries; attempt++) {
+        const response = await fetch(url, options);
+        if (response.status !== 429 || attempt === retries) return response;
+        const retryAfter = Math.min(Number(response.headers.get("retry-after") || 5) * 1000, 30000);
+        await new Promise(resolve => setTimeout(resolve, retryAfter));
+    }
+    return null;
+}
+
 module.exports = async function foodScan(tp) {
     const ROOT = "LifeOS/Кухня";
     const DIRS = {
@@ -520,6 +530,35 @@ module.exports = async function foodScan(tp) {
                 });
                 const data = await response.json();
                 raw = data.choices?.[0]?.message?.content || "";
+            } else if (config.provider === "groq") {
+                const apiKey = String(config.apiKey || "").trim();
+                if (!apiKey) return null;
+                const groqEndpoint = String(config.endpoint || "https://api.groq.com/openai/v1").replace(/\/$/, "");
+                const groqResponse = await fetchWithRetry(`${groqEndpoint}/chat/completions`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${apiKey}`
+                    },
+                    body: JSON.stringify({
+                        model: config.model,
+                        temperature: Number(config.temperature || 0.1),
+                        response_format: { type: "json_object" },
+                        messages: [
+                            {
+                                role: "system",
+                                content: "You normalize barcode lookup candidates into strict JSON for a personal inventory database. Return only a JSON object."
+                            },
+                            {
+                                role: "user",
+                                content: prompt
+                            }
+                        ]
+                    })
+                });
+                if (!groqResponse) return null;
+                const groqData = await groqResponse.json();
+                raw = groqData.choices?.[0]?.message?.content || "";
             } else {
                 return null;
             }
