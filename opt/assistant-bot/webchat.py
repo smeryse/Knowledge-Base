@@ -7,14 +7,14 @@ from flask import Flask, request, jsonify, render_template_string, session, redi
 app = Flask(__name__)
 app.secret_key = os.urandom(32).hex()
 
-OPENROUTER_KEY = None
+GROK_KEY = None
 dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
 if os.path.exists(dotenv_path):
     with open(dotenv_path) as f:
         for line in f:
             line = line.strip()
-            if line.startswith('OPENROUTER_API_KEY='):
-                OPENROUTER_KEY = line.split('=', 1)[1].strip().strip("'\"")
+            if line.startswith(.GROK_API_KEY.'):
+                GROK_KEY = line.split('=', 1)[1].strip().strip("'\"")
 
 CHAT_PASSWORD = os.environ.get('CHAT_PASSWORD', 'test2026')
 
@@ -425,8 +425,8 @@ def logout():
 def chat():
     if not session.get('logged_in'):
         return jsonify({'error': 'Не авторизован'}), 401
-    if not OPENROUTER_KEY:
-        return jsonify({'error': 'OpenRouter API ключ не настроен'}), 500
+    if not GROK_KEY:
+        return jsonify({'error': 'Grok API ключ не настроен'}), 500
 
     data = request.get_json()
     if not data:
@@ -456,9 +456,9 @@ def chat():
 
     try:
         resp = requests.post(
-            'https://openrouter.ai/api/v1/chat/completions',
+            'https://api.x.ai/v1/chat/completions',
             headers={
-                'Authorization': f'Bearer {OPENROUTER_KEY}',
+                'Authorization': f'Bearer {GROK_KEY}',
                 'Content-Type': 'application/json',
                 'HTTP-Referer': 'https://chat.local',
                 'X-Title': 'AI Chat'
@@ -473,11 +473,11 @@ def chat():
         )
         result = resp.json()
         if resp.status_code != 200:
-            return jsonify({'error': f'OpenRouter: {result.get("error", {}).get("message", str(result))[:200]}'}), 502
+            return jsonify({'error': f'Grok: {result.get("error", {}).get("message", str(result))[:200]}'}), 502
         reply = result['choices'][0]['message']['content']
         return jsonify({'reply': reply})
     except requests.Timeout:
-        return jsonify({'error': 'Таймаут OpenRouter'}), 504
+        return jsonify({'error': 'Таймаут Grok'}), 504
     except Exception as e:
         return jsonify({'error': str(e)[:200]}), 500
 

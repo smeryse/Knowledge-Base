@@ -2,10 +2,10 @@ import requests
 import json
 import re
 from typing import List, Dict, Any
-from config import OPENROUTER_API_KEY
+from config import GROK_API_KEY
 
-OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
-MODEL = "deepseek/deepseek-chat"
+GROK_URL = "https://api.groq.com/openai/v1/chat/completions"
+MODEL = "llama-3.3-70b-versatile"
 
 PROMPT_TEMPLATE = """Ты — нормализатор товаров из кассового чека. Для КАЖДОГО товара из списка верни JSON-объект.
 
@@ -36,19 +36,17 @@ PROMPT_TEMPLATE = """Ты — нормализатор товаров из ка�
 
 class AINormalizer:
     def __init__(self):
-        self.openrouter_key = OPENROUTER_API_KEY
+        self.grok_key = GROK_API_KEY
 
-    def _call_openrouter(self, prompt: str) -> str:
-        if not self.openrouter_key:
-            raise RuntimeError("OpenRouter API key не настроен")
+    def _call_grok(self, prompt: str) -> str:
+        if not self.grok_key:
+            raise RuntimeError("Grok API key не настроен")
         try:
             resp = requests.post(
-                OPENROUTER_URL,
+                GROK_URL,
                 headers={
-                    "Authorization": f"Bearer {self.openrouter_key}",
+                    "Authorization": f"Bearer {self.grok_key}",
                     "Content-Type": "application/json",
-                    "HTTP-Referer": "https://assistant-bot.local",
-                    "X-Title": "Receipt Normalizer"
                 },
                 json={
                     "model": MODEL,
@@ -60,14 +58,14 @@ class AINormalizer:
             )
             data = resp.json()
             if resp.status_code != 200:
-                raise RuntimeError(f"OpenRouter HTTP {resp.status_code}: {data}")
+                raise RuntimeError(f"Grok HTTP {resp.status_code}: {data}")
             if "choices" not in data:
-                raise RuntimeError(f"OpenRouter ошибка: {data.get('error', data)}")
+                raise RuntimeError(f"Grok ошибка: {data.get('error', data)}")
             return data["choices"][0]["message"]["content"]
         except requests.RequestException as e:
-            raise RuntimeError(f"OpenRouter сетевая ошибка: {e}")
+            raise RuntimeError(f"Grok сетевая ошибка: {e}")
         except (KeyError, IndexError) as e:
-            raise RuntimeError(f"OpenRouter неверный формат ответа: {e}")
+            raise RuntimeError(f"Grok неверный формат ответа: {e}")
 
     def normalize_unknown_batch(self, items: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         """
@@ -81,7 +79,7 @@ class AINormalizer:
 
         lines = [f"- {i.get('raw_name', 'UNKNOWN')}" for i in items]
         prompt = PROMPT_TEMPLATE.replace("{items}", "\n".join(lines))
-        raw_text = self._call_openrouter(prompt)
+        raw_text = self._call_grok(prompt)
 
         # Strip possible markdown fences
         text = raw_text.strip()
@@ -149,12 +147,10 @@ class AINormalizer:
 
         try:
             resp = requests.post(
-                OPENROUTER_URL,
+                GROK_URL,
                 headers={
-                    "Authorization": f"Bearer {self.openrouter_key}",
+                    "Authorization": f"Bearer {self.grok_key}",
                     "Content-Type": "application/json",
-                    "HTTP-Referer": "https://assistant-bot.local",
-                    "X-Title": "Store Normalizer"
                 },
                 json={
                     "model": MODEL,
@@ -166,9 +162,9 @@ class AINormalizer:
             )
             data = resp.json()
             if resp.status_code != 200:
-                raise RuntimeError(f"OpenRouter HTTP {resp.status_code}: {data}")
+                raise RuntimeError(f"Grok HTTP {resp.status_code}: {data}")
             if "choices" not in data:
-                raise RuntimeError(f"OpenRouter ошибка: {data.get('error', data)}")
+                raise RuntimeError(f"Grok ошибка: {data.get('error', data)}")
 
             raw_text = data["choices"][0]["message"]["content"]
             text = raw_text.strip()

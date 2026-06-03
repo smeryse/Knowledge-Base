@@ -32,8 +32,8 @@ CATEGORIES_ALLOWED = {
     "уход", "быт", "прочее",
 }
 
-DEFAULT_OPENROUTER_MODEL = "deepseek/deepseek-chat"
-DEFAULT_OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
+DEFAULT_GROK_MODEL = "llama-3.3-70b-versatile"
+DEFAULT_GROK_URL = "https://api.groq.com/openai/v1/chat/completions"
 
 
 def _normalize_unit(u: str) -> str:
@@ -194,7 +194,7 @@ def fetch_candidates(barcode: str) -> List[Dict]:
     return candidates
 
 
-def openrouter_normalize(barcode: str, candidates: List[Dict], api_key: str, model: str = DEFAULT_OPENROUTER_MODEL) -> Optional[Dict]:
+def grok_normalize(barcode: str, candidates: List[Dict], api_key: str, model: str = DEFAULT_GROK_MODEL) -> Optional[Dict]:
     if not candidates or not api_key:
         return None
     prompt = (
@@ -222,12 +222,10 @@ def openrouter_normalize(barcode: str, candidates: List[Dict], api_key: str, mod
     )
     try:
         r = requests.post(
-            DEFAULT_OPENROUTER_URL,
+            DEFAULT_GROK_URL,
             headers={
                 "Authorization": f"Bearer {api_key}",
                 "Content-Type": "application/json",
-                "HTTP-Referer": "https://weaselcloud",
-                "X-Title": "Obsidian Food Bot"
             },
             json={
                 "model": model,
@@ -259,7 +257,7 @@ def openrouter_normalize(barcode: str, candidates: List[Dict], api_key: str, mod
             "perishable": bool(parsed.get("perishable", False)),
             "default_shelf_life_days": str(parsed.get("default_shelf_life_days", "")),
             "confidence": float(parsed.get("confidence", 0)),
-            "source": "openrouter"
+            "source": "grok"
         }
     except Exception:
         return None
@@ -460,7 +458,7 @@ def extract_barcode(image_bytes: bytes) -> Optional[str]:
     return None
 
 
-def process_barcode(barcode: str, openrouter_key: str) -> Dict[str, Any]:
+def process_barcode(barcode: str, grok_key: str) -> Dict[str, Any]:
     # Deduplication: check if product with this barcode already exists
     existing = find_product_by_barcode(barcode)
     if existing:
@@ -476,7 +474,7 @@ def process_barcode(barcode: str, openrouter_key: str) -> Dict[str, Any]:
     candidates = fetch_candidates(barcode)
     normalized = None
     if candidates:
-        normalized = openrouter_normalize(barcode, candidates, openrouter_key)
+        normalized = grok_normalize(barcode, candidates, grok_key)
 
     if normalized:
         # Double-check by title to avoid near-duplicates

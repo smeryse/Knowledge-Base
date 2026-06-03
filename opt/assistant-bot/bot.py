@@ -126,7 +126,7 @@ async def process_receipt_qr(message: types.Message, qr_text: str):
     except RuntimeError as e:
         await processing_msg.edit_text(
             f"❌ Ошибка нормализации товаров:\n{e}\n\n"
-            f"Чек НЕ сохранён. Проверь API-ключ OpenRouter и попробуй снова."
+            f"Чек НЕ сохранён. Проверь API-ключ Grok и попробуй снова."
         )
     except Exception as e:
         await processing_msg.edit_text(f"❌ Ошибка сохранения: {e}")
@@ -433,7 +433,7 @@ async def handle_photo(message: types.Message):
         
         # Step 1: local database
         await processing_msg.edit_text(f"🔍 Штрихкод: {barcode}\n📂 Поиск в базе...")
-        from barcode_scanner import find_product_by_barcode, fetch_candidates, openrouter_normalize, create_product_note, find_product_by_title
+        from barcode_scanner import find_product_by_barcode, fetch_candidates, grok_normalize, create_product_note, find_product_by_title
         existing = find_product_by_barcode(barcode)
         
         if existing:
@@ -455,7 +455,7 @@ async def handle_photo(message: types.Message):
             if candidates:
                 # Step 3: LLM normalization
                 await processing_msg.edit_text(f"🔍 Штрихкод: {barcode}\n🤖 Нормализация...")
-                normalized = openrouter_normalize(barcode, candidates, ai_norm.openrouter_key)
+                normalized = grok_normalize(barcode, candidates, ai_norm.grok_key)
                 
                 if normalized:
                     dup = find_product_by_title(normalized["title"])
