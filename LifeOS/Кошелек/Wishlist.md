@@ -23,4 +23,3 @@ tags:
 - Аккумуляторы АА типа
 - DJ пульт pioneer ddj flx4
 - Кофемолка Hibrew 150w
-- 
