@@ -45,21 +45,21 @@ views:
   - type: tasknotesCalendar
     name: Agenda
     order:
-      - status
-      - priority
       - due
-      - scheduled
       - projects
       - contexts
+      - file.name
+      - file.tasks
+      - status
+      - priority
+      - scheduled
+      - complete_instances
+      - recurrence
       - file.tags
       - blockedBy
-      - file.name
-      - recurrence
-      - complete_instances
-      - file.tasks
     options:
       showPropertyBasedEvents: false
-    calendarView: timeGridDay
+    calendarView: timeGridWeek
     startDateProperty: file.ctime
     listDayCount: 7
     titleProperty: file.basename

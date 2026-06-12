@@ -7,12 +7,14 @@ cancelled:
 recurrence:
 priority: 3
 points: 30
-status: todo
+status: "null"
 tags:
   - todo
   - git
   - task
 category:
+dateModified: 2026-06-12T15:39:58.190+03:00
+tasknotes_manual_order: "0|hzzzzz:"
 ---
 
 # Настроить репозиторий OS
