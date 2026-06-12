@@ -45,11 +45,6 @@ views:
   - type: tasknotesCalendar
     name: Agenda
     order:
-      - due
-      - projects
-      - contexts
-      - file.name
-      - file.tasks
       - status
       - priority
       - scheduled
@@ -57,6 +52,11 @@ views:
       - recurrence
       - file.tags
       - blockedBy
+      - projects
+      - contexts
+      - file.name
+      - file.tasks
+      - due
     options:
       showPropertyBasedEvents: false
     calendarView: dayGridMonth
