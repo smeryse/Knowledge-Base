@@ -1,6 +1,5 @@
 ---
 created: 2026-03-31
-due: 2026-03-31
 scheduled:
 start:
 cancelled:
@@ -13,7 +12,7 @@ tags:
   - git
   - task
 category:
-dateModified: 2026-06-12T15:39:58.190+03:00
+dateModified: 2026-06-12T23:41:55.272+03:00
 tasknotes_manual_order: "0|hzzzzz:"
 ---
 
