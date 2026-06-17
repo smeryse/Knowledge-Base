@@ -4,46 +4,48 @@ tags:
   - personal
   - shopping
 ---
-- [IETS GT500 - охлаждающая подставка для ноутбука (Premium)](https://www.ozon.ru/product/originalnaya-ietsgt500bd-bazovaya-versiya-turboventilyatornogo-dvigatelya-nakladka-dlya-ohlazhdeniya-1493955135/?at=nRtr2yYyncpqVKyriwojggsMOrwB7cn8YPMYS1893gN)
-- [Airpods 4](https://www.ozon.ru/product/apple-naushniki-besprovodnye-s-mikrofonom-apple-airpods-4-bluetooth-usb-type-c-belyy-chernyy-2010664864/?at=A6tGXmzmjc4LyQQqTojJA0Kfg6zG1wc7xE1mXIMx8Epj)
-- Повербанк
-- Электрогриль
-- Тостер
-- Ноутбук
-- SSD m2 nvme 2tb
-- Беруши для сна
-- Чайник заварочный
-- Тиапот
-- Термос
-- Форма для яиц пашот
-- Кабель для ibasso dc03
-- Кофе зерновой 1кг
-- Аккумуляторы АА типа
-- DJ пульт pioneer ddj flx4
-- Кофемолка Hibrew 150w
-- Moondrop chu 2
-- nb 550 green
-- Вакууматор для продуктов
-- Набор ножей
-- MAISON MARGIELA Replica Jazz Club 100ml
-- Зеленая матча в порошке
-- Кофе руанда мутетели зерновой 1кг
-- Зерно кукурузы 1кг для попкорна
-- Отвертка набор бит для точных работ 117 в 1
-- Графический планшет Parblo
-- Rick Owens высокие
-- Темперированный темпер
-- Audio technica ath m50x white
-- Кунжут, лен, чиа сушеные
-- Жесткий чехол для Beyerdynamic DT 990 PRO
-- Наушники kz krilla
-- Кофе мехмет афенди
-- Носки белые черные качественные
-- Кулон крест мисы амане
-- Зарядная станция и аккум для xbox series s
-- Футболка alhex twin
-- Дуршлаг для промывки круп
-- ночник аксолотль майнкрафт
-- Термокружка
-- Чай габа листовой
-- наушники koss porta pro
+Привет, Ярослав. Держи список в виде таблицы.
+
+| Товар                                                                                                                                                                                                                                                    |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [IETS GT500 - охлаждающая подставка для ноутбука (Premium)](https://www.ozon.ru/product/originalnaya-ietsgt500bd-bazovaya-versiya-turboventilyatornogo-dvigatelya-nakladka-dlya-ohlazhdeniya-1493955135/?at=nRtr2yYyncpqVKyriwojggsMOrwB7cn8YPMYS1893gN) |
+| [Airpods 4](https://www.ozon.ru/product/apple-naushniki-besprovodnye-s-mikrofonom-apple-airpods-4-bluetooth-usb-type-c-belyy-chernyy-2010664864/?at=A6tGXmzmjc4LyQQqTojJA0Kfg6zG1wc7xE1mXIMx8Epj)                                                        |
+| [Повербанк](https://www.ozon.ru/product/moshchnyy-poverbank-xiaomi-30000-mah-s-bystroy-zaryadkoy-fast-charge-power-bank-vneshniy-4519212473/?at=83tB0JKJ9txWj1VMh4GqYxOFZDgKEZtMD1ERSqN2Y2x)                                                             |
+| [Электрогриль](https://www.ozon.ru/product/elektricheskiy-gril-weissgauff-wcg-100-chef-s-steak-3-v-1-gril-duhovka-barbekyu-moshchnost-1950-vt-5-3539151287/?at=99trXZyxRCJzYGPjCykvGMEHYK93D5uMqyYJNSMzm2Wy)                                             |
+| SSD m2 nvme 2tb                                                                                                                                                                                                                                          |
+| Беруши для сна пена мягкие                                                                                                                                                                                                                               |
+|                                                                                                                                                                                                                                                          |
+| [Тиапот](https://www.ozon.ru/product/chaynik-zavarochnyy-steklyannyy-gunfu-s-knopkoy-tipot-obem-750-ml-3518364742/?at=WPtNKp7xziEY0QQMsorv0A4TyR8Pq3hYmQJqPfA5Og8v)                                                                                      |
+| [Термос](https://www.ozon.ru/product/termos-dlya-chaya-0-5-termokruzhka-500ml-avtomobilnaya-muzhskaya-dlya-kofe-1880276865/?at=J8tgv4Gyps23ZjyOI35xZ9CQq1jznUQ3NvAXsq7VRlv)                                                                              |
+| [Форма для яиц пашот](https://www.ozon.ru/product/forma-dlya-varenyh-yaits-1-sht-3052950418/?at=Y7tjq0RgkHD9771ZI73PBqOIq5NEZmU23Nl8ktz5n39Z)                                                                                                            |
+| ~~Кабель для ibasso dc03~~                                                                                                                                                                                                                               |
+| Кофе зерновой 1кг                                                                                                                                                                                                                                        |
+| Аккумуляторы АА типа                                                                                                                                                                                                                                     |
+| DJ пульт pioneer ddj flx4                                                                                                                                                                                                                                |
+| Кофемолка Hibrew 150w                                                                                                                                                                                                                                    |
+| Moondrop chu 2                                                                                                                                                                                                                                           |
+| nb 550 green                                                                                                                                                                                                                                             |
+| Вакууматор для продуктов                                                                                                                                                                                                                                 |
+| Набор ножей                                                                                                                                                                                                                                              |
+| MAISON MARGIELA Replica Jazz Club 100ml                                                                                                                                                                                                                  |
+| Зеленая матча в порошке                                                                                                                                                                                                                                  |
+| Кофе руанда мутетели зерновой 1кг                                                                                                                                                                                                                        |
+| Зерно кукурузы 1кг для попкорна                                                                                                                                                                                                                          |
+| Отвертка набор бит для точных работ 117 в 1                                                                                                                                                                                                              |
+| Графический планшет Parblo                                                                                                                                                                                                                               |
+| Rick Owens высокие                                                                                                                                                                                                                                       |
+| Темперированный темпер                                                                                                                                                                                                                                   |
+| Audio technica ath m50x white                                                                                                                                                                                                                            |
+| Кунжут, лен, чиа сушеные                                                                                                                                                                                                                                 |
+| Жесткий чехол для Beyerdynamic DT 990 PRO                                                                                                                                                                                                                |
+| Наушники kz krilla                                                                                                                                                                                                                                       |
+| Кофе мехмет афенди                                                                                                                                                                                                                                       |
+| Носки белые черные качественные                                                                                                                                                                                                                          |
+| Кулон крест мисы амане                                                                                                                                                                                                                                   |
+| Зарядная станция и аккум для xbox series s                                                                                                                                                                                                               |
+| Футболка alhex twin                                                                                                                                                                                                                                      |
+| Дуршлаг для промывки круп                                                                                                                                                                                                                                |
+| ночник аксолотль майнкрафт                                                                                                                                                                                                                               |
+| Термокружка                                                                                                                                                                                                                                              |
+| Чай габа листовой                                                                                                                                                                                                                                        |
+| наушники koss porta pro                                                                                                                                                                                                                                  |
