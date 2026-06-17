@@ -4,10 +4,8 @@ tags:
   - personal
   - shopping
 ---
-- IETS GT500 - охлаждающая подставка для ноутбука (Premium)
-- Аэрогриль
-- Airpods 4
-- Airpods pro 2
+- [IETS GT500 - охлаждающая подставка для ноутбука (Premium)](https://www.ozon.ru/product/originalnaya-ietsgt500bd-bazovaya-versiya-turboventilyatornogo-dvigatelya-nakladka-dlya-ohlazhdeniya-1493955135/?at=nRtr2yYyncpqVKyriwojggsMOrwB7cn8YPMYS1893gN)
+- [Airpods 4](https://www.ozon.ru/product/apple-naushniki-besprovodnye-s-mikrofonom-apple-airpods-4-bluetooth-usb-type-c-belyy-chernyy-2010664864/?at=A6tGXmzmjc4LyQQqTojJA0Kfg6zG1wc7xE1mXIMx8Epj)
 - Повербанк
 - Электрогриль
 - Тостер
