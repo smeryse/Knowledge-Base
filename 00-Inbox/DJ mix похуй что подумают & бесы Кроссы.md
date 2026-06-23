@@ -1,0 +1,6 @@
+---
+tags:
+  - music
+  - dj
+  - ideas
+---
