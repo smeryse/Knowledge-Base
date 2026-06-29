@@ -1,2 +1,5 @@
-https://www.youtube.com/watch?v=nuZTpUEBenM
-
+---
+tags:
+  - links
+link: https://www.youtube.com/watch?v=nuZTpUEBenM
+---

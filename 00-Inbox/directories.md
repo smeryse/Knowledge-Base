@@ -2,6 +2,7 @@
 tags:
   - linux
   - reference
+  - config
 ---
 /opt - папка для установки программ
 ~/.zshrc - конфиги zsh терминала

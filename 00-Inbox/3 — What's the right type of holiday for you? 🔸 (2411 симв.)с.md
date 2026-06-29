@@ -1,1 +1,0 @@
-## 3 — What's the right type of holiday for you? 🔸 (2411 симв.)
