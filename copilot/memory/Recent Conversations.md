@@ -5,3 +5,7 @@
 ## Add Tags to Note
 **Time:** 2026-07-01 14:15
 **Summary:** The user wants to add tags to their active note, which is named "goubernator". The AI suggests relevant tags in Russian and then provides them in YAML format, both in Russian and English, upon user request.
+
+## Add Emojis to Text
+**Time:** 2026-07-01 14:26
+**Summary:** The user wants to add relevant emojis to a given text. The emojis should be inserted at natural breaks, never placed next to each other, and the original text must remain unchanged. The AI provides an example of emojified text.
