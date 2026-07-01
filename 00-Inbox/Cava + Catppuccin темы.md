@@ -1,3 +1,9 @@
+---
+tags:
+  - catpucchin
+  - themes
+---
+
 ## Структура конфигов
 
 `~/.config/cava/config` — основной конфиг (teal)

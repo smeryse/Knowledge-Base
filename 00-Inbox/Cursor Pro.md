@@ -3,7 +3,6 @@ tags:
   - ai
   - ide
 ---
-
 ```bash
 rm -rf ~/.config/Cursor ~/.cursor ~/.cursor-viprc ~/Documents/.cursor-free-vip
 ```

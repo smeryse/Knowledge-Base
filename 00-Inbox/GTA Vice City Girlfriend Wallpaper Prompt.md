@@ -1,11 +1,18 @@
 ---
+
+---
+
 tags:
   - ai
   - images
   - wallpapers
----
-
- 
+  - gta
+  - vice-city
+  - san-andreas
+  - prompts
+  - digital-art
+  - illustration
+ =--
 > [!summary] Prompt 1
 > A realistic Grand Theft Auto style illustration with a cinematic game loading screen look. A confident young woman standing outdoors in a Los Angeles / Vice City-inspired location, with palm trees and suburban houses in the background. She is wearing a red fitted top and blue high-waisted denim shorts, an open black leather jacket. No sunglasses. Long loose hair, hoop earrings. She is confidently holding a compact submachine gun. Bright daylight, clean sharp lines, semi-realistic comic art style, high detail, dramatic lighting, vibrant colors, GTA 5 / GTA Online poster style, Rockstar Games art style, ultra-high resolution, professional digital illustration.
 

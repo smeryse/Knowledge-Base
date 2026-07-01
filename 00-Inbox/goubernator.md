@@ -1,3 +1,13 @@
+---
+tags:
+  - Linux
+  - CPU
+  - cpufreq
+  - governor
+  - performance
+  - configuration
+  - nbfc
+---
 /sys/devices/system/cpu/cpufreq/policy0 - каталог губернатора тихого режима
 /sys/devices/system/cpu/cpu0/cpufreq - текущий профиль губернатора
 scaling_available_governors - доступные профили 

@@ -2,6 +2,7 @@
 tags:
   - linux
   - tilling
+  - hotkeys
 aliases:
   - тайлинг
 ---
