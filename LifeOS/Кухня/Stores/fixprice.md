@@ -1,5 +1,20 @@
 ---
 type: store
+<<<<<<< HEAD
+title: Fixprice
+aliases:
+- Fixprice
+created: '2026-06-23'
+tags:
+- store
+---
+
+# Fixprice
+
+## Заметки
+
+>
+=======
 title: "FixPrice"
 aliases:
 - "фикспрайс"
@@ -10,3 +25,4 @@ tags:
   - store
 ---
 
+>>>>>>> origin/main

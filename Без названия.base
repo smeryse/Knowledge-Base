@@ -1,0 +1,6 @@
+views:
+  - type: cards
+    name: Таблица
+    markers: number
+  - type: table
+    name: представление

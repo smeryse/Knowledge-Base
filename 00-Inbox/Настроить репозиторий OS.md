@@ -1,12 +1,20 @@
 ---
 created: 2026-03-31
+<<<<<<< HEAD
+due: 2026-03-31
+=======
+>>>>>>> origin/main
 scheduled:
 start:
 cancelled:
 recurrence:
 priority: 3
 points: 30
-status: none
+<<<<<<< HEAD
+status: todo
+=======
+status: "null"
+>>>>>>> origin/main
 tags:
   - todo
   - git
@@ -14,8 +22,11 @@ tags:
   - linux
   - configuration
 category:
-dateModified: 2026-07-01T15:58:33.861+03:00
+<<<<<<< HEAD
+=======
+dateModified: 2026-06-12T23:41:55.272+03:00
 tasknotes_manual_order: "0|hzzzzz:"
+>>>>>>> origin/main
 ---
 
 # Настроить репозиторий OS
