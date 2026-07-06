@@ -6,7 +6,6 @@ tags:
   - audio_visualizer
   - linux_config
 ---
-
 ## Структура конфигов
 
 `~/.config/cava/config` — основной конфиг (teal)

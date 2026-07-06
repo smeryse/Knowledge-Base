@@ -5,9 +5,6 @@ tags:
   - system
   - design
 ---
-
-# Catppuccin System Theme Project
-
 ## Setup Instruction
 
 - **Palette:** https://catppuccin.com/palette/

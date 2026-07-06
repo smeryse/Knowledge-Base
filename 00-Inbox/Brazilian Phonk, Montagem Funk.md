@@ -8,9 +8,6 @@ tags:
 aliases: [Brazilian Phonk, Montagem Funk, Automotivo Phonk]
 created: 2026-04-29
 ---
-
-# Brazilian Phonk / Montagem Funk
-
 Электронный поджанр, сформировавшийся на стыке американского мемфис-фонка, бразильского фанка (Funk Carioca) и современной клубной электроники. Распространяется преимущественно через TikTok, SoundCloud и YouTube, ориентирован на автомобильные аудиосистемы и танцевальные сеты.
 
 ## История и корни

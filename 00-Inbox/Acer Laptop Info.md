@@ -4,7 +4,4 @@ tags:
   - laptop
   - hardware
 ---
-
-# Acer Laptop Info
-
 **Модель:** Acer Aspire 7 A715-42G-К4GR
