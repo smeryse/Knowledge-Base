@@ -1,0 +1,299 @@
+filters:
+  and:
+    - type == "product"
+views:
+  - type: table
+    name: Главная
+    order:
+      - file.name
+      - barcode
+      - aliases
+      - category
+      - brand
+      - typical_pack_size
+      - typical_pack_unit
+      - perishable
+      - default_shelf_life_days
+      - price
+      - image
+      - file.ctime
+      - base_unit
+    sort:
+      - property: base_unit
+        direction: DESC
+      - property: price
+        direction: ASC
+      - property: file.name
+        direction: DESC
+      - property: aliases
+        direction: DESC
+      - property: category
+        direction: ASC
+      - property: barcode
+        direction: ASC
+      - property: brand
+        direction: ASC
+      - property: image
+        direction: DESC
+      - property: title
+        direction: DESC
+    image: note.image
+    columnSize:
+      file.name: 251
+      note.barcode: 140
+      note.aliases: 229
+      note.category: 113
+      note.typical_pack_size: 57
+      note.typical_pack_unit: 52
+      note.perishable: 48
+      note.default_shelf_life_days: 88
+      note.image: 144
+  - type: cards
+    name: Главная с изображением
+    order:
+      - file.name
+      - barcode
+      - aliases
+      - category
+      - brand
+      - typical_pack_size
+      - typical_pack_unit
+      - perishable
+      - default_shelf_life_days
+      - price
+      - image
+      - file.ctime
+      - base_unit
+    sort:
+      - property: category
+        direction: DESC
+      - property: file.name
+        direction: ASC
+      - property: brand
+        direction: ASC
+      - property: image
+        direction: DESC
+      - property: file.ctime
+        direction: ASC
+      - property: title
+        direction: DESC
+    image: note.image
+    columnSize:
+      file.name: 251
+      note.barcode: 140
+      note.aliases: 229
+      note.category: 113
+      note.typical_pack_size: 57
+      note.typical_pack_unit: 52
+      note.perishable: 48
+      note.default_shelf_life_days: 88
+      note.image: 144
+  - type: table
+    name: Без цены
+    filters:
+      and:
+        - or:
+            - price == ""
+            - price == null
+    order:
+      - file.name
+      - barcode
+      - aliases
+      - category
+      - brand
+      - typical_pack_size
+      - typical_pack_unit
+      - perishable
+      - default_shelf_life_days
+      - price
+      - image
+      - file.ctime
+      - base_unit
+    sort:
+      - property: file.name
+        direction: ASC
+    image: note.image
+    columnSize:
+      file.name: 251
+      note.barcode: 140
+      note.aliases: 229
+      note.category: 113
+      note.typical_pack_size: 57
+      note.typical_pack_unit: 52
+      note.perishable: 48
+      note.default_shelf_life_days: 88
+      note.image: 144
+  - type: table
+    name: Без штрихкода
+    filters:
+      and:
+        - or:
+            - barcode == ""
+            - barcode == null
+    order:
+      - file.name
+      - barcode
+      - aliases
+      - category
+      - brand
+      - typical_pack_size
+      - typical_pack_unit
+      - perishable
+      - default_shelf_life_days
+      - price
+      - image
+      - file.ctime
+      - base_unit
+    sort:
+      - property: file.name
+        direction: ASC
+    image: note.image
+    columnSize:
+      file.name: 251
+      note.barcode: 140
+      note.aliases: 229
+      note.category: 113
+      note.typical_pack_size: 57
+      note.typical_pack_unit: 52
+      note.perishable: 48
+      note.default_shelf_life_days: 88
+      note.image: 144
+  - type: table
+    name: Без категории
+    filters:
+      and:
+        - or:
+            - category == ""
+            - category == null
+    order:
+      - file.name
+      - barcode
+      - aliases
+      - category
+      - brand
+      - typical_pack_size
+      - typical_pack_unit
+      - perishable
+      - default_shelf_life_days
+      - price
+      - image
+      - file.ctime
+      - base_unit
+    sort:
+      - property: file.name
+        direction: ASC
+    image: note.image
+    columnSize:
+      file.name: 251
+      note.barcode: 140
+      note.aliases: 229
+      note.category: 113
+      note.typical_pack_size: 57
+      note.typical_pack_unit: 52
+      note.perishable: 48
+      note.default_shelf_life_days: 88
+      note.image: 144
+  - type: table
+    name: Без изображения
+    filters:
+      and:
+        - or:
+            - image == ""
+            - image == null
+    order:
+      - file.name
+      - barcode
+      - aliases
+      - category
+      - brand
+      - typical_pack_size
+      - typical_pack_unit
+      - perishable
+      - default_shelf_life_days
+      - price
+      - image
+      - file.ctime
+      - base_unit
+    sort:
+      - property: file.name
+        direction: ASC
+    image: note.image
+    columnSize:
+      file.name: 251
+      note.barcode: 140
+      note.aliases: 229
+      note.category: 113
+      note.typical_pack_size: 57
+      note.typical_pack_unit: 52
+      note.perishable: 48
+      note.default_shelf_life_days: 88
+      note.image: 144
+  - type: table
+    name: По категориям
+    group:
+      target: category
+    order:
+      - file.name
+      - barcode
+      - aliases
+      - category
+      - brand
+      - typical_pack_size
+      - typical_pack_unit
+      - perishable
+      - default_shelf_life_days
+      - price
+      - image
+      - file.ctime
+      - base_unit
+    sort:
+      - property: category
+        direction: ASC
+      - property: file.name
+        direction: ASC
+    image: note.image
+    columnSize:
+      file.name: 251
+      note.barcode: 140
+      note.aliases: 229
+      note.category: 113
+      note.typical_pack_size: 57
+      note.typical_pack_unit: 52
+      note.perishable: 48
+      note.default_shelf_life_days: 88
+      note.image: 144
+  - type: table
+    name: Ссылки из Pantry
+    filters:
+      and:
+        - file.inlinks
+    order:
+      - file.name
+      - barcode
+      - aliases
+      - category
+      - brand
+      - typical_pack_size
+      - typical_pack_unit
+      - perishable
+      - default_shelf_life_days
+      - price
+      - image
+      - file.ctime
+      - base_unit
+    sort:
+      - property: file.inlinks
+        direction: DESC
+      - property: file.name
+        direction: ASC
+    image: note.image
+    columnSize:
+      file.name: 251
+      note.barcode: 140
+      note.aliases: 229
+      note.category: 113
+      note.typical_pack_size: 57
+      note.typical_pack_unit: 52
+      note.perishable: 48
+      note.default_shelf_life_days: 88
+      note.image: 144

@@ -1,0 +1,12 @@
+---
+type: pantry-item
+product: '[[LifeOS/Кухня/Products/контейнер-с-замком-latch-08-09-л-вил|Контейнер
+  с замком LATCH 0.8/0.9 л -- ВИЛ]]'
+source_receipt: '[[2026-05-16-фикспрайс|2026-05-16-фикспрайс]]'
+qty_current: 2.0
+unit: шт
+manufactured_on: ''
+created: '2026-05-17'
+tags:
+- pantry-item
+---

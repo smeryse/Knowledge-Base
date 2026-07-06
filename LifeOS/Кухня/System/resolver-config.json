@@ -1,0 +1,9 @@
+{
+  "enabled": true,
+  "provider": "groq",
+  "endpoint": "https://api.groq.com/openai/v1",
+  "apiKey": "gsk_...",
+  "model": "llama-3.1-8b-instant",
+  "temperature": 0.1,
+  "timeout_ms": 20000
+}

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Purple Adaptation</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background-color: #0d1117;
+            color: #c9d1d9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .palette-container {
+            display: flex;
+            gap: 10px;
+            background: #161b22;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #30363d;
+        }
+
+        .color-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .square {
+            width: 50px;
+            height: 50px;
+            border-radius: 4px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .hex {
+            font-family: monospace;
+            font-size: 13px;
+            background: #21262d;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #8b949e;
+        }
+
+        /* --- АДАПТИРОВАННАЯ ПАЛИТРА --- */
+        
+        /* 1. Фон / Нет активности */
+        .c-1 { background-color: #161220; } 
+        
+        /* 2. Низкая активность (аналог #033A16) */
+        .c-2 { background-color: #2E1065; }
+        
+        /* 3. Средняя активность (аналог #196C2E) */
+        .c-3 { background-color: #6B21A8; }
+        
+        /* 4. Высокая активность (аналог #2EA043) */
+        .c-4 { background-color: #9333EA; }
+        
+        /* 5. Пиковая активность (аналог #56D364) */
+        .c-5 { background-color: #C084FC; }
+
+    </style>
+</head>
+<body>
+
+    <div class="palette-container">
+        <div class="color-item">
+            <div class="square c-1"></div>
+            <div class="hex">#161220</div>
+        </div>
+        <div class="color-item">
+            <div class="square c-2"></div>
+            <div class="hex">#2E1065</div>
+        </div>
+        <div class="color-item">
+            <div class="square c-3"></div>
+            <div class="hex">#6B21A8</div>
+        </div>
+        <div class="color-item">
+            <div class="square c-4"></div>
+            <div class="hex">#9333EA</div>
+        </div>
+        <div class="color-item">
+            <div class="square c-5"></div>
+            <div class="hex">#C084FC</div>
+        </div>
+    </div>
+
+</body>
+</html>
