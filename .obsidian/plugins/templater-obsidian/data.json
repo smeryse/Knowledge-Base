@@ -29,8 +29,7 @@
   "syntax_highlighting": true,
   "syntax_highlighting_mobile": false,
   "enabled_templates_hotkeys": [
-    "Templates/Note.md",
-    ""
+    "Templates/Note.md"
   ],
   "startup_templates": [
     "Templates/Note.md",
