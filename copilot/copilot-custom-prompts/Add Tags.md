@@ -3,7 +3,7 @@ copilot-command-context-menu-enabled: true
 copilot-command-slash-enabled: true
 copilot-command-context-menu-order: 1150
 copilot-command-model-key: ""
-copilot-command-last-used: 1783344963720
+copilot-command-last-used: 1783346930291
 ---
 For {activeNote}: review the "tags" property in YAML frontmatter. Add relevant English tags — you may also remove tags that no longer fit or improve/replace existing ones if needed. All tags must be in English, lowercase, with no spaces (use underscores instead, e.g. "data_viz"). Don't change other properties.
 

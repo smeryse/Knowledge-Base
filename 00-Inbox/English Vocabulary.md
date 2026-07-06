@@ -1,6 +1,9 @@
 ---
 tags:
-  - english
+  - english_vocabulary
+  - vocabulary
+  - english_grammar
+  - language_learning
 ---
 # Unit 1
 an acquaintance - знакомый - People Around You
