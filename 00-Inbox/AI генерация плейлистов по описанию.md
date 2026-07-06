@@ -1,13 +1,21 @@
 ---
 title: AI плейлисты и генерация музыки по вайбу
-tags: [music, ai, playlists, synthwave, rnb, tools]
+tags:
+  - music
+  - ai
+  - playlists
+  - synthwave
+  - rnb
+  - music_discovery
+  - tools
 created: 2026-05-04
 ---
+
 # AI генерация плейлистов по описанию
 
 ## 🧠 Основные сервисы (по текстовому промпту)
 
-### 🔹 PlaylistAI
+### PlaylistAI
 - Генерация плейлистов по описанию
 - Интеграция со Spotify
 - Хорошо понимает сложные вайбы (night drive, synthwave, R&B)
@@ -19,7 +27,7 @@ created: 2026-05-04
 
 ---
 
-### 🔹 Cosine (AI discovery)
+### Cosine (AI discovery)
 - Поиск музыки через настроение / сцену / эстетику
 - Подходит для абстрактных описаний
 
@@ -30,7 +38,7 @@ created: 2026-05-04
 
 ---
 
-### 🔹 ChatGPT + Spotify (ручной метод)
+### ChatGPT + Spotify (ручной метод)
 - Генерируешь список → переносишь в Spotify
 - Можно использовать Soundiiz для автоматизации
 
@@ -38,7 +46,7 @@ created: 2026-05-04
 
 ## 🎧 Поиск похожих треков (audio-based)
 
-### 🔹 Chosic
+### Chosic
 - Анализирует треки и находит максимально похожие
 - Хорошо работает для расширения плейлистов
 
@@ -46,7 +54,7 @@ created: 2026-05-04
 
 ---
 
-### 🔹 Every Noise at Once
+### Every Noise at Once
 - Карта жанров Spotify
 - Полезно для поиска поджанров (alt R&B, synthwave)
 
@@ -56,8 +64,8 @@ created: 2026-05-04
 
 ## 🔥 Лучший способ для длинных миксов
 
-### 🔹 YouTube
-- Самый эффективный вариант для “лонгмиксов”
+### YouTube
+Самый эффективный вариант для «лонгмиксов».
 
 **Запросы:**
 - `The Weeknd Dawn FM transitions mix`
@@ -68,31 +76,31 @@ created: 2026-05-04
 
 ## 💡 Как правильно писать промпты
 
-❌ Плохо:
-> похожие треки
+❌ **Плохо:** `похожие треки`
 
-✅ Хорошо:
-> dark synthwave rnb, night drive, neon lights, emotional, smooth transitions, The Weeknd style
+✅ **Хорошо:** `dark synthwave rnb, night drive, neon lights, emotional, smooth transitions, The Weeknd style`
 
-**Правило:**
-- Добавляй:
-  - настроение (dark, emotional)
-  - сцену (night drive, neon city)
-  - жанры (synthwave, rnb)
-  - референсы (The Weeknd, Dawn FM)
+**Правило:** Добавляй:
+- настроение (dark, emotional)
+- сцену (night drive, neon city)
+- жанры (synthwave, rnb)
+- референсы (The Weeknd, Dawn FM)
 
 ---
 
 ## ⚡ Быстрый выбор
 
-- AI по описанию → **PlaylistAI**
-- Готовые миксы → **YouTube**
-- Похожие треки → **Chosic**
-- Исследование жанров → **Every Noise**
+| Задача | Сервис |
+|--------|--------|
+| AI по описанию | **PlaylistAI** |
+| Готовые миксы | **YouTube** |
+| Похожие треки | **Chosic** |
+| Исследование жанров | **Every Noise** |
 
 ---
 
 ## 🧩 Заметки
+
 - Лучшие результаты даёт комбинация сервисов
 - YouTube часто превосходит AI за счёт готовых curated миксов
-- Чем точнее вайб → тем лучше плейлист
+- Чем точнее вайб — тем лучше плейлист

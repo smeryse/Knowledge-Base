@@ -1,7 +1,9 @@
 ---
 tags:
+  - minecraft
+  - elyprismlauncher
   - linux
-  - github
+  - gaming
 ---
 
 https://github.com/ElyPrismLauncher/ElyPrismLauncher/releases/tag/9.5

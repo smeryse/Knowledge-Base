@@ -4,7 +4,7 @@ tags:
   - gnome
   - hanabi
   - troubleshooting
-  - обои
+  - wallpapers
 created: 2026-04-30
 status: 🔧 в процессе
 ---
@@ -70,10 +70,7 @@ sudo apt install gir1.2-gst-plugins-base-1.0 gir1.2-gst-plugins-bad-1.0
 - [[Troubleshooting Linux]]
 
 > [!NOTE]
-> Если проблема сохранится — проверить логи:  
-> `journalctl -f | grep hanabi`  
-> или  
+> Если проблема сохранится — проверить логи:
+> `journalctl -f | grep hanabi`
+> или
 > `gnome-extensions list --details hanabi-extension@jeffshee.github.io`
-```
-
-Заметка готова. Теги и чеклисты помогут отслеживать статус, а блок `> [!NOTE]` выделит важные команды для дальнейшей отладки, если фикс не сработает с первого раза.

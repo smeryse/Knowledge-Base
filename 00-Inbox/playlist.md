@@ -1,6 +1,9 @@
 ---
 tags:
   - music
+  - audio
+  - headphones
+  - flac
 ---
 
 # 🎵 Музыкальная коллекция

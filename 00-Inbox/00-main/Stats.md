@@ -1,3 +1,13 @@
+---
+tags:
+  - dashboard
+  - stats
+  - tracking
+  - obsidian
+---
+
+# Stats
+
 ## Баллы
 
 ```dataviewjs
@@ -244,7 +254,7 @@ yOptions:
 
 ---
 
-## Файлы 
+## Файлы
 
 ```dataviewjs
 const files = dv.pages().file;

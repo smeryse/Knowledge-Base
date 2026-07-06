@@ -2,7 +2,9 @@
 tags:
   - osint
   - opsec
+  - security
   - red_team
+  - investigation
 ---
 
 # OSINT против

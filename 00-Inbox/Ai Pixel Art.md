@@ -1,7 +1,10 @@
 ---
 tags:
   - ai
-  - art
+  - pixel_art
   - reference
 ---
-https://www.google.com/amp/s/habr.com/ru/amp/publications/930462/
+
+# AI Pixel Art
+
+🔗 [Статья на Habr](https://www.google.com/amp/s/habr.com/ru/amp/publications/930462/)

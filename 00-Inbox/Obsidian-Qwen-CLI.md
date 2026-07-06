@@ -1,14 +1,15 @@
 ---
 tags:
   - obsidian
-  - ai-tools
+  - qwen
   - cli
   - automation
+  - ai_tools
 ---
-
 # Запуск Qwen Code в терминале Obsidian
 
 ## Цель
+
 Автоматический запуск Qwen Code CLI в терминале Obsidian с контекстом базы знаний.
 
 ## Варианты настройки
@@ -72,8 +73,8 @@ Qwen Code автоматически видит контекст текущей 
 
 ### Настройка Obsidian Terminal
 
-1. Settings → Community plugins → Browse → установить "Terminal"
-2. Открыть терминал (`Ctrl+P` → "Terminal: Open terminal")
+1. Settings → Community plugins → Browse → установить «Terminal»
+2. Открыть терминал (`Ctrl+P` → «Terminal: Open terminal»)
 3. Выполнить: `./.qwen/obsidian-chat.sh` или просто `qwen`
 
 ---
@@ -87,6 +88,7 @@ qwen --include-directories "10-Tech,00-Inbox"
 ```
 
 Или в скрипте:
+
 ```bash
 qwen --include-directories "$(pwd)/10-Tech"
 ```
@@ -112,5 +114,6 @@ qwen --include-directories "$(pwd)/10-Tech"
 - [[AI Assistants]]
 
 ---
+
 **Дата создания:** 2026-03-31
 **Теги:** #obsidian #qwen #cli #automation

@@ -1,4 +1,11 @@
+---
+tags:
+  - tags
+  - obsidian
+  - metadata
+---
 
+# Tag Base
 
 ```dataviewjs
 const tagsByLetter = {};

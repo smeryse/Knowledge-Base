@@ -1,3 +1,11 @@
+---
+tags:
+  - obsidian
+  - knowledge_base
+  - meta
+  - documentation
+  - ai_assistant
+---
 # QWEN.md — Контекст для AI-ассистентов
 
 ## 📌 Обзор проекта

@@ -1,7 +1,10 @@
 ---
 tags:
+  - sound_synthesis
+  - dsp
   - roadmap
   - music
+  - audio_programming
 ---
 
 # 🧠 КУРС: DIGITAL SIGNAL PROCESSING & SOUND SYNTHESIS

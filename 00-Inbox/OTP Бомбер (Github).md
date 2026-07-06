@@ -1,9 +1,10 @@
 ---
 tags:
+  - security
   - red_team
-  - sec
+  - sms_bomber
+  - github
 ---
-
 https://github.com/TheSpeedX/TBomb
 
-[[хакинг]][[телефоны]][[смс]]
+[[хакинг]] [[телефоны]] [[смс]]

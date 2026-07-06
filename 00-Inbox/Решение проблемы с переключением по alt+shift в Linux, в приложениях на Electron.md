@@ -3,6 +3,8 @@ tags:
   - linux
   - issue
   - guide
+  - electron
+  - keyboard_layout
 ---
 
-https://habr.com/ru/articles/476996/
+**Решение:** [Habr](https://habr.com/ru/articles/476996/)

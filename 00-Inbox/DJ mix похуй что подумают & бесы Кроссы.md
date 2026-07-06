@@ -1,6 +1,7 @@
 ---
 tags:
-  - music
   - dj
+  - music
+  - mix
   - ideas
 ---

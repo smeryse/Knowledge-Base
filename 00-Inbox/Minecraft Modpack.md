@@ -1,6 +1,6 @@
 ---
 tags:
-  - archive
   - minecraft
   - mods
+  - archive
 ---

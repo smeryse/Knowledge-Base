@@ -1,9 +1,12 @@
 ---
 tags:
   - linux
+  - directories
   - reference
   - config
+  - filesystem
 ---
-/opt - папка для установки программ
-~/.zshrc - конфиги zsh терминала
-/home/smeryse/.oh-my-zsh/lib/directories.zsh - конфиги алиасов Oh My Zsh
+
+- `/opt` — папка для установки программ
+- `~/.zshrc` — конфиги zsh терминала
+- `/home/smeryse/.oh-my-zsh/lib/directories.zsh` — конфиги алиасов Oh My Zsh

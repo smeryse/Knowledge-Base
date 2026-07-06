@@ -2,8 +2,11 @@
 tags:
   - bots
   - telegram
+  - soundcloud
+  - music_download
 ---
-### Scdl
-This script is able to download music from SoundCloud and set id3tag to the downloaded music. Compatible with Windows, OS X, Linux.
 
-Телеграм бот для скачивания
+### Scdl
+Скрипт для скачивания музыки с SoundCloud и установки id3-тегов. Совместим с Windows, macOS и Linux.
+
+Телеграм-бот для скачивания музыки.

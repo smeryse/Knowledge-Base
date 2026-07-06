@@ -1,6 +1,9 @@
 ---
 tags:
   - linux
+  - terminal
+  - commands
+  - apt
 ---
 
 ##### Вывести список доверенных репозиториев
@@ -12,4 +15,3 @@ sudo ls -la /etc/apt/sources.list.d/
 ```bash
 sudo apt update && sudo apt upgrade
 ```
-

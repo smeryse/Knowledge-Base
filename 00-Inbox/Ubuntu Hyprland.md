@@ -4,30 +4,27 @@ tags:
   - hyprland
 ---
 
-[ERROR] Failed to download Fantasque Sans Mono Nerd Font Please check your connection
+## Ошибки установки
 
-[ERROR] Failed to download Victor Mono Font Please check your connection
+Все ошибки связаны с недоступностью прокси-сервера `127.0.0.1:10808`. Необходимо проверить подключение к VPN/прокси перед запуском установки.
 
-Клонирование в «swappy»...
-fatal: «https://github.com/jtheoof/swappy.git/» недоступно: Failed to connect to 127.0.0.1 port 10808 after 0 ms: Couldn't connect to server
-[ERROR] Download failed for swappy
+### Ошибки загрузки шрифтов
+- `[ERROR] Failed to download Fantasque Sans Mono Nerd Font` — проверьте подключение
+- `[ERROR] Failed to download Victor Mono Font` — проверьте подключение
 
-Клонирование в «swww»...
-fatal: «https://github.com/LGFae/swww.git/» недоступно: Failed to connect to 127.0.0.1 port 10808 after 0 ms: Couldn't connect to server
-[ERROR] Download failed for swww v0.11.2
+### Ошибки клонирования репозиториев
+- **swappy**: `https://github.com/jtheoof/swappy.git/` — Failed to connect to 127.0.0.1 port 10808
+- **swww**: `https://github.com/LGFae/swww.git/` — Failed to connect to 127.0.0.1 port 10808
+- **nwg-displays**: `https://github.com/nwg-piotr/nwg-displays.git/` — Failed to connect to 127.0.0.1 port 10808
+- **hyprlock**: `https://github.com/hyprwm/hyprlock.git/` — Failed to connect to 127.0.0.1 port 10808
+- **hypridle**: `https://github.com/hyprwm/hypridle.git/` — Failed to connect to 127.0.0.1 port 10808
 
-Клонирование в «nwg-displays»...
-fatal: «https://github.com/nwg-piotr/nwg-displays.git/» недоступно: Failed to connect to 127.0.0.1 port 10808 after 0 ms: Couldn't connect to server
-[ERROR] Failed to download nwg-displays v0.3.22 Please check your connection
-mv: не удалось выполнить stat для 'install-08-210422_nwg-display2.log': Нет такого файла или каталога
+### Ошибки загрузки
+- `[ERROR] Download failed for swappy`
+- `[ERROR] Download failed for swww v0.11.2`
+- `[ERROR] Failed to download nwg-displays v0.3.22`
+- `[ERROR] Download failed for hyprlock v0.3.0`
+- `[ERROR] Download failed for hypridle v0.1.2`
 
-
-Клонирование в «hyprlock»...
-fatal: «https://github.com/hyprwm/hyprlock.git/» недоступно: Failed to connect to 127.0.0.1 port 10808 after 0 ms: Couldn't connect to server
-[ERROR] Download failed for hyprlock v0.3.0
-
-Клонирование в «hypridle»...
-fatal: «https://github.com/hyprwm/hypridle.git/» недоступно: Failed to connect to 127.0.0.1 port 10808 after 0 ms: Couldn't connect to server
-[ERROR] Download failed for hypridle v0.1.2
-
-
+### Прочие ошибки
+- `mv: не удалось выполнить stat для 'install-08-210422_nwg-display2.log': Нет такого файла или каталога`

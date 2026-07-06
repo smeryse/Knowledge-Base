@@ -1,9 +1,9 @@
 ---
 tags:
-  - c
+  - cpp
   - algorithms
+  - competitive_programming
   - github
 ---
 
-https://github.com/cp-algorithms/cp-algorithms
-
+**CP Algorithms:** [GitHub](https://github.com/cp-algorithms/cp-algorithms)

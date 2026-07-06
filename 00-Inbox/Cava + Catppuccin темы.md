@@ -1,14 +1,17 @@
 ---
 tags:
-  - catpucchin
+  - cava
+  - catppuccin
   - themes
+  - audio_visualizer
+  - linux_config
 ---
 
 ## Структура конфигов
 
 `~/.config/cava/config` — основной конфиг (teal)
-`~/.config/cava/themes/` — все Catppuccin флейворы:
-  mocha, latte, frappe, macchiato (+ transparent)
+
+`~/.config/cava/themes/` — все Catppuccin флейворы: mocha, latte, frappe, macchiato (+ transparent)
 
 ## Использование
 
@@ -21,10 +24,10 @@ tags:
 | cava macchiato | Catppuccin Macchiato |
 | cava mocha-t   | Mocha прозрачный     |
 | cava latte-t   | Latte прозрачный     |
+
 ## Как это работает
-В `~/.zshrc` переопределена функция `cava()`.
-Она проверяет первый аргумент и подставляет нужный
-`-p ~/.config/cava/themes/<flavor>`.
+
+В `~/.zshrc` переопределена функция `cava()`. Она проверяет первый аргумент и подставляет нужный `-p ~/.config/cava/themes/<flavor>`.
 
 ## Как добавить свой конфиг
 

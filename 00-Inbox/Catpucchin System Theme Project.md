@@ -1,12 +1,16 @@
 ---
 tags:
+  - catppuccin
+  - theming
   - system
-  - theme
-  - catpucchin
+  - design
 ---
-# Setup Instruction
 
-https://catppuccin.com/palette/
-https://github.com/catppuccin/catppuccin/blob/main/docs/style-guide.md
-https://github.com/catppuccin/catppuccin/blob/main/docs/README.md
-https://github.com/catppuccin/firefox
+# Catppuccin System Theme Project
+
+## Setup Instruction
+
+- **Palette:** https://catppuccin.com/palette/
+- **Style Guide:** https://github.com/catppuccin/catppuccin/blob/main/docs/style-guide.md
+- **README:** https://github.com/catppuccin/catppuccin/blob/main/docs/README.md
+- **Firefox Theme:** https://github.com/catppuccin/firefox

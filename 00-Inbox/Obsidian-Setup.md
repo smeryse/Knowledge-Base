@@ -1,3 +1,10 @@
+---
+tags:
+  - obsidian
+  - configuration
+  - tasks
+  - plugins
+---
 # ⚙️ Настройка Obsidian для Tasks System
 
 ## ✅ Настройки применены автоматически

@@ -2,6 +2,8 @@
 tags:
   - budget
   - finance
+  - personal_finance
+  - tracking
 aliases:
   - Бюджет
 ---

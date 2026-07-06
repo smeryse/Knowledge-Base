@@ -1,4 +1,6 @@
 ---
 tags:
   - dj
+  - music
+  - album
 ---

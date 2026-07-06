@@ -1,4 +1,6 @@
 ---
 tags:
   - hyprland
+  - waybar
+  - cava
 ---

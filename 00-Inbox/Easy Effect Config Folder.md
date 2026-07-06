@@ -1,6 +1,8 @@
 ---
 tags:
+  - easyeffects
+  - audio
   - config
-  - music
+  - linux
 path: /home/smeryse/.config/easyeffects/output
 ---

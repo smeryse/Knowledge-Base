@@ -1,7 +1,10 @@
 ---
 tags:
-  - ai-video
-  - face-swap
-  - real-time
+  - ai_video
+  - face_swap
+  - real_time
+  - deepfake
+  - ai
 ---
-https://www.youtube.com/watch?v=xAICmrzPJjA
+
+**Decart.ai** — обзор: [YouTube](https://www.youtube.com/watch?v=xAICmrzPJjA)

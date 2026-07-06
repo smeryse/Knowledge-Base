@@ -1,1 +1,6 @@
+---
+tags:
+  - image
+  - screenshot
+---
 ![[Pasted image 20260324032123.png]]
