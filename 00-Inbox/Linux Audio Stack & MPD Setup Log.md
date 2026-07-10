@@ -6,12 +6,8 @@ tags:
   - pipewire
   - systemd
   - flatpak
+date: 2026-03-25
 ---
-
-**Дата:** 2026-03-25
-**Статус:** #in_progress
-**Теги:** #linux #audio #mpd #pipewire #systemd #flatpak
-
 ## 1. Архитектура звука
 - **PipeWire:** мультимедийный сервер (замена PulseAudio + JACK)
 - **PulseAudio:** легаси звуковой сервер. PipeWire эмулирует его API через `pipewire-pulse`

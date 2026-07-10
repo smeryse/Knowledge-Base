@@ -9,8 +9,6 @@ tags:
   - f_droid
   - insular
 source: https://habr.com/ru/articles/1022390/
-author: linux-over
-status: 📝 processed
 ---
 
 # Insular/Island: изоляция «стукачей» на Android

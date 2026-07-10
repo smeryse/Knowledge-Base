@@ -3,7 +3,6 @@ tags:
   - dj
   - brazilian-funk
 ---
-
 - [Piano](https://vk.com/audio315717279_456244007_bd4faf14b461cfa165) + original ver. + montagem paraiso
 - [UNA NOCHE](https://vk.com/audio-2001694909_141694909) + LOS VOLTAJE + LA MENTE (Slowed non-official voyre)
 - CLOUDY FUNK + ориг семпла

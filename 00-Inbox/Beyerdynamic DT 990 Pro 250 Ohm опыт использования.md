@@ -1,12 +1,14 @@
 ---
-date: {{date}}
+date:
+  "{ date }":
 tags:
   - audio
   - gear
   - beyerdynamic
   - headphones
   - troubleshooting
-aliases: [DT 990 Pro 250 Ohm — проблемы и особенности]
+aliases:
+  - DT 990 Pro 250 Ohm — проблемы и особенности
 ---
 ## Проблема: искажения на высокой громкости
 

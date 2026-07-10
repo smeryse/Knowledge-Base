@@ -5,7 +5,6 @@ tags:
   - commands
   - apt
 ---
-
 ##### Вывести список доверенных репозиториев
 ```bash
 sudo ls -la /etc/apt/sources.list.d/

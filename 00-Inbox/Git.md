@@ -6,7 +6,6 @@ tags:
 ---
 
 ### Quick setup
-
 ```bash
 echo "# Knowledge-Base" >> README.md
 git init
