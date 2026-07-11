@@ -3,6 +3,9 @@ aliases:
   - TODO
 ---
 
+# 0
+- [ ] PennyWallet: категории как .md-файлы (вместо flat JSON). Нужно: интерфейс WalletCategory, loadCategoryFiles(), bootstrapDefaultCategories(), сохранение/удаление, Settings UI для добавления/удаления
+
 # 1
 - поставить кастомный neofetch
 - добавить возможность исключать продукты из pantry - как
