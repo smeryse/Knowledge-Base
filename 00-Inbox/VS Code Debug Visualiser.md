@@ -5,8 +5,8 @@ tags:
   - debugging
   - visualizer
   - reference
+link: https://pin.it/1YcuZH0QZ
 ---
 
 Ссылка на визуализатор отладки VS Code:
 
-https://pin.it/1YcuZH0QZ

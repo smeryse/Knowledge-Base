@@ -59,7 +59,7 @@ views:
       - due
     options:
       showPropertyBasedEvents: false
-    calendarView: timeGridWeek
+    calendarView: dayGridMonth
     startDateProperty: file.ctime
     listDayCount: 7
     titleProperty: file.basename

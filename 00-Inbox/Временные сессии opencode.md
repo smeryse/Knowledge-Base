@@ -4,8 +4,9 @@ tags:
   - cli
   - productivity
   - temporary_sessions
+  - recheck
 ---
-
+[[Вынести в отдельный файл конфиги Opencode]]
 ## Временная сессия opencode
 
 `oc -t` — запуск временной сессии opencode, которая автоматически удаляется после выхода.
